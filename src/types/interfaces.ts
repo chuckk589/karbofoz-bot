@@ -1,15 +1,7 @@
 import { Api, Composer, Context, SessionFlavor } from 'grammy';
-import { I18nContext, I18nContextFlavor, TemplateData } from '@grammyjs/i18n';
+import { I18nContext, I18nContextFlavor } from '@grammyjs/i18n';
 import { MenuControlPanel, MenuFlavor } from '@grammyjs/menu';
-import { match } from 'src/modules/bot/common/helpers';
 import { ModuleMetadata } from '@nestjs/common';
-import { BotStep } from './enums';
-import { Locale, User } from 'src/modules/mikroorm/entities/User';
-import { Notification } from 'src/modules/mikroorm/entities/Notification';
-import { globalComposer } from 'src/modules/bot/global/global.composer';
-import { Promo } from 'src/modules/mikroorm/entities/Promo';
-import { EntityDTO } from '@mikro-orm/core';
-import { BotLotteryDto, Lottery } from 'src/modules/mikroorm/entities/Lottery';
 import { Message, Update, UserFromGetMe } from 'grammy/out/types.node';
 
 export class BotContext extends Context implements SessionFlavor<Session>, I18nContextFlavor, MenuFlavor {
@@ -54,25 +46,13 @@ export class BotContext extends Context implements SessionFlavor<Session>, I18nC
 }
 
 export interface Session {
-  bulkId: number;
-  menuId: number;
+  menuId?: number;
   step: BotStep;
-  isRegistered: boolean;
-  winners: BotLotteryDto[];
+}
+export enum BotStep {
+  default = 'default',
 }
 
-export type CheckData = { fancyId: string; checkCount: number };
-
-export class TranslatableConfig {
-  constructor(payload: Promo) {
-    this.id = payload.id;
-    this.key = payload.name;
-    this.translation = payload.translation.getAllLabels();
-  }
-  id: number;
-  key: string;
-  translation: { [key in Locale]: string };
-}
 export class BaseComposer {
   protected _composer: Composer<any>;
   getMiddleware(): Composer<any> {
@@ -86,10 +66,4 @@ export interface GrammyBotOptions {
 export interface GrammyBotOptionsAsync extends Pick<ModuleMetadata, 'imports'> {
   useFactory?: (...args: any[]) => Promise<GrammyBotOptions> | GrammyBotOptions;
   inject?: any[];
-}
-export interface QueueEntity {
-  id: number;
-  interval: ReturnType<typeof setInterval>;
-  adminsOnly?: boolean;
-  notification?: Notification;
 }
