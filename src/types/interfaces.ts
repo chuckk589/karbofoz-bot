@@ -51,6 +51,10 @@ export interface Session {
 }
 export enum BotStep {
   default = 'default',
+  exchange = 'exchange',
+  wallets = 'wallets',
+  presets = 'presets',
+  settings = 'settings',
 }
 
 export class BaseComposer {

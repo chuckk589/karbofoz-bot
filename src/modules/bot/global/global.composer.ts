@@ -1,6 +1,6 @@
 import { Menu } from '@grammyjs/menu';
 import { InputFile, Keyboard } from 'grammy';
-import { BaseComposer, BotContext } from 'src/types/interfaces';
+import { BaseComposer, BotContext, BotStep } from 'src/types/interfaces';
 import { Command, ComposerController, On, Use } from '../common/decorators';
 import { label } from '../common/helpers';
 import { globalService } from './global.service';
@@ -8,92 +8,104 @@ import { Router } from '@grammyjs/router';
 import { mainKeyboard } from '../common/keyboards';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import i18n from '../middleware/i18n';
-import { ConfigService } from '@nestjs/config';
+import { AppConfigService } from 'src/modules/app-config/app-config.service';
 
 @ComposerController
 export class globalComposer extends BaseComposer {
   constructor(
     private readonly globalService: globalService,
-    private readonly configService: ConfigService,
+    private readonly appConfigService: AppConfigService,
     @InjectPinoLogger('globalComposer') private readonly logger: PinoLogger,
   ) {
     super();
   }
 
-  // @Use()
-  // menu = new Menu<BotContext>('reg-menu').dynamic((ctx, range) => {
-  //   const locale = ctx.i18n.locale() as Locale;
-  //   switch (ctx.session.step) {
-  //     case BotStep.default: {
-  //       Object.values(Locale).map((lang) =>
-  //         range.text(label({ text: lang }), async (ctx) => {
-  //           await this.globalService.updateUser(ctx.from.id, { locale: lang as Locale });
-  //           ctx.i18n.locale(lang);
-  //           ctx.session.step = BotStep.resident;
-  //           await ctx.editMessageCaption({ caption: ctx.i18n.t('start') + '\n\n' + ctx.i18n.t('askResidence') });
-  //           //await ctx.editMessageText(ctx.i18n.t('start') + '\n\n' + ctx.i18n.t('askResidence'));
-  //         }),
-  //       );
-  //       break;
-  //     }
-  //     case BotStep.resident: {
-  //       range.text(label({ text: 'yes' }), async (ctx) => {
-  //         ctx.session.step = BotStep.age;
-  //         await ctx.editMessageCaption({ caption: ctx.i18n.t('start') + '\n\n' + ctx.i18n.t('askAge') });
-  //         //await ctx.editMessageText(ctx.i18n.t('start') + '\n\n' + ctx.i18n.t('askAge'));
-  //       });
-  //       range.text(label({ text: 'no' }), async (ctx) => {
-  //         ctx.session.step = BotStep.default;
-  //         ctx.menu.close();
-  //         await ctx.reply(ctx.i18n.t('restrictedResidence'));
-  //       });
-  //       break;
-  //     }
-  //     case BotStep.age: {
-  //       range.text(label({ text: 'yes' }), async (ctx) => {
-  //         ctx.session.step = BotStep.gender;
-  //         await ctx.editMessageCaption({ caption: ctx.i18n.t('start') + '\n\n' + ctx.i18n.t('askGender') });
-  //         //await ctx.editMessageText(ctx.i18n.t('start') + '\n\n' + ctx.i18n.t('askGender'));
-  //       });
-  //       range.text(label({ text: 'no' }), async (ctx) => {
-  //         ctx.session.step = BotStep.default;
-  //         ctx.menu.close();
-  //         await ctx.reply(ctx.i18n.t('restrictedAge'));
-  //       });
-  //       break;
-  //     }
-
-  //     case BotStep.gender: {
-  //       Object.values(UserGender).map((gender) => {
-  //         range.text(label({ text: gender }), async (ctx) => {
-  //           ctx.session.step = BotStep.promo;
-  //           await this.globalService.updateUser(ctx.from.id, { gender: gender });
-  //           await ctx.editMessageCaption({ caption: ctx.i18n.t('start') + '\n\n' + ctx.i18n.t('askPromo') });
-  //           //await ctx.editMessageText(ctx.i18n.t('start') + '\n\n' + ctx.i18n.t('askPromo'));
-  //         });
-  //       });
-  //       break;
-  //     }
-
-  //     case BotStep.promo: {
-  //       this.AppConfigService.promos.map((promo, index) => {
-  //         range.text(label({ text: promo.translation[locale] }), async (ctx) => {
-  //           await this.globalService.updatePromo(ctx.from.id, promo.id);
-  //           ctx.session.step = BotStep.name;
-  //           ctx.menu.close();
-  //           await ctx.editMessageCaption({ caption: ctx.i18n.t('start') });
-  //           await ctx.reply(ctx.i18n.t('askName'));
-  //         });
-  //         range.row();
-  //       });
-  //       break;
-  //     }
-  //   }
-  //   return range;
-  // });
+  @Use()
+  menu = new Menu<BotContext>('start-menu').dynamic((ctx, range) => {
+    if (ctx.session.step == BotStep.default) {
+      ['exchange', 'wallets', 'presets', 'settings'].map((key) =>
+        range.text(label(key), async (ctx) => {
+          ctx.session.step = key as BotStep;
+          await ctx.editMessageText(ctx.i18n.t(key));
+        }),
+      );
+    } else if (ctx.session.step == BotStep.exchange) {
+      this.appConfigService.exchanges.map((exchange) =>
+        range.text(label(exchange), async (ctx) => {
+          await ctx.editMessageText(ctx.i18n.t(exchange));
+        }),
+      );
+    }
+    return range;
+    // const locale = ctx.i18n.locale() as Locale;
+    // switch (ctx.session.step) {
+    //   case BotStep.default: {
+    //     Object.values(Locale).map((lang) =>
+    //       range.text(label({ text: lang }), async (ctx) => {
+    //         await this.globalService.updateUser(ctx.from.id, { locale: lang as Locale });
+    //         ctx.i18n.locale(lang);
+    //         ctx.session.step = BotStep.resident;
+    //         await ctx.editMessageCaption({ caption: ctx.i18n.t('start') + '\n\n' + ctx.i18n.t('askResidence') });
+    //         //await ctx.editMessageText(ctx.i18n.t('start') + '\n\n' + ctx.i18n.t('askResidence'));
+    //       }),
+    //     );
+    //     break;
+    //   }
+    //   case BotStep.resident: {
+    //     range.text(label({ text: 'yes' }), async (ctx) => {
+    //       ctx.session.step = BotStep.age;
+    //       await ctx.editMessageCaption({ caption: ctx.i18n.t('start') + '\n\n' + ctx.i18n.t('askAge') });
+    //       //await ctx.editMessageText(ctx.i18n.t('start') + '\n\n' + ctx.i18n.t('askAge'));
+    //     });
+    //     range.text(label({ text: 'no' }), async (ctx) => {
+    //       ctx.session.step = BotStep.default;
+    //       ctx.menu.close();
+    //       await ctx.reply(ctx.i18n.t('restrictedResidence'));
+    //     });
+    //     break;
+    //   }
+    //   case BotStep.age: {
+    //     range.text(label({ text: 'yes' }), async (ctx) => {
+    //       ctx.session.step = BotStep.gender;
+    //       await ctx.editMessageCaption({ caption: ctx.i18n.t('start') + '\n\n' + ctx.i18n.t('askGender') });
+    //       //await ctx.editMessageText(ctx.i18n.t('start') + '\n\n' + ctx.i18n.t('askGender'));
+    //     });
+    //     range.text(label({ text: 'no' }), async (ctx) => {
+    //       ctx.session.step = BotStep.default;
+    //       ctx.menu.close();
+    //       await ctx.reply(ctx.i18n.t('restrictedAge'));
+    //     });
+    //     break;
+    //   }
+    //   case BotStep.gender: {
+    //     Object.values(UserGender).map((gender) => {
+    //       range.text(label({ text: gender }), async (ctx) => {
+    //         ctx.session.step = BotStep.promo;
+    //         await this.globalService.updateUser(ctx.from.id, { gender: gender });
+    //         await ctx.editMessageCaption({ caption: ctx.i18n.t('start') + '\n\n' + ctx.i18n.t('askPromo') });
+    //         //await ctx.editMessageText(ctx.i18n.t('start') + '\n\n' + ctx.i18n.t('askPromo'));
+    //       });
+    //     });
+    //     break;
+    //   }
+    //   case BotStep.promo: {
+    //     this.AppConfigService.promos.map((promo, index) => {
+    //       range.text(label({ text: promo.translation[locale] }), async (ctx) => {
+    //         await this.globalService.updatePromo(ctx.from.id, promo.id);
+    //         ctx.session.step = BotStep.name;
+    //         ctx.menu.close();
+    //         await ctx.editMessageCaption({ caption: ctx.i18n.t('start') });
+    //         await ctx.reply(ctx.i18n.t('askName'));
+    //       });
+    //       range.row();
+    //     });
+    //     break;
+    //   }
+    // }
+    // return range;
+  });
   @Command('start')
   start = async (ctx: BotContext) => {
-    ctx.reply('start');
     // ctx.session.step = BotStep.default;
     // const user = await this.globalService.getUser(ctx);
     // ctx.session.isRegistered = user.registered;
@@ -102,11 +114,7 @@ export class globalComposer extends BaseComposer {
     // if (ctx.session.isRegistered) {
     //   await ctx.reply(ctx.i18n.t('mainMenu'), { reply_markup: mainKeyboard(ctx) });
     // } else {
-    //   await ctx.replyWithPhoto(this.AppConfigService.get('url') + 'assets/henkel.png', {
-    //     caption: i18n.t('ru', 'start') + '\n\n' + i18n.t('uz', 'start') + '\n\n' + ctx.i18n.t('chooseLang'),
-    //     reply_markup: this.menu,
-    //   });
-    // }
+    await ctx.reply(ctx.i18n.t('start'), { reply_markup: this.menu });
   };
   // @On(':contact')
   // contact = async (ctx: BotContext) => {

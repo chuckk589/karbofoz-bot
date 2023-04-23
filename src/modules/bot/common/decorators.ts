@@ -1,7 +1,7 @@
 import { Composer, Context, FilterQuery } from 'grammy';
 import { LISTENERS_METADATA } from 'src/constants';
 import { match } from 'src/modules/bot/common/helpers';
-import { BotContext } from 'src/types/interfaces';
+import { BotContext, BotStep } from 'src/types/interfaces';
 
 class BotListenerMetadata {
   constructor(method: ComposerMethod, payload: any, key: string, parent?: string) {

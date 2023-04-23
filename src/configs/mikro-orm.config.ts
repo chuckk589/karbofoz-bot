@@ -17,5 +17,4 @@ const MikroORMOptions: MikroOrmModuleOptions = {
     fileName: (className: string) => className, // seeder file naming convention
   },
 };
-
 export default MikroORMOptions;

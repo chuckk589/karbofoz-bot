@@ -4,7 +4,6 @@ import { BotContext } from 'src/types/interfaces';
 const preventOldUpdates = Date.now() / 1000;
 
 export default async function (ctx: BotContext, next: NextFunction): Promise<void> {
-  console.log('wtf');
   try {
     const date: number = ctx.msg?.date;
     if (date) {

@@ -1,8 +1,8 @@
-import { session } from 'grammy';
 import { globalComposer } from 'src/modules/bot/global/global.composer';
 import { globalModule } from 'src/modules/bot/global/global.module';
 import checkTime from 'src/modules/bot/middleware/checkTime';
 import i18n from 'src/modules/bot/middleware/i18n';
+import { session } from 'src/modules/bot/middleware/session';
 import { GrammyBotOptionsAsync, BaseComposer } from 'src/types/interfaces';
 
 const options: GrammyBotOptionsAsync = {

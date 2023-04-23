@@ -1,10 +1,23 @@
+import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
+import { Exchange } from 'src/modules/mikroorm/entities/Exchange';
 import { BotContext } from 'src/types/interfaces';
 // import { TelegramController } from 'src/telegram/telegram.controller';
 
 @Injectable()
 export class globalService {
-  constructor() {}
+  constructor(private readonly em: EntityManager) {}
+
+  wallets(ctx: BotContext) {
+    throw new Error('Method not implemented.');
+  }
+  presets(ctx: BotContext) {
+    throw new Error('Method not implemented.');
+  }
+  settings(ctx: BotContext) {
+    throw new Error('Method not implemented.');
+  }
+  async exchange(ctx: BotContext) {}
 
   // async getUserChatIds(): Promise<string[]> {
   //   const users = await this.em.find(User, {});
