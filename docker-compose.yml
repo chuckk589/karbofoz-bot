@@ -1,5 +1,12 @@
 version: '3.8'
 services:
+  adminer:
+    image: adminer:latest
+    restart: unless-stopped
+    environment:
+      ADMINER_DEFAULT_SERVER: mysqldb
+    ports:
+      - 8081:8081
   mysqldb:
     image: mysql:5.7
     restart: unless-stopped
@@ -12,7 +19,7 @@ services:
     volumes:
       - db:/var/lib/mysql
     ports:
-    - 3307:3306
+    - 3309:3306
   app:
     depends_on:
       - mysqldb
@@ -26,7 +33,6 @@ services:
       - NODE_ENV=${NODE_ENV}
     volumes:
       - ./src/:/app/src/
-      - static:/app/dist/public/files
     ports:
       - $PORT:$PORT
     stdin_open: true
