@@ -13,7 +13,7 @@ export class PresetService {
     const queryString = Object.keys(body)
       .map((key) => `${key}=${body[key]}`)
       .join('&');
-    const browser = await puppeteer.launch({ args: ['--ignore-certificate-errors'], headless: true, executablePath: '/usr/bin/google-chrome' });
+    const browser = await puppeteer.launch({ args: ['--ignore-certificate-errors', '--no-sandbox'], headless: true, executablePath: '/usr/bin/google-chrome' });
     const page = await browser.newPage();
     await page.goto(`https://localhost:${process.env.PORT}/template?${queryString}`, { waitUntil: 'networkidle2' });
     await page.setViewport({
