@@ -30,6 +30,11 @@ services:
       - $PORT:$PORT
     stdin_open: true
     tty: true
+    networks:
+      - api_bridge
 volumes: 
     db:
     static:
+networks:
+  api_bridge:
+    driver: bridge
