@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install gnupg wget -y && \
 
 FROM pptr as base
 COPY . .
-RUN apt-get update && apt install bash git python3 make g++ yarn>=1.22.4
+RUN apt-get update && apt-get install bash git python3 make g++ yarn>=1.22.4
 WORKDIR /app
 COPY package.json tsconfig.json yarn.lock  ./
 RUN yarn --frozen-lockfile
