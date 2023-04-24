@@ -13,7 +13,11 @@ export class PresetService {
     const queryString = Object.keys(body)
       .map((key) => `${key}=${body[key]}`)
       .join('&');
-    const browser = await puppeteer.launch({ args: ['--ignore-certificate-errors', '--no-sandbox'], headless: true, executablePath: '/usr/bin/google-chrome' });
+    const browser = await puppeteer.launch({
+      args: ['--disable-web-security', '--enable-features=NetworkService', '--ignore-certificate-errors', '--no-sandbox'],
+      headless: true,
+      executablePath: '/usr/bin/google-chrome',
+    });
     const page = await browser.newPage();
     await page.goto(`http://devanz.space/template?${queryString}`, { waitUntil: 'networkidle2' });
     await page.setViewport({
