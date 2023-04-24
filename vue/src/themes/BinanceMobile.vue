@@ -120,7 +120,7 @@ export default {
 <style>
 @font-face {
   font-family: 'binance';
-  src: url('binance/DINPro.ttf');
+  src: url('../binance/DINPro.ttf');
 }
 
 body {

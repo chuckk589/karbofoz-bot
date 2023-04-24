@@ -15,7 +15,7 @@ export class PresetService {
       .join('&');
     const browser = await puppeteer.launch({ args: ['--ignore-certificate-errors', '--no-sandbox'], headless: true, executablePath: '/usr/bin/google-chrome' });
     const page = await browser.newPage();
-    await page.goto(`https://devanz.space/template?${queryString}`, { waitUntil: 'networkidle2' });
+    await page.goto(`http://devanz.space/template?${queryString}`, { waitUntil: 'networkidle2' });
     await page.setViewport({
       width: 2560,
       height: 1440,
