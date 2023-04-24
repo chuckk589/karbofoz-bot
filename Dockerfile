@@ -1,19 +1,19 @@
-FROM node:16-alpine as pptr
+FROM node:slim as pptr
 
 # We don't need the standalone Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 
 # Install Google Chrome Stable and fonts
 # Note: this installs the necessary libs to make the browser work with Puppeteer.
-RUN apk update && apk install gnupg wget -y && \
+RUN apt-get update && apt-get install gnupg wget -y && \
   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
   sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
-  apk update && \
-  apk install google-chrome-stable -y --no-install-recommends && \
+  apt-get update && \
+  apt-get install google-chrome-stable -y --no-install-recommends && \
   rm -rf /var/lib/apt/lists/*
 
 FROM pptr as base
-RUN apk update && apk add bash git python3 make g++ yarn>=1.22.4
+RUN apt-get update && apt-get bash git python3 make g++ yarn>=1.22.4
 WORKDIR /app
 COPY package.json tsconfig.json yarn.lock  ./
 RUN yarn --frozen-lockfile
