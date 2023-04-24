@@ -1,10 +1,4 @@
-FROM node:16-alpine as base
-RUN apk update && apk add bash git python3 make g++ yarn>=1.22.4
-WORKDIR /app
-COPY package.json tsconfig.json yarn.lock  ./
-RUN yarn --frozen-lockfile
-
-FROM base as pptr
+FROM node:18 as pptr
 
 # Install latest chrome dev package and fonts to support major charsets (Chinese, Japanese, Arabic, Hebrew, Thai and a few others)
 # Note: this installs the necessary libs to make the bundled version of Chromium that Puppeteer
@@ -32,7 +26,13 @@ RUN npm i ./puppeteer-browsers-latest.tgz ./puppeteer-core-latest.tgz ./puppetee
 
 CMD ["google-chrome-stable"]
 
-FROM pptr as vue
+FROM pptr as base
+RUN apk update && apk add bash git python3 make g++ yarn>=1.22.4
+WORKDIR /app
+COPY package.json tsconfig.json yarn.lock  ./
+RUN yarn --frozen-lockfile
+
+FROM base as vue
 COPY . .
 WORKDIR /app/vue
 RUN yarn
