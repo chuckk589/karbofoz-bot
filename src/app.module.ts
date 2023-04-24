@@ -26,7 +26,7 @@ import { ThemeModule } from './modules/theme/theme.module';
       }),
     }),
     BotModule.forRootAsync(options),
-    ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', '/dist/public/') }),
+    ServeStaticModule.forRoot({ rootPath: process.env.NODE_ENV === 'dev' ? join(__dirname, '..', '/src/public/') : join(__dirname, '..', '/dist/public/') }),
     LoggerModule.forRoot({ pinoHttp: { autoLogging: false } }),
     ConfigModule,
     PresetModule,

@@ -15,16 +15,16 @@ export class PresetService {
       .join('&');
     const browser = await puppeteer.launch({ args: ['--ignore-certificate-errors'], headless: false });
     const page = await browser.newPage();
-    await page.goto(`https://localhost:3001/template?${queryString}`, { waitUntil: 'networkidle2' });
+    await page.goto(`https://localhost:${process.env.PORT}/template?${queryString}`, { waitUntil: 'networkidle2' });
     await page.setViewport({
       width: 2560,
       height: 1440,
       deviceScaleFactor: 1,
     });
-    // const img = await page.$('img');
-    // const screen = await img.screenshot({ encoding: 'base64' });
-    // await browser.close();
-    // return { screen };
+    const img = await page.$('#area');
+    const screen = await img.screenshot({ path: 'example.png', encoding: 'base64' });
+    await browser.close();
+    return { screen };
   }
 
   async createPreset(body: CreatePresetDto) {

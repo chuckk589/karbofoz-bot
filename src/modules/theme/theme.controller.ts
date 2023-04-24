@@ -8,7 +8,7 @@ import { ThemeService } from './theme.service';
 export class ThemeController {
   constructor(private readonly themeService: ThemeService) {}
   @Get(':id')
-  getTemplate(@Param('id') id: string, @Query('exchange') exchange: string) {
-    return this.themeService.getTheme(+id, +exchange);
+  getTemplate(@Param('id') id: string, @Query('language') language: string) {
+    return this.themeService.getTheme(+id, +language);
   }
 }

@@ -7,7 +7,9 @@ export class RetrieveThemeDto {
     this.title = theme.name;
     this.value = theme.id.toString();
     this.inputs = theme.themeInputs.getItems().map((themeInput) => new RetrieveInputDto(themeInput.input));
-    this.languages = theme.themeLanguages.getItems().map((themeLanguage) => new RetrieveConfigDto({ title: themeLanguage.language.name, value: themeLanguage.language.id.toString() }));
+    this.languages = theme.themeLanguages.isInitialized()
+      ? theme.themeLanguages.getItems().map((themeLanguage) => new RetrieveConfigDto({ title: themeLanguage.language.name, value: themeLanguage.language.id.toString() }))
+      : undefined;
   }
   title: string;
   value: string;

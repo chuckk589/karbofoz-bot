@@ -1,30 +1,32 @@
 <template>
-  <Page></Page>
+  <component :is="theme" :payload="payload" v-if="loaded"></component>
 </template>
 
 <script>
-import Page from './Page.vue';
+import { BinanceMobile } from '../themes';
 export default {
   name: 'TemplateView',
   components: {
-    Page,
+    BinanceMobile,
   },
   data() {
     return {
-      img: '',
+      theme: 'BinanceMobile',
+      payload: {},
+      loaded: false,
     };
   },
   mounted() {
-    this.$http({ method: 'GET', url: `/v1/theme/${this.$route.query.theme}?exchange=${this.$route.query.exchange}` }).then((e) => {
-      this.img = e.data.imgPath;
-      console.log(e.data);
-      const { exchange, theme, ...queryParams } = this.$route.query;
-      e.data.inputs.forEach((input) => {
-        const text = document.createElement('p');
-        text.style = `position: absolute; color:white; ${input.style}`;
-        text.innerText = queryParams[input.alias] || input.default;
-        document.body.appendChild(text);
-      });
+    this.$http({ method: 'GET', url: `/v1/theme/${this.$route.query.theme}?language=${this.$route.query.language}` }).then((e) => {
+      this.theme = e.data.path
+        .replace(/-.*/, '')
+        .split('/')
+        .map((word) => word[0].toUpperCase() + word.slice(1))
+        .join('');
+      this.payload = e.data;
+      this.payload.query = this.$route.query;
+      console.log(this.payload);
+      this.loaded = true;
     });
   },
   methods: {},

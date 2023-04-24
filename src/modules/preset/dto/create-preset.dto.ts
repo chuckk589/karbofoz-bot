@@ -5,5 +5,7 @@ export class CreatePresetDto {
   exchange: string;
   @IsNumberString()
   theme: string;
+  @IsNumberString()
+  language: string;
   [key: string]: string | number;
 }

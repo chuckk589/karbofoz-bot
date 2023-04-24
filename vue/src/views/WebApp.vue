@@ -12,9 +12,7 @@
               <v-form ref="form1">
                 <v-select v-model="exchange" :items="table.exchanges" label="Биржа" density="compact" :rules="notEmpty"></v-select>
                 <v-select v-model="theme" :items="themeItems" label="Тема" density="compact" :rules="notEmpty"></v-select>
-                <!-- <v-select :disabled="platform !== 'mobile'" v-model="device" :items="this.$ctable.devices" label="Статусбар" density="compact"></v-select> -->
-                <!-- <v-select v-model="type" :items="typeItems" label="Направление" density="compact" :rules="notEmpty"></v-select> -->
-                <!-- <v-select v-model="network" :items="this.$ctable.networks" label="Сеть" density="compact" :rules="notEmpty"></v-select> -->
+                <v-select v-model="language" :items="themeLanguages" label="Язык" density="compact"></v-select>
               </v-form>
             </v-card-text>
           </v-window-item>
@@ -22,8 +20,7 @@
           <v-window-item :value="2">
             <v-card-text>
               <v-form ref="form2">
-                <v-text-field v-for="field in themeFields" :key="field.value" :type="field.type" density="compact" :label="field.name" :rules="notEmpty" @input="(event) => (form[field.alias] = event.target.value)">
-                </v-text-field>
+                <v-text-field v-for="field in themeFields" :key="field.value" :type="field.type" density="compact" step="1" :label="field.name" :rules="notEmpty" @input="(event) => (form[field.alias] = event.target.value)"> </v-text-field>
               </v-form>
             </v-card-text>
           </v-window-item>
@@ -63,6 +60,7 @@ export default {
       table: {},
       preview: '',
       loading: false,
+      language: '',
     };
   },
   mounted() {
@@ -100,6 +98,7 @@ export default {
             .post('/v1/preset/preview/', {
               exchange: this.exchange,
               theme: this.theme,
+              language: this.language,
               ...this.form,
             })
             .then((res) => {
@@ -119,6 +118,9 @@ export default {
   computed: {
     themeItems() {
       return this.table.templates?.find((item) => item.value == this.exchange)?.themes || [];
+    },
+    themeLanguages() {
+      return this.table.templates?.find((item) => item.value == this.exchange)?.themes.find((item) => item.value == this.theme)?.languages || [];
     },
     themeFields() {
       return this.table.templates?.find((item) => item.value == this.exchange)?.themes.find((item) => item.value == this.theme)?.inputs || [];
