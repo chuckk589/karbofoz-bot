@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install gnupg wget -y && \
   rm -rf /var/lib/apt/lists/*
 
 FROM pptr as base
+COPY . .
 RUN apk update && apk add bash git python3 make g++ yarn>=1.22.4
 WORKDIR /app
 COPY package.json tsconfig.json yarn.lock  ./
