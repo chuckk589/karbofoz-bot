@@ -1,8 +1,7 @@
 import { Entity, PrimaryKey, Property, Unique } from '@mikro-orm/core';
-import { CustomBaseEntity } from './CustomBaseEntity';
 
 @Entity()
-export class Language extends CustomBaseEntity {
+export class Language {
   @PrimaryKey()
   id!: number;
 

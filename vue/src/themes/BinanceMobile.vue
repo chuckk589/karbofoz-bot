@@ -1,5 +1,5 @@
 <template>
-  <div id="area" style="left: 0px; top: 0px; width: 1080px; height: 2184px">
+  <div id="wobar" style="left: 0px; top: 0px; width: 1080px; height: 2184px">
     <div :style="'left:0px; top:0px; width:237px; height:119px; background-image: url(' + payload.path + '/01.jpg)'"></div>
     <div :class="'text ' + themeClass" :style="' font-size:49px; left:237px; top:0px; width:606px; height:119px; background-image: url(' + payload.path + '/text1.jpg)'">
       {{ getText('text1') }}
@@ -95,11 +95,12 @@ export default {
       if (chunks[0] === 'input') {
         raw = this.payload.query[fieldName];
       } else if (chunks[0] === 'text') {
-        raw = this.payload.theme.inputs.find((input) => input.alias === fieldName).values;
+        raw = this.payload.theme.inputs.find((input) => input.alias === fieldName)?.values || 'No data';
       }
       return this.applyDecoration(raw, decoration);
     },
     applyDecoration(text, decoration) {
+      if (!text) return '';
       if (decoration && decoration.length) {
         decoration.forEach((deco) => {
           if (deco === 'date') {

@@ -1,10 +1,9 @@
 import { Entity, ManyToMany, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
-import { CustomBaseEntity } from './CustomBaseEntity';
 
 import { Template } from './Template';
 
 @Entity()
-export class Preset extends CustomBaseEntity {
+export class Preset {
   @PrimaryKey()
   id!: number;
 

@@ -1,7 +1,6 @@
 import { Entity, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
-import { CustomBaseEntity } from './CustomBaseEntity';
 import { Input } from './Input';
-import { ThemeLanguage } from './ThemeLanguage';
+import { Language } from './Language';
 
 @Entity()
 export class InputValue {
@@ -14,6 +13,6 @@ export class InputValue {
   @ManyToOne(() => Input)
   input: Input;
 
-  @ManyToOne(() => ThemeLanguage)
-  themeLanguage: ThemeLanguage;
+  @ManyToOne(() => Language)
+  language: Language;
 }

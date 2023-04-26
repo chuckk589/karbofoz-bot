@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { Preset } from '../mikroorm/entities/Preset';
 import { CreatePresetDto } from './dto/create-preset.dto';
 import puppeteer from 'puppeteer';
+import puppeteerOptions from 'src/configs/puppeteer.config';
 
 @Injectable()
 export class PresetService {
@@ -13,19 +14,15 @@ export class PresetService {
     const queryString = Object.keys(body)
       .map((key) => `${key}=${body[key]}`)
       .join('&');
-    const browser = await puppeteer.launch({
-      args: ['--disable-web-security', '--enable-features=NetworkService', '--ignore-certificate-errors', '--no-sandbox'],
-      headless: true,
-      executablePath: '/usr/bin/google-chrome',
-    });
+    const browser = await puppeteer.launch(puppeteerOptions);
     const page = await browser.newPage();
-    await page.goto(`http://localhost:443/template?${queryString}`, { waitUntil: 'networkidle2' });
+    await page.goto(`${process.env.NODE_ENV === 'dev' ? 'https://192.168.1.14:3001' : 'http://localhost:443'}/template?${queryString}`, { waitUntil: 'networkidle2' });
     await page.setViewport({
       width: 2560,
       height: 1440,
       deviceScaleFactor: 1,
     });
-    const img = await page.$('#area');
+    const img = await page.$('#wobar');
     const screen = await img.screenshot({ path: 'example.png', encoding: 'base64' });
     await browser.close();
     return { screen };

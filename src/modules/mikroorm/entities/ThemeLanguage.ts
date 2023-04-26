@@ -1,5 +1,4 @@
 import { Entity, ManyToMany, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
-import { CustomBaseEntity } from './CustomBaseEntity';
 import { Theme } from './Theme';
 import { Language } from './Language';
 

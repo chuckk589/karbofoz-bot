@@ -7,7 +7,7 @@ import { RetrieveThemeDto } from './dto/retrieve-theme.dto';
 export class ThemeService {
   constructor(private readonly em: EntityManager) {}
   async getTheme(id: number, language: number) {
-    const theme = await this.em.findOne(Theme, { id }, { populate: ['template.exchange', 'themeInputs.input.inputValues.themeLanguage.language'] });
+    const theme = await this.em.findOne(Theme, { id }, { populate: ['template.exchange', 'themeInputs.input.inputValues.language'] });
     const themeDto = new RetrieveThemeDto(theme);
     themeDto.inputs = themeDto.inputs.map((input) => {
       input.values = Array.isArray(input.values) && input.values.find((value) => +value.language === language)?.value;
