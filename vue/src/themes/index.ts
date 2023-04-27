@@ -1,3 +1,4 @@
 import BinanceMobile from './BinanceMobile.vue';
-
-export { BinanceMobile };
+import TrustMobile from './TrustMobile.vue';
+import ExodusMobile from './ExodusMobile.vue';
+export { BinanceMobile, TrustMobile, ExodusMobile };

@@ -19,8 +19,8 @@
 
           <v-window-item :value="2">
             <v-card-text>
-              <v-form ref="form2">
-                <v-text-field v-for="field in themeFields" :key="field.value" :type="field.type" density="compact" step="1" :label="field.name" :rules="notEmpty" @input="(event) => (form[field.alias] = event.target.value)"> </v-text-field>
+              <v-form ref="form2" v-if="step == 2">
+                <component :is="getComponentName(field)" v-for="field in themeFields" :key="field.value" :items="field.variants" :type="field.type" density="compact" step="1" :label="field.name" :rules="notEmpty" v-model="form[field.alias]"></component>
               </v-form>
             </v-card-text>
           </v-window-item>
@@ -47,7 +47,13 @@
 </template>
 
 <script>
+import { VTextField } from 'vuetify/components/VTextField';
+import { VSelect } from 'vuetify/components/VSelect';
 export default {
+  components: {
+    VTextField,
+    VSelect,
+  },
   name: 'WebApp',
   data() {
     return {
@@ -74,9 +80,17 @@ export default {
       this.errorMessage = '';
       this.$refs.form1.validate().then((res) => {
         if (res.valid) {
+          this.form = this.themeFields.reduce((acc, item) => {
+            acc[item.alias] = '';
+            return acc;
+          }, {});
           this.step++;
         }
       });
+    },
+    manageInput(event) {
+      console.log(event);
+      this.form[event.target.name] = event.target.value;
     },
     back() {
       this.errorMessage = '';
@@ -88,6 +102,10 @@ export default {
     },
     preset() {
       // this.step = 3;
+    },
+    getComponentName(field) {
+      if (field.type == 'select') return 'v-select';
+      else return 'v-text-field';
     },
     submit() {
       this.errorMessage = '';

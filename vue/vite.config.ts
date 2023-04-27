@@ -18,17 +18,18 @@ export default defineConfig({
         target: 'http://localhost:3000/',
         changeOrigin: true,
       },
-      '/auth': {
+      '/trust': {
         target: 'http://localhost:3000/',
-        changeOrigin: true,
       },
       '/binance': {
         target: 'http://localhost:3000/',
-        changeOrigin: true,
+      },
+      '/exodus': {
+        target: 'http://localhost:3000/',
       },
     },
   },
-  plugins: [vue(), vueJsx(), vuetify({ autoImport: true })],
+  plugins: [vue(), vuetify({ autoImport: true }), vueJsx()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

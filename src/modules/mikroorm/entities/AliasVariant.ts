@@ -9,6 +9,9 @@ export class AliasVariant {
   @Property()
   value: string;
 
-  @ManyToOne(() => InputAlias)
+  @Property()
+  alias: string;
+
+  @ManyToOne({ entity: () => InputAlias })
   inputAlias: InputAlias;
 }

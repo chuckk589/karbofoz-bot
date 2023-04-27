@@ -3,7 +3,7 @@ import { EntityManager, PopulateHint } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 import { Exchange } from '../mikroorm/entities/Exchange';
 import { Template } from '../mikroorm/entities/Template';
-import { RetrieveTemplateDto } from '../theme/dto/retrieve-template.dto';
+import { RetrieveConfigTemplateDto } from './dto/retrieve-config-template.dto';
 
 @Injectable()
 export class ConfigService {
@@ -13,11 +13,11 @@ export class ConfigService {
     const templates = await this.em.find(
       Template,
       { themes: { themeInputs: { input: { inputAlias: { $ne: null } } } } },
-      { populate: ['exchange', 'themes.themeInputs.input.inputAlias', 'themes.themeLanguages.language'], populateWhere: PopulateHint.INFER },
+      { populate: ['exchange', 'themes.themeInputs.input.inputAlias.aliasVariants', 'themes.themeLanguages.language'], populateWhere: PopulateHint.INFER },
     );
     return {
       exchanges: exchanges.map((exchange) => new RetrieveConfigDto({ title: exchange.name, value: exchange.id.toString() })),
-      templates: templates.map((template) => new RetrieveTemplateDto(template)),
+      templates: templates.map((template) => new RetrieveConfigTemplateDto(template)),
     };
   }
 }

@@ -1,20 +1,30 @@
-import { EntityManager, PopulateHint } from '@mikro-orm/core';
+import { EntityManager, LoadStrategy, PopulateHint } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 import { Theme } from '../mikroorm/entities/Theme';
-import { RetrieveThemeDto } from './dto/retrieve-theme.dto';
+import { RetrieveInputValuesDto } from './dto/retrieve-input-values.dto';
 
 @Injectable()
 export class ThemeService {
   constructor(private readonly em: EntityManager) {}
   async getTheme(id: number, language: number) {
-    const theme = await this.em.findOne(Theme, { id }, { populate: ['template.exchange', 'themeInputs.input.inputValues.language'] });
-    const themeDto = new RetrieveThemeDto(theme);
-    themeDto.inputs = themeDto.inputs.map((input) => {
-      input.values = Array.isArray(input.values) && input.values.find((value) => +value.language === language)?.value;
-      return input;
-    });
+    // const theme = await this.em.findOne(
+    //   Theme,
+    //   { id, themeInputs: { input: { inputValues: { language } } } },
+    //   {
+    //     populate: ['template.exchange', 'themeInputs.input.inputValues.language'],
+    //     strategy: LoadStrategy.JOINED,
+    //   },
+    // );
+    const theme = await this.em.findOne(
+      Theme,
+      { id, themeInputs: { input: { inputValues: { language } } } },
+      {
+        populate: ['template.exchange', 'themeInputs.input.inputValues.language'],
+        strategy: LoadStrategy.JOINED,
+      },
+    );
     return {
-      theme: themeDto,
+      theme: new RetrieveInputValuesDto(theme),
       path: `${theme.template.exchange.alias}/${theme.alias}`,
     };
   }

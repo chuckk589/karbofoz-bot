@@ -3,11 +3,13 @@
 </template>
 
 <script>
-import { BinanceMobile } from '../themes';
+import { BinanceMobile, TrustMobile, ExodusMobile } from '../themes';
 export default {
   name: 'TemplateView',
   components: {
     BinanceMobile,
+    TrustMobile,
+    ExodusMobile,
   },
   data() {
     return {

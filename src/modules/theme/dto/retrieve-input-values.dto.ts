@@ -1,10 +1,11 @@
-import { InputValue } from 'src/modules/mikroorm/entities/InputValue';
+import { Theme } from 'src/modules/mikroorm/entities/Theme';
 
 export class RetrieveInputValuesDto {
-  constructor(inputValue: InputValue) {
-    this.value = inputValue.value;
-    this.language = inputValue.language.id.toString();
+  constructor(theme: Theme) {
+    this.inputs = theme.themeInputs.getItems().map((themeInput) => ({
+      alias: themeInput.input.alias,
+      value: themeInput.input.inputValues.getItems()[0].value,
+    }));
   }
-  value: string;
-  language: string;
+  inputs: { alias: string; value: string }[];
 }

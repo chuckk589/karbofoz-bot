@@ -16,9 +16,7 @@
     </div>
     <div class="text" :style="'left:39px; top:375px; width:1002px; height:74px; background-image: url(' + payload.path + '/input1.jpg)'">
       <div :style="'position: initial; width:71px; height:74px; background-image: url(' + payload.path + '/10.jpg)'"></div>
-      <div style="position: initial; font-size: 44px; color: #2ebc82">
-        {{ getText('text3') }}
-      </div>
+      <div style="position: initial; font-size: 44px; color: #2ebc82">{{ getText('text3') }}</div>
     </div>
     <div class="text" :style="'color: #88929C;font-size: 32px;text-align: center;font-weight: 500;line-height: 45px;left:39px; top:449px; width:1002px; height:116px; background-image: url(' + payload.path + '/text4.jpg)'">
       {{ getText('text4') }}
@@ -70,51 +68,13 @@
   </div>
 </template>
 <script>
+import themeMixin from '../mixins/mixin';
 export default {
   name: 'BinanceMobile',
-  props: {
-    payload: {
-      path: String,
-      query: Object,
-      theme: {
-        type: Object,
-        inputs: {
-          type: Array,
-          default: () => [],
-        },
-      },
-    },
-  },
+  mixins: [themeMixin],
+
   data() {
     return {};
-  },
-  methods: {
-    getText(fieldName, decoration) {
-      const chunks = fieldName.split(/(\d.*)/);
-      let raw = '';
-      if (chunks[0] === 'input') {
-        raw = this.payload.query[fieldName];
-      } else if (chunks[0] === 'text') {
-        raw = this.payload.theme.inputs.find((input) => input.alias === fieldName)?.values || 'No data';
-      }
-      return this.applyDecoration(raw, decoration);
-    },
-    applyDecoration(text, decoration) {
-      if (!text) return '';
-      if (decoration && decoration.length) {
-        decoration.forEach((deco) => {
-          if (deco === 'date') {
-            text = text.replace('T', ' ');
-          }
-        });
-      }
-      return text;
-    },
-  },
-  computed: {
-    themeClass() {
-      return this.payload.path.split('/').pop();
-    },
   },
 };
 </script>
@@ -146,12 +106,15 @@ div {
   color: #88929c;
   font-size: 37px;
 }
+
 .mobile-dark {
   color: #e6ebf1;
 }
+
 .mobile-light {
   color: #202630;
 }
+
 .text-right {
   font-weight: 500;
   display: flex;
