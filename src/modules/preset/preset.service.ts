@@ -24,8 +24,8 @@ export class PresetService {
     });
     const img = await page.$('#wobar');
     const screen = await img.screenshot({ path: 'example.png', encoding: 'base64' });
-    // await browser.close();
-    // return { screen };
+    await browser.close();
+    return { screen };
   }
 
   async createPreset(body: CreatePresetDto) {
