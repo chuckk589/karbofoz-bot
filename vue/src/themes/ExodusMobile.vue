@@ -77,34 +77,3 @@ export default {
   },
 };
 </script>
-<style>
-body {
-}
-
-div {
-  position: absolute;
-}
-
-.text {
-  display: flex;
-  font-weight: 900;
-  justify-content: flex-center;
-  align-items: center;
-}
-
-.text-basic {
-  font-weight: 500;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #fefeff;
-  font-size: 42px;
-}
-.text-headers {
-  color: #c6c9d8;
-}
-.text-values {
-  color: #9599a4;
-}
-</style>

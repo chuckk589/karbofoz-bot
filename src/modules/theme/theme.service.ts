@@ -23,6 +23,7 @@ export class ThemeService {
         strategy: LoadStrategy.JOINED,
       },
     );
+    console.log(theme);
     return {
       theme: new RetrieveInputValuesDto(theme),
       path: `${theme.template.exchange.alias}/${theme.alias}`,

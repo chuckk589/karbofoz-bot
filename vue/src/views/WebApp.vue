@@ -114,7 +114,6 @@ export default {
           this.loading = true;
           this.$http
             .post('/v1/preset/preview/', {
-              exchange: this.exchange,
               theme: this.theme,
               language: this.language,
               ...this.form,

@@ -1,70 +1,58 @@
 <template>
-  <div id="wobar" style="left: 0px; top: 0px; width: 1080px; height: 2184px">
-    <div :style="'left:0px; top:0px; width:237px; height:119px; background-image: url(' + payload.path + '/01.jpg)'"></div>
-    <div :class="'text ' + themeClass" :style="' font-size:49px; left:237px; top:0px; width:606px; height:119px; background-image: url(' + payload.path + '/text1.jpg)'">
-      {{ getText('text1') }}
+  <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px; height: 2184px; display: flex; flex-direction: column">
+    <div :class="'text-' + theme" style="height: 120px; margin-bottom: 75px; font-size: 49px">
+      <div style="background-image: url('/binance/images/3.png'); width: 51px; height: 40px; margin-right: auto; margin: 0 auto 0 32px"></div>
+      <div style="margin-right: auto; font-weight: 900; padding-left: 120px">Deposit Details</div>
+      <div style="background-image: url('/binance/images/2.png'); width: 43px; height: 52px; margin: 0 79px 0 0"></div>
+      <div style="background-image: url('/binance/images/1.png'); width: 41px; height: 52px; margin: 0 38px 0 0"></div>
     </div>
-    <div :style="'left:843px; top:0px; width:237px; height:119px; background-image: url(' + payload.path + '/03.jpg)'"></div>
-    <div :style="'left:0px; top:119px; width:1080px; height:69px; background-image: url(' + payload.path + '/04.jpg)'"></div>
-    <div :style="'left:0px; top:188px; width:39px; height:1996px; background-image: url(' + payload.path + '/05.jpg)'"></div>
-    <div class="text" :style="'color: #86909A; font-size: 38px; left:39px; top:188px; width:1002px; height:75px; background-image: url(' + payload.path + '/text2.jpg)'">
-      {{ getText('text2') }}
+    <div class="text-gray" style="font-size: 37px; margin-bottom: 18px; font-weight: 600">Amount</div>
+    <div :class="'text-' + theme" style="margin-bottom: 4px">
+      <div style="font-size: 70px; font-weight: 1000; letter-spacing: 3px">1233.056789</div>
+      <div style="font-size: 42px; font-weight: 800; padding: 26px 0 0 0">USDT</div>
     </div>
-    <div :style="'left:1041px; top:188px; width:39px; height:1996px; background-image: url(' + payload.path + '/07.jpg)'"></div>
-    <div :class="'text ' + themeClass" :style="'font-size: 79px; left:39px; top:263px; width:1002px; height:112px; background-image: url(' + payload.path + '/input1.jpg)'">
-      {{ getText('input1') }}
+    <div style="margin-bottom: 28px">
+      <div style="background-image: url('/binance/images/4.png'); width: 32px; height: 32px; margin-right: 20px"></div>
+      <div style="color: #2cb682ff; font-weight: 700; font-size: 42px; letter-spacing: 1px">Completed</div>
     </div>
-    <div class="text" :style="'left:39px; top:375px; width:1002px; height:74px; background-image: url(' + payload.path + '/input1.jpg)'">
-      <div :style="'position: initial; width:71px; height:74px; background-image: url(' + payload.path + '/10.jpg)'"></div>
-      <div style="position: initial; font-size: 44px; color: #2ebc82">{{ getText('text3') }}</div>
+    <div :class="'line-' + theme" class="text-gray" style="font-size: 33px; text-align: center; line-height: 39px; font-weight: 500; height: 161px; align-items: flex-start; margin-bottom: 76px">Crypto has arrived in your Binance account. View your spot account balance for more details.</div>
+    <div class="data-item" style="margin-bottom: 40px">
+      <div class="text-gray">Confirmations</div>
+      <div :class="'text-' + theme">50 / 1</div>
     </div>
-    <div class="text" :style="'color: #88929C;font-size: 32px;text-align: center;font-weight: 500;line-height: 45px;left:39px; top:449px; width:1002px; height:116px; background-image: url(' + payload.path + '/text4.jpg)'">
-      {{ getText('text4') }}
+    <div class="data-item" style="margin-bottom: 40px">
+      <div class="text-gray">Network</div>
+      <div :class="'text-' + theme">TRX</div>
     </div>
-    <div :style="'left:39px; top:565px; width:1002px; height:66px; background-image: url(' + payload.path + '/13.jpg)'"></div>
-    <div :style="'left:39px; top:631px; width:1002px; height:56px; background-image: url(' + payload.path + '/14.jpg)'"></div>
-    <div class="text-left" :style="'left:39px; top:687px; width:501px; height:92px; background-image: url(' + payload.path + '/text5.jpg)'">{{ getText('text5') }}</div>
-    <div :class="'text-right ' + themeClass" :style="'left:540px; top:687px; width:501px; height:92px; background-image: url(' + payload.path + '/input2.jpg)'">
-      {{ getText('input2') }}
+    <div class="data-item" style="margin-bottom: 31px">
+      <div class="text-gray">Deposit Wallet</div>
+      <div :class="'text-' + theme">Spot Wallet</div>
     </div>
-    <div class="text-left" :style="'left:39px; top:779px; width:501px; height:94px; background-image: url(' + payload.path + '/text6.jpg)'">{{ getText('text6') }}</div>
-    <div :class="'text-right ' + themeClass" :style="'left:540px; top:779px; width:501px; height:94px; background-image: url(' + payload.path + '/input3.jpg)'">
-      {{ getText('input3') }}
+    <div class="data-item" style="margin-bottom: 70px">
+      <div class="text-gray" style="margin-right: auto">Address</div>
+      <div :class="'text-' + theme" style="margin-right: 25px; max-width: 560px; word-break: break-word; align-content: stretch; text-align: end">23333333333332333333333333dsfdsfdsfdsfdsfdsfdsfdsf</div>
+      <div style="background-image: url('/binance/images/5.png'); width: 37px; height: 41px; margin-right: 10px"></div>
     </div>
-    <div class="text-left" :style="'left:39px; top:873px; width:501px; height:100px; background-image: url(' + payload.path + '/text7.jpg)'">{{ getText('text7') }}</div>
-    <div :class="'text-right ' + themeClass" :style="'left:540px; top:873px; width:501px; height:100px; background-image: url(' + payload.path + '/input4.jpg)'">
-      {{ getText('input4') }}
+    <div class="data-item" style="margin-bottom: 81px">
+      <div class="text-gray" style="margin-right: auto">Txid</div>
+      <div :class="'text-' + theme" style="margin-right: 25px; max-width: 560px; word-break: break-word; align-content: stretch; text-align: end; text-decoration: underline">23333333333332333333333333dsfdsfdsfdsfdsfdsfdsfdsf</div>
+      <div style="background-image: url('/binance/images/5.png'); width: 37px; height: 41px; margin-right: 10px"></div>
     </div>
-    <div class="text-left" :style="'left:39px; top:973px; width:399px; height:132px; background-image: url(' + payload.path + '/text8.jpg)'">{{ getText('text8') }}</div>
-    <div :class="'text-right ' + themeClass" :style="'overflow-wrap:anywhere;padding-right: 22px;left:438px; top:973px; width:552px; height:132px; background-image: url(' + payload.path + '/input5.jpg)'">
-      {{ getText('input5') }}
+    <div class="data-item" style="margin-bottom: 62px">
+      <div class="text-gray">Date</div>
+      <div :class="'text-' + theme">2023-04-07 15:42:40</div>
     </div>
-    <div :style="'left:990px; top:973px; width:51px; height:362px; background-image: url(' + payload.path + '/23.jpg)'"></div>
-    <div class="text-left" :style="' left:39px; top:1105px; width:399px; height:230px; background-image: url(' + payload.path + '/text9.jpg)'">
-      {{ getText('text9') }}
+    <div :class="'block-' + theme" style="height: 360px; border-radius: 20px; margin: 0 40px; flex: -; /* flex-direction: column; */ align-items: stretch">
+      <div style="flex-direction: column; /* flex-grow: 1; */ flex: 1; align-items: flex-start; justify-content: flex-start; margin: 64px 0 0 50px">
+        <div class="text-gray" style="font-weight: 700; font-size: 33px">Receive</div>
+        <div :class="'text-' + theme" style="font-size: 50px; font-weight: 900; margin-bottom: 70px">Receive Crypto With Zero Fee</div>
+        <div style="color: #e9ba22ff; font-size: 38px; font-weight: 800">Discover Now</div>
+      </div>
+      <div style="flex-direction: column; padding-right: 32px; justify-content: flex-start; /* margin-top: 14px; */">
+        <div style="background-image: url('/binance/images/6.png'); width: 127px; height: 135px; /* margin-right: 58px; */ margin-top: 112px"></div>
+        <div style="background-image: url('/binance/images/7.png'); width: 189px; height: 13px; margin-top: 47px; margin-right: 10px"></div>
+      </div>
     </div>
-    <div :class="'text-right ' + themeClass" :style="'text-decoration: underline;overflow-wrap:anywhere;padding-right: 22px;left:438px; top:1105px; width:552px; height:230px; background-image: url(' + payload.path + '/input6.jpg)'">
-      {{ getText('input6') }}
-    </div>
-    <div class="text-left" :style="' left:39px; top:1335px; width:501px; height:97px; background-image: url(' + payload.path + '/text10.jpg)'">
-      {{ getText('text10') }}
-    </div>
-    <div :class="'text-right ' + themeClass" :style="'left:540px; top:1335px; width:501px; height:97px; background-image: url(' + payload.path + '/27.jpg)'">
-      {{ getText('input7', ['date']) }}
-    </div>
-    <div :style="'left:39px; top:1432px; width:1002px; height:39px; background-image: url(' + payload.path + '/28.jpg)'"></div>
-    <div :style="'left:39px; top:1471px; width:53px; height:361px; background-image: url(' + payload.path + '/29.jpg)'"></div>
-    <div class="text-left" :style="'align-items: flex-end;font-weight: 700;line-height: 60px;font-size: 33px; left:92px; top:1471px; width:668px; height:120px; background-image: url(' + payload.path + '/text11.jpg)'">
-      {{ getText('text11') }}
-    </div>
-    <div :style="'left:760px; top:1471px; width:281px; height:361px; background-image: url(' + payload.path + '/31.jpg)'"></div>
-    <div :class="'text-left ' + themeClass" :style="'font-size: 49px;font-weight: 600;left:92px; top:1591px; width:668px; height:66px; background-image: url(' + payload.path + '/text12.jpg)'">
-      {{ getText('text12') }}
-    </div>
-    <div class="text-left" :style="'color: #DAB540;font-weight: 700;font-size: 40px;padding-top: 30px;left:92px; top:1657px; width:668px; height:175px; background-image: url(' + payload.path + '/text13.jpg)'">
-      {{ getText('text13') }}
-    </div>
-    <div :style="'left:39px; top:1832px; width:1002px; height:352px; background-image: url(' + payload.path + '/34.jpg)'"></div>
   </div>
 </template>
 <script>
@@ -74,7 +62,12 @@ export default {
   mixins: [themeMixin],
 
   data() {
-    return {};
+    return {
+      theme: '',
+    };
+  },
+  mounted() {
+    this.theme = this.payload.path.split('/').pop();
   },
 };
 </script>
@@ -88,38 +81,42 @@ body {
   font-family: 'binance';
 }
 
-div {
-  position: absolute;
-}
-
-.text {
+#main div {
   display: flex;
-  font-weight: 900;
   justify-content: center;
   align-items: center;
 }
 
-.text-left {
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  color: #88929c;
-  font-size: 37px;
-}
-
 .mobile-dark {
-  color: #e6ebf1;
+  background-color: #1f2630;
 }
 
-.mobile-light {
-  color: #202630;
+.text-mobile-dark {
+  color: #edeef1ff;
+}
+.block-mobile-dark {
+  background-color: #29313c;
+}
+.block-mobile-light {
+  background-color: #fafafa;
+}
+.line-mobile-dark {
+  border-bottom: 1px solid #353c46;
+}
+.line-mobile-light {
+  border-bottom: 1px solid #ececed;
+}
+.text-mobile-light {
+  color: black;
 }
 
-.text-right {
-  font-weight: 500;
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
+.text-gray {
+  color: #717a8bff;
+}
+.data-item {
   font-size: 37px;
+  font-weight: 500;
+  justify-content: space-between !important;
+  padding: 0 36px;
 }
 </style>
