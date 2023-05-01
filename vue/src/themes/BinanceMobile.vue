@@ -71,14 +71,14 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 @font-face {
-  font-family: 'binance';
-  src: url('../binance/DINPro.ttf');
+  font-family: 'font';
+  src: url('../binance/fonts/DINPro.ttf');
 }
 
-body {
-  font-family: 'binance';
+#main {
+  font-family: 'font';
 }
 
 #main div {

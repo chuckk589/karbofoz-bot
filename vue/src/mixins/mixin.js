@@ -36,6 +36,7 @@ const themeMixin = {
       }
       return text;
     },
+    lengthFortmatter(value, maxlength) {},
   },
   computed: {
     themeClass() {

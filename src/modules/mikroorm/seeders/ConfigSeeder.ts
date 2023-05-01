@@ -21,15 +21,17 @@ export class ConfigSeeder extends Seeder {
     const exchange = em.create(Exchange, { alias: 'binance', name: 'Binance' });
     const trust = em.create(Exchange, { alias: 'trust', name: 'Trust' });
     const exodus = em.create(Exchange, { alias: 'exodus', name: 'Exodus' });
-
+    const safepal = em.create(Exchange, { alias: 'safepal', name: 'Safepal' });
     //шаблоны
     em.create(Template, { exchange: exchange });
     em.create(Template, { exchange: trust });
     em.create(Template, { exchange: exodus });
+    em.create(Template, { exchange: safepal });
 
     await GenerateThemesForExchange.call({ em: em }, _trust);
     await GenerateThemesForExchange.call({ em: em }, _binance);
     await GenerateThemesForExchange.call({ em: em }, _exodus);
+    await GenerateThemesForExchange.call({ em: em }, _safepal);
   }
 }
 const _binance = {
@@ -154,6 +156,50 @@ const _exodus = {
     .add({ en: 'Sent to', alias: 'outd' })
     .add({ en: 'Received', alias: 'inf' })
     .add({ en: 'Sent', alias: 'outf' }),
+};
+const _safepal = {
+  name: 'safepal ',
+  languages: ['ru'],
+  themes: [
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
+    .add({ type: HtmlInputType.TEXT, name: 'Комиссия' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата' })
+    .add({ type: HtmlInputType.TEXT, name: 'От' })
+    .add({ type: HtmlInputType.TEXT, name: 'На' })
+    .add({ type: HtmlInputType.TEXT, name: 'TxID' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Высота' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Block' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Nonce' })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ ru: 'Детали транзакции' })
+    .add({ ru: 'Статус' })
+    .add({ ru: 'Комиссия сети' })
+    .add({ ru: 'Время' })
+    .add({ ru: 'От' })
+    .add({ ru: 'На' })
+    .add({ ru: 'Transaction Hash' })
+    .add({ ru: 'Block' })
+    .add({ ru: 'Nonce' })
+    .add({ ru: 'Получить', alias: 'in' })
+    .add({ ru: 'Отправить', alias: 'out' }),
 };
 async function GenerateThemesForExchange(this: { em: EntityManager }, data: data) {
   const languages = await this.em.find(Language, { alias: { $in: data.languages } });

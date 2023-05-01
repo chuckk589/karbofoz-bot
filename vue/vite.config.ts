@@ -27,6 +27,9 @@ export default defineConfig({
       '/exodus': {
         target: 'http://localhost:3000/',
       },
+      '/safepal': {
+        target: 'http://localhost:3000/',
+      },
     },
   },
   plugins: [vue(), vuetify({ autoImport: true }), vueJsx()],
