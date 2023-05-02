@@ -9,6 +9,6 @@ export class ThemeController {
   constructor(private readonly themeService: ThemeService) {}
   @Get(':id')
   getTemplate(@Param('id') id: string, @Query('language') language: string) {
-    return this.themeService.getTheme(+id, +language);
+    return this.themeService.getTheme(+id, language);
   }
 }

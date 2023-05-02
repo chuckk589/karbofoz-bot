@@ -6,7 +6,7 @@ import { RetrieveInputValuesDto } from './dto/retrieve-input-values.dto';
 @Injectable()
 export class ThemeService {
   constructor(private readonly em: EntityManager) {}
-  async getTheme(id: number, language: number) {
+  async getTheme(id: number, language: string) {
     // const theme = await this.em.findOne(
     //   Theme,
     //   { id, themeInputs: { input: { inputValues: { language } } } },
@@ -17,15 +17,15 @@ export class ThemeService {
     // );
     const theme = await this.em.findOne(
       Theme,
-      { id, themeInputs: { input: { inputValues: { language } } } },
+      { id, themeInputs: { input: { inputValues: { $ne: null } } } },
       {
         populate: ['template.exchange', 'themeInputs.input.inputValues.language'],
         strategy: LoadStrategy.JOINED,
       },
     );
-    console.log(theme);
+
     return {
-      theme: new RetrieveInputValuesDto(theme),
+      theme: new RetrieveInputValuesDto(theme, language),
       path: `${theme.template.exchange.alias}/${theme.alias}`,
     };
   }

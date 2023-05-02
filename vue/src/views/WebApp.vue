@@ -13,6 +13,8 @@
                 <v-select v-model="exchange" :items="table.exchanges" label="Биржа" density="compact" :rules="notEmpty"></v-select>
                 <v-select v-model="theme" :items="themeItems" label="Тема" density="compact" :rules="notEmpty"></v-select>
                 <v-select v-model="language" :items="themeLanguages" label="Язык" density="compact"></v-select>
+                <v-select v-model="currency" :items="table.currencies" label="Валюта" density="compact"></v-select>
+                <v-select v-model="network" :items="table.networks" label="Сеть" density="compact"></v-select>
               </v-form>
             </v-card-text>
           </v-window-item>
@@ -20,7 +22,11 @@
           <v-window-item :value="2">
             <v-card-text>
               <v-form ref="form2" v-if="step == 2">
-                <component :is="getComponentName(field)" v-for="field in themeFields" :key="field.value" :items="field.variants" :type="field.type" density="compact" step="1" :label="field.name" :rules="notEmpty" v-model="form[field.alias]"></component>
+                <component :is="getComponentName(field)" v-for="field in themeFields" :key="field.value" :items="field.variants" :type="field.type" density="compact" step="1" :rules="!field.optional ? notEmpty : []" v-model="form[field.alias]">
+                  <template #label>
+                    <span>{{ field.name }}<strong class="text-red" v-if="!field.optional">&nbsp;&nbsp;*</strong></span>
+                  </template>
+                </component>
               </v-form>
             </v-card-text>
           </v-window-item>
@@ -67,6 +73,8 @@ export default {
       preview: '',
       loading: false,
       language: '',
+      currency: '',
+      network: '',
     };
   },
   mounted() {
@@ -116,6 +124,8 @@ export default {
             .post('/v1/preset/preview/', {
               theme: this.theme,
               language: this.language,
+              currency: this.currency,
+              network: this.network,
               ...this.form,
             })
             .then((res) => {
@@ -163,7 +173,9 @@ export default {
   display: flex;
   flex-direction: column;
 }
-
+.required label::after {
+  content: '*';
+}
 input[type='time'] {
   position: relative;
 }

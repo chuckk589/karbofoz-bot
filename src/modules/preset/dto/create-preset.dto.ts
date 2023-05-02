@@ -1,9 +1,9 @@
-import { IsNumberString } from 'class-validator';
+import { IsNumberString, IsString } from 'class-validator';
 
 export class CreatePresetDto {
   @IsNumberString()
   theme: string;
-  @IsNumberString()
+  @IsString()
   language: string;
   [key: string]: string | number;
 }

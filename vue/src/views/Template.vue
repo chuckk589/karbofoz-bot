@@ -20,7 +20,7 @@ export default {
     };
   },
   mounted() {
-    this.$http({ method: 'GET', url: `/v1/theme/${this.$route.query.theme}?language=${this.$route.query.language}` }).then((e) => {
+    this.$http({ method: 'GET', url: `/v1/theme/${this.$route.query.theme}?language=${this.$route.query.language}&currency=${this.$route.query.currency}&network=${this.$route.query.network}` }).then((e) => {
       this.theme = e.data.path
         .replace(/-.*/, '')
         .split('/')

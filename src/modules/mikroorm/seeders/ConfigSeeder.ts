@@ -6,18 +6,29 @@ import { Template } from '../entities/Template';
 import { Theme } from '../entities/Theme';
 import { Input } from '../entities/Input';
 import { HtmlInputType, InputAlias } from '../entities/InputAlias';
+import { Network } from '../entities/Network';
+import { Currency } from '../entities/Currency';
 
 type selectValue = { value: string; alias: string };
 type field = { [key: string]: string } | { type: HtmlInputType; name: string; optional?: boolean; values?: selectValue[]; alias?: string };
 type data = { name: string; languages: string[]; themes: { alias: string; name: string }[]; fields: Set<field> };
+
 export class ConfigSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
-    // //языки
+    // сети
+    em.create(Network, { alias: 'bep20', name: 'BEP20' });
+    em.create(Network, { alias: 'erc20', name: 'ERC20' });
+    em.create(Network, { alias: 'bep2', name: 'BEP2' });
+    em.create(Network, { alias: 'trc20', name: 'TRC20' });
+    //валюты
+    em.create(Currency, { alias: 'btc', name: 'Bitcoin' });
+    em.create(Currency, { alias: 'usdt', name: 'USDT' });
+    //языки
     em.create(Language, { alias: 'en', name: 'Английский' });
     em.create(Language, { alias: 'es', name: 'Испанский' });
     em.create(Language, { alias: 'ru', name: 'Русский' });
     em.create(Language, { alias: 'ua', name: 'Украинский' });
-    // //биржи
+    //биржи
     const exchange = em.create(Exchange, { alias: 'binance', name: 'Binance' });
     const trust = em.create(Exchange, { alias: 'trust', name: 'Trust' });
     const exodus = em.create(Exchange, { alias: 'exodus', name: 'Exodus' });
@@ -65,8 +76,7 @@ const _binance = {
     .add({ en: 'Receive Crypto With Zero Fee', es: 'USDT APR de hasta 4.06%' })
     .add({ en: 'Discover Now', es: 'Descubrir ahora' })
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
-    .add({ type: HtmlInputType.TEXT, name: 'Подтверждения' })
-    .add({ type: HtmlInputType.TEXT, name: 'Сеть' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Подтверждения' })
     .add({ type: HtmlInputType.TEXT, name: 'Имя кошелька' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес' })
     .add({ type: HtmlInputType.TEXT, name: 'TXID' })
@@ -95,12 +105,12 @@ const _trust = {
     },
   ],
   fields: new Set()
-    .add({ type: HtmlInputType.TEXT, name: 'Сумма' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции' })
-    .add({ type: HtmlInputType.TEXT, name: 'Статус транзакции' })
+    .add({ type: HtmlInputType.TEXT, name: 'Статус транзакции' }) //TODO: сделать селект
     .add({ type: HtmlInputType.TEXT, name: 'Адрес' })
-    .add({ type: HtmlInputType.TEXT, name: 'Сетевой сбор' })
-    .add({ type: HtmlInputType.TEXT, name: 'Nonce' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Сетевой сбор' })
+    .add({ type: HtmlInputType.TEXT, name: 'Nonce', optional: true })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -129,11 +139,12 @@ const _exodus = {
     },
   ],
   fields: new Set()
-    .add({ type: HtmlInputType.TEXT, name: 'Сумма' })
-    .add({ type: HtmlInputType.TEXT, name: 'Дата создания' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес' })
     .add({ type: HtmlInputType.TEXT, name: 'TXID' })
-    .add({ type: HtmlInputType.NUMBER, name: 'Текущий баланс' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Текущий баланс', optional: true })
+    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', optional: true })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -143,7 +154,6 @@ const _exodus = {
       ],
       alias: 'direction',
     })
-    .add({ type: HtmlInputType.TEXT, name: 'Комиссия' })
     .add({ en: 'TRANSACTION DETAILS' })
     .add({ en: 'Personal Note' })
     .add({ en: 'Add Note' })
@@ -155,10 +165,11 @@ const _exodus = {
     .add({ en: 'Received from', alias: 'ind' })
     .add({ en: 'Sent to', alias: 'outd' })
     .add({ en: 'Received', alias: 'inf' })
-    .add({ en: 'Sent', alias: 'outf' }),
+    .add({ en: 'Sent', alias: 'outf' })
+    .add({ en: 'Contact Support' }),
 };
 const _safepal = {
-  name: 'safepal ',
+  name: 'safepal',
   languages: ['ru'],
   themes: [
     {
@@ -172,14 +183,16 @@ const _safepal = {
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
-    .add({ type: HtmlInputType.TEXT, name: 'Комиссия' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', optional: true })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции' })
     .add({ type: HtmlInputType.TEXT, name: 'От' })
     .add({ type: HtmlInputType.TEXT, name: 'На' })
-    .add({ type: HtmlInputType.TEXT, name: 'TxID' })
-    .add({ type: HtmlInputType.NUMBER, name: 'Высота' })
-    .add({ type: HtmlInputType.NUMBER, name: 'Block' })
-    .add({ type: HtmlInputType.NUMBER, name: 'Nonce' })
+    .add({ type: HtmlInputType.TEXT, name: 'TxID', optional: true })
+    .add({ type: HtmlInputType.TEXT, name: 'Transaction Hash', optional: true })
+    .add({ type: HtmlInputType.NUMBER, name: 'Высота', optional: true })
+    .add({ type: HtmlInputType.NUMBER, name: 'Block', optional: true })
+    .add({ type: HtmlInputType.NUMBER, name: 'Nonce', optional: true })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес' })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -196,11 +209,57 @@ const _safepal = {
     .add({ ru: 'От' })
     .add({ ru: 'На' })
     .add({ ru: 'Transaction Hash' })
+    .add({ ru: 'Успех' })
+    .add({ ru: 'Получить', alias: 'in' })
+    .add({ ru: 'Отправить', alias: 'out' })
     .add({ ru: 'Block' })
     .add({ ru: 'Nonce' })
-    .add({ ru: 'Получить', alias: 'in' })
-    .add({ ru: 'Отправить', alias: 'out' }),
+    .add({ ru: 'TxID' })
+    .add({ ru: 'Высота' }),
 };
+// async function GenerateThemesForExchange(this: { em: EntityManager }, data: data) {
+//   const languages = await this.em.find(Language, { alias: { $in: data.languages } });
+//   const exchange = await this.em.findOneOrFail(Exchange, { alias: data.name });
+//   const template = await this.em.findOneOrFail(Template, { exchange });
+//   const count = { input: 0, text: 0 };
+//   const inputs: Input[] = [];
+//   for await (const field of data.fields) {
+//     const input = await this.em.findOne(Input, { alias: field.alias });
+//     if (input) {
+//       inputs.push(input);
+//       continue;
+//     }
+//     inputs.push(
+//       this.em.create(Input, {
+//         alias: field.alias || (field.type ? `input${++count.input}` : `text${++count.text}`),
+//         ...(field.type
+//           ? {
+//               inputAlias: {
+//                 type: field.type as HtmlInputType,
+//                 name: field.name,
+//                 optional: !!field.optional,
+//                 ...(field.values
+//                   ? {
+//                       aliasVariants: field.values as selectValue[],
+//                     }
+//                   : {}),
+//               },
+//             }
+//           : { inputValues: data.languages.map((language: string) => ({ value: (field as any)[language], language: languages.find((lan) => lan.alias == language) })) }),
+//       }),
+//     );
+//   }
+
+//   await this.em.flush();
+//   data.themes.map((theme: any) =>
+//     this.em.create(Theme, {
+//       ...theme,
+//       template,
+//       themeLanguages: [...Array(languages.length).keys()].map((i) => ({ language: languages[i] })),
+//       themeInputs: [...Array(inputs.length).keys()].map((i) => ({ input: inputs[i] })),
+//     }),
+//   );
+// }
 async function GenerateThemesForExchange(this: { em: EntityManager }, data: data) {
   const languages = await this.em.find(Language, { alias: { $in: data.languages } });
   const exchange = await this.em.findOneOrFail(Exchange, { alias: data.name });

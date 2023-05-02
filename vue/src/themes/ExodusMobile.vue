@@ -1,20 +1,20 @@
 <template>
-  <div id="main" style="left: 0px; top: 0px; width: 1080px; height: 2279px; background-image: url(exodus/images/4.png)">
-    <div style="display: flex; flex-direction: column; align-items: stretch">
-      <div style="height: 103px; background-color: red; margin-bottom: 15px"></div>
-      <div style="font-size: 37px; margin-bottom: 80px">
+  <div id="main" style="left: 0px; overflow: hidden; top: 0px; width: 1080px; height: 2274px; background-image: url(exodus/images/4.png)">
+    <div style="height: 103px; background-color: red"></div>
+    <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch">
+      <div style="font-size: 37px; margin-bottom: 80px; margin-top: 15px">
         <div style="background-image: url(exodus/images/1.png); width: 55px; height: 39px; margin-left: 64px"></div>
-        <div style="color: #9ca6c8; font-size: 37px; margin: auto">TRANSACTION DETAILS</div>
+        <div style="color: #9ca6c8; font-size: 37px; margin: auto">{{ getText('text1') }}</div>
         <div style="background-image: url(exodus/images/2.png); width: 46px; height: 65px; margin-right: 71px"></div>
       </div>
-      <div v-for="(block, index) in block1" :key="index" class="data-item">
+      <div v-for="(block, index) in getBlocks('block1')" :key="index" class="data-item">
         <div>{{ block.text }}</div>
         <div :style="block.style">{{ block.value }}</div>
       </div>
       <div class="data-item" style="height: 488px; justify-content: space-evenly">
         <kek style="background-image: url(exodus/images/3.png); width: 91px; height: 92px; margin-top: 36px"></kek>
-        <div style="font-size: 42px">Need help?</div>
-        <div style="margin-bottom: 36px; font-size: 53px; background: #907df0; background: linear-gradient(to left, #907df0 0%, #604ebf 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent">Contact Support</div>
+        <div style="font-size: 42px">{{ getText('text7') }}</div>
+        <div style="margin-bottom: 36px; font-size: 53px; background: #907df0; background: linear-gradient(to left, #907df0 0%, #604ebf 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent">{{ getText('text7') }}</div>
       </div>
     </div>
   </div>
@@ -31,33 +31,63 @@ export default {
       theme: '',
       block1: [
         {
-          text: 'Received',
-          value: '+1,234.0568 USDT',
-          style: 'color:#5fa697',
+          value: 'input1',
+          alias: 'direction',
+          key: 'f',
+          style: this.payload.query.direction === 'in' ? 'color:#5fa697' : 'color:#9599a5',
+          formatter: 'sumFormatter2',
         },
         {
-          text: 'Personal Note',
-          value: 'Add Note',
+          text: 'text8',
+          value: 'input6',
+          formatter: 'sumFormatter',
+          style: 'color:#9599a5',
+        },
+        {
+          text: 'text2',
+          value: 'text3',
           style: 'color:#6c5dc3',
         },
         {
-          text: 'Created',
-          value: 'A few seconds ago...',
+          text: 'text4',
+          value: 'input2',
+          formatter: 'dateFormatter',
         },
         {
-          text: 'Transaction ID',
-          value: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+          value: 'input3',
+          alias: 'direction',
+          key: 'd',
           style: 'line-height: 47px;font-size: 40px;margin-top: 17px;color: #3f099f;background: #907DF0;background: linear-gradient(to left, #907DF0 0%, #604EBF 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;',
         },
         {
-          text: 'Now',
-          value: '$1,234.94',
+          text: 'text5',
+          value: 'input4',
+          style: 'line-height: 47px;font-size: 40px;margin-top: 17px;color: #3f099f;background: #907DF0;background: linear-gradient(to left, #907DF0 0%, #604EBF 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;',
+        },
+        {
+          text: 'text6',
+          value: 'input5',
+          formatter: 'sumFormatter',
         },
       ],
     };
   },
-  mounted() {
-    this.theme = this.payload.path.split('/').pop();
+  methods: {
+    sumFormatter(value) {
+      return value && `$ ${value}`;
+    },
+    sumFormatter2(value) {
+      return this.payload.query.direction === 'in' ? `+${value} ${this.currencies[this.getTextFromQuery('currency')].label}` : value;
+    },
+    dateFormatter(value) {
+      return new Date(value).toLocaleString(this.payload.query.language, {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+      });
+    },
   },
 };
 </script>
@@ -66,11 +96,6 @@ body {
   font-family: 'Roboto';
 }
 
-#main div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 .data-item {
   flex-direction: column;
   height: 265px;

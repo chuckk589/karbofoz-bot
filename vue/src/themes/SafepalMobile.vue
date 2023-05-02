@@ -1,52 +1,57 @@
 <template>
   <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px; height: 2274px">
-    <div style="height: 98px; background-color: red; margin-bottom: 25px"></div>
-    <div style="margin: 0 42px; display: flex; flex-direction: column; align-items: stretch">
-      <div style="font-size: 48px; margin-bottom: 78px">
-        <div style="background-image: url(safepal/images/1.png); width: 30px; height: 51px; margin-left: 18px; transform: rotate(180deg) scale(0.8); margin-bottom: 7px"></div>
-        <div :class="'text-' + theme" style="margin: 0 auto 0 auto; font-weight: 500">Детали транзакции</div>
-        <div style="width: 30px; height: 51px; margin-right: 18px"></div>
-      </div>
-      <div style="font-size: 64px; font-weight: 500; margin-bottom: 53px">
-        <div style="background-image: url(safepal/images/3.png); width: 65px; height: 65px; background-size: cover; margin-right: 15px"><div style="background-image: url(safepal/images/2.png); width: 26px; position: absolute; height: 26px; background-size: cover; margin: 40px 0 0 40px"></div></div>
-        <div :class="'text-' + theme">Получить</div>
-      </div>
-      <div :class="'block-' + theme" style="height: 168px; margin-bottom: 40px; justify-content: flex-start; border-radius: 29px">
-        <div style="font-size: 64px; font-weight: 500">
-          <div style="background-image: url(safepal/images/coins/usdt.png); width: 108px; height: 108px; background-size: cover; margin-left: 41px"><div style="background-image: url(safepal/images/coins/bnb_smart_chain.png); width: 40px; position: absolute; height: 40px; background-size: cover; margin: 65px 0 0 65px"></div></div>
+    <div style="height: 98px; background-color: red"></div>
+    <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch">
+      <div2 style="margin: 25px 42px 0 42px">
+        <div style="font-size: 48px; margin-bottom: 78px">
+          <div style="background-image: url(safepal/images/1.png); width: 30px; height: 51px; margin-left: 18px; transform: rotate(180deg) scale(0.8); margin-bottom: 7px"></div>
+          <div :class="'text-' + theme" style="margin: 0 auto 0 auto; font-weight: 500">{{ getText('text1') }}</div>
+          <div style="width: 30px; height: 51px; margin-right: 18px"></div>
         </div>
-        <div style="flex-direction: column; margin-left: 27px; font-weight: 600; letter-spacing: 1px; line-height: 45px; align-items: flex-start">
-          <div :class="'text-' + theme" style="font-size: 40px">+2986.7131988 USDT</div>
-          <div style="font-size: 35px; color: #9e9dac">BEP20 0x55d...97955</div>
+        <div style="font-size: 64px; font-weight: 500; margin-bottom: 53px">
+          <div :style="'background-image: url(safepal/images/3.png); width: 65px; height: 65px; background-size: cover; margin-right: 15px;' + rotateStyle"></div>
+          <div :class="'text-' + theme" style="position: relative">
+            <div style="background-image: url(safepal/images/2.png); width: 26px; position: absolute; height: 26px; background-size: cover; top: 55px; left: -40px"></div>
+            {{ getText('direction') }}
+          </div>
         </div>
-      </div>
-      <div :class="'block-' + theme" style="flex-direction: column; margin-bottom: 39px; align-items: stretch; border-radius: 29px; padding: 25px 43px">
-        <div v-for="(block, index) in block1" :key="index" :class="'data-item text-' + theme">
-          <div>{{ block.text }}</div>
-          <div :style="block.style">{{ block.value }}</div>
-          <div v-if="block.icon"></div>
+        <div :class="'block-' + theme" style="height: 168px; margin-bottom: 40px; justify-content: flex-start; border-radius: 29px">
+          <div style="font-size: 64px; font-weight: 500">
+            <div :style="'background-image: url(safepal/images/coins/' + payload.query.currency + '.png); width: 108px; height: 108px; background-size: cover; margin-left: 41px'"><div :style="'background-image: url(safepal/images/coins/' + payload.query.network + '.png); width: 40px; position: absolute; height: 40px; background-size: cover; margin: 65px 0 0 65px'"></div></div>
+          </div>
+          <div style="flex-direction: column; margin-left: 27px; font-weight: 600; letter-spacing: 1px; line-height: 45px; align-items: flex-start">
+            <div :class="'text-' + theme" style="font-size: 40px">{{ sumFormatter(getText('input1')) }} {{ currencies[getTextFromQuery('currency')].label }}</div>
+            <div style="font-size: 35px; color: #9e9dac">{{ networks[getTextFromQuery('network')].label }} {{ lengthFormatter(getText('input11'), 10) }}</div>
+          </div>
         </div>
-      </div>
-      <div :class="'block-' + theme" style="flex-direction: column; margin-bottom: 41px; align-items: stretch; border-radius: 29px; padding: 25px 43px">
-        <div v-for="(block, index) in block2" :key="index" :class="'data-item text-' + theme">
-          <div>{{ block.text }}</div>
-          <div>{{ block.value }}</div>
-          <div v-if="block.icon"></div>
+        <div :class="'block-' + theme" style="flex-direction: column; margin-bottom: 39px; align-items: stretch; border-radius: 29px; padding: 25px 43px">
+          <div v-for="(block, index) in getBlocks('block1')" :key="index" :class="'data-item text-' + theme">
+            <div>{{ block.text }}</div>
+            <div :style="block.style">{{ block.value }}</div>
+            <div v-if="block.icon"></div>
+          </div>
         </div>
-      </div>
-      <div :class="'block-' + theme" style="flex-direction: column; margin-bottom: 34px; align-items: stretch; border-radius: 29px; padding: 25px 43px">
-        <div v-for="(block, index) in block3" :key="index" :class="'data-item text-' + theme">
-          <div>{{ block.text }}</div>
-          <div>{{ block.value }}</div>
-          <div v-if="block.icon"></div>
+        <div :class="'block-' + theme" style="flex-direction: column; margin-bottom: 41px; align-items: stretch; border-radius: 29px; padding: 25px 43px">
+          <div v-for="(block, index) in getBlocks('block2')" :key="index" :class="'data-item text-' + theme">
+            <div>{{ block.text }}</div>
+            <div>{{ block.value }}</div>
+            <div v-if="block.icon"></div>
+          </div>
         </div>
-      </div>
-      <div :class="'block-' + theme" style="flex-direction: column; align-items: stretch; border-radius: 29px; padding: 25px 43px">
-        <div :class="'data-item text-' + theme">
-          <div style="letter-spacing: -2px">Посмотреть в обозревателе блокчейна</div>
-          <div style="background-image: url(safepal/images/1.png); width: 30px; height: 51px; transform: scale(0.6); margin-right: 10px"></div>
+        <div :class="'block-' + theme" style="flex-direction: column; margin-bottom: 34px; align-items: stretch; border-radius: 29px; padding: 25px 43px">
+          <div v-for="(block, index) in getBlocks('block3')" :key="index" :class="'data-item text-' + theme">
+            <div>{{ block.text }}</div>
+            <div>{{ block.value }}</div>
+            <div v-if="block.icon"></div>
+          </div>
         </div>
-      </div>
+        <div :class="'block-' + theme" style="flex-direction: column; align-items: stretch; border-radius: 29px; padding: 25px 43px">
+          <div :class="'data-item text-' + theme">
+            <div style="letter-spacing: -2px">Посмотреть в обозревателе блокчейна</div>
+            <div style="background-image: url(safepal/images/1.png); width: 30px; height: 51px; transform: scale(0.6); margin-right: 10px"></div>
+          </div>
+        </div>
+      </div2>
     </div>
   </div>
 </template>
@@ -62,65 +67,71 @@ export default {
       theme: '',
       block1: [
         {
-          text: 'Статус',
-          value: 'Успех',
+          text: 'text2',
+          value: 'text8',
           style: 'color: #31c786;',
         },
         {
-          text: 'Комиссия сети',
-          value: '0.00072254 BNB',
+          text: 'text3',
+          value: 'input2',
+          formatter: 'coinFormatter',
         },
         {
-          text: 'Время',
-          value: '2021-05-20 12:00:00',
+          text: 'text4',
+          value: 'input3',
+          formatter: 'dateFormatter',
         },
       ],
       block2: [
         {
-          text: 'От',
-          value: '0x1234...0abcdef',
+          text: 'text5',
+          value: 'input4',
           icon: '5.png',
+          formatter: 'lengthFormatter',
         },
         {
-          text: 'На',
-          value: '0x1234...0abcdef',
+          text: 'text6',
+          value: 'input5',
           icon: '5.png',
+          formatter: 'lengthFormatter',
         },
       ],
       block3: [
         {
-          text: 'Transaction Hash',
-          value: '00x1234...0abcdef',
+          text: 'text7',
+          value: 'input7',
+          icon: '5.png',
+          formatter: 'lengthFormatter',
+        },
+        {
+          text: 'text9',
+          value: 'input9',
+        },
+        {
+          text: 'text10',
+          value: 'input10',
+        },
+        {
+          text: 'text11',
+          value: 'input6',
+          formatter: 'lengthFormatter',
           icon: '5.png',
         },
         {
-          text: 'Block',
-          value: '12345678',
-        },
-        {
-          text: 'Nonce',
-          value: '12345678',
-        },
-        {
-          text: 'TxID',
-          value: '0x1234...0abcdef',
-        },
-        {
-          text: 'Высота',
-          value: '12345678',
+          text: 'text12',
+          value: 'input8',
         },
       ],
     };
   },
-  mounted() {
-    this.theme = this.payload.path.split('/').pop();
-  },
   computed: {
-    colorStyle() {
-      return this.theme === 'mobile-dark' ? 'filter: invert(1)' : '';
+    rotateStyle() {
+      return this.payload.query.direction == 'in' ? '' : 'transform: rotate(227deg);';
     },
-    borderColor() {
-      return this.theme === 'mobile-dark' ? '#1b1c1e' : '#dbdbdd';
+  },
+  methods: {
+    sumFormatter(value) {
+      return `${+parseFloat(value) > 0 ? '+' : ''}${value}`;
     },
   },
 };
@@ -130,12 +141,6 @@ body {
   font-family: 'AlibabaPuHuiTi-2', 'Alibaba Sans', sans-serif;
 }
 
-#main div,
-#main div div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 .text-mobile-dark {
   color: white;
 }
