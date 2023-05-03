@@ -107,7 +107,6 @@ const _trust = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции' })
-    .add({ type: HtmlInputType.TEXT, name: 'Статус транзакции' }) //TODO: сделать селект
     .add({ type: HtmlInputType.TEXT, name: 'Адрес' })
     .add({ type: HtmlInputType.NUMBER, name: 'Сетевой сбор' })
     .add({ type: HtmlInputType.TEXT, name: 'Nonce', optional: true })
@@ -126,6 +125,7 @@ const _trust = {
     .add({ en: 'Network Fee' })
     .add({ en: 'MORE DETAILS' })
     .add({ en: 'Nonce' })
+    .add({ en: 'Completed' })
     .add({ en: 'Sender', alias: 'in' })
     .add({ en: 'Recipient', alias: 'out' }),
 };

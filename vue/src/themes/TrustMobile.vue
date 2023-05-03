@@ -51,11 +51,11 @@ export default {
         },
         {
           text: 'text3',
-          value: 'input3',
+          value: 'text7',
           icon: '1.png',
         },
         {
-          value: 'input4',
+          value: 'input3',
           alias: 'direction',
           formatter: 'lengthFormatter',
         },
@@ -63,13 +63,13 @@ export default {
       block2: [
         {
           text: 'text4',
-          value: 'input5',
+          value: 'input4',
           icon: '1.png',
           formatter: 'bnbFormatter',
         },
         {
           text: 'text6',
-          value: 'input6',
+          value: 'input5',
         },
       ],
     };
