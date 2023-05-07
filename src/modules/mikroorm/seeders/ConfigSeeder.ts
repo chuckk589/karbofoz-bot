@@ -16,12 +16,10 @@ type data = { name: string; languages: string[]; themes: { alias: string; name: 
 export class ConfigSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
     // сети
-    em.create(Network, { alias: 'bep20', name: 'BEP20' });
-    em.create(Network, { alias: 'erc20', name: 'ERC20' });
-    em.create(Network, { alias: 'bep2', name: 'BEP2' });
-    em.create(Network, { alias: 'trc20', name: 'TRC20' });
+    em.create(Network, { alias: 'bep20', name: 'BSC' });
+    em.create(Network, { alias: 'erc20', name: 'ETH' });
+    em.create(Network, { alias: 'trc20', name: 'TRX' });
     //валюты
-    em.create(Currency, { alias: 'btc', name: 'Bitcoin' });
     em.create(Currency, { alias: 'usdt', name: 'USDT' });
     //языки
     em.create(Language, { alias: 'en', name: 'Английский' });
@@ -39,8 +37,8 @@ export class ConfigSeeder extends Seeder {
     em.create(Template, { exchange: exodus });
     em.create(Template, { exchange: safepal });
 
-    await GenerateThemesForExchange.call({ em: em }, _trust);
     await GenerateThemesForExchange.call({ em: em }, _binance);
+    await GenerateThemesForExchange.call({ em: em }, _trust);
     await GenerateThemesForExchange.call({ em: em }, _exodus);
     await GenerateThemesForExchange.call({ em: em }, _safepal);
   }
@@ -79,8 +77,25 @@ const _binance = {
     .add({ type: HtmlInputType.NUMBER, name: 'Подтверждения' })
     .add({ type: HtmlInputType.TEXT, name: 'Имя кошелька' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес' })
-    .add({ type: HtmlInputType.TEXT, name: 'TXID' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции' })
+    .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
+    .add({
+      type: HtmlInputType.DATETIME_LOCAL,
+      name: 'Дата транзакции',
+      alias: 'date',
+      values: [
+        { value: 'Текущее время ', alias: '0' },
+        { value: '2 минуты назад ', alias: '120' },
+        { value: '5 минут назад ', alias: '300' },
+        { value: '10 минут назад ', alias: '600' },
+        { value: '30 минут назад ', alias: '1800' },
+        { value: '1 час назад ', alias: '3600' },
+        { value: '2 часа назад ', alias: '7200' },
+        { value: '3 часа назад  ', alias: '10800' },
+        { value: '6 часов назад ', alias: '21600' },
+        { value: '12 часов назад ', alias: '43200' },
+        { value: '1 день назад ', alias: '86400' },
+      ],
+    })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -142,7 +157,7 @@ const _exodus = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес' })
-    .add({ type: HtmlInputType.TEXT, name: 'TXID' })
+    .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
     .add({ type: HtmlInputType.NUMBER, name: 'Текущий баланс', optional: true })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', optional: true })
     .add({
@@ -187,8 +202,8 @@ const _safepal = {
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции' })
     .add({ type: HtmlInputType.TEXT, name: 'От' })
     .add({ type: HtmlInputType.TEXT, name: 'На' })
-    .add({ type: HtmlInputType.TEXT, name: 'TxID', optional: true })
-    .add({ type: HtmlInputType.TEXT, name: 'Transaction Hash', optional: true })
+    .add({ type: HtmlInputType.TEXT, name: 'TxID', optional: true, alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Transaction Hash', optional: true, alias: 'txid' })
     .add({ type: HtmlInputType.NUMBER, name: 'Высота', optional: true })
     .add({ type: HtmlInputType.NUMBER, name: 'Block', optional: true })
     .add({ type: HtmlInputType.NUMBER, name: 'Nonce', optional: true })
@@ -215,51 +230,10 @@ const _safepal = {
     .add({ ru: 'Block' })
     .add({ ru: 'Nonce' })
     .add({ ru: 'TxID' })
-    .add({ ru: 'Высота' }),
+    .add({ ru: 'Высота' })
+    .add({ ru: 'Посмотреть в обозревателе блокчейна' }),
 };
-// async function GenerateThemesForExchange(this: { em: EntityManager }, data: data) {
-//   const languages = await this.em.find(Language, { alias: { $in: data.languages } });
-//   const exchange = await this.em.findOneOrFail(Exchange, { alias: data.name });
-//   const template = await this.em.findOneOrFail(Template, { exchange });
-//   const count = { input: 0, text: 0 };
-//   const inputs: Input[] = [];
-//   for await (const field of data.fields) {
-//     const input = await this.em.findOne(Input, { alias: field.alias });
-//     if (input) {
-//       inputs.push(input);
-//       continue;
-//     }
-//     inputs.push(
-//       this.em.create(Input, {
-//         alias: field.alias || (field.type ? `input${++count.input}` : `text${++count.text}`),
-//         ...(field.type
-//           ? {
-//               inputAlias: {
-//                 type: field.type as HtmlInputType,
-//                 name: field.name,
-//                 optional: !!field.optional,
-//                 ...(field.values
-//                   ? {
-//                       aliasVariants: field.values as selectValue[],
-//                     }
-//                   : {}),
-//               },
-//             }
-//           : { inputValues: data.languages.map((language: string) => ({ value: (field as any)[language], language: languages.find((lan) => lan.alias == language) })) }),
-//       }),
-//     );
-//   }
 
-//   await this.em.flush();
-//   data.themes.map((theme: any) =>
-//     this.em.create(Theme, {
-//       ...theme,
-//       template,
-//       themeLanguages: [...Array(languages.length).keys()].map((i) => ({ language: languages[i] })),
-//       themeInputs: [...Array(inputs.length).keys()].map((i) => ({ input: inputs[i] })),
-//     }),
-//   );
-// }
 async function GenerateThemesForExchange(this: { em: EntityManager }, data: data) {
   const languages = await this.em.find(Language, { alias: { $in: data.languages } });
   const exchange = await this.em.findOneOrFail(Exchange, { alias: data.name });

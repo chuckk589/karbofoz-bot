@@ -10,7 +10,7 @@
       <div class="text-gray" style="font-size: 37px; margin-bottom: 18px; font-weight: 600">{{ getText('text2') }}</div>
       <div :class="'text-' + theme" style="margin-bottom: 4px">
         <div style="font-size: 70px; font-weight: 1000; letter-spacing: 3px">{{ getText('input1') }}</div>
-        <div style="font-size: 42px; font-weight: 800; padding: 26px 0 0 0; margin-left: 15px">{{ currencies[getTextFromQuery('currency')].label }}</div>
+        <div style="font-size: 42px; font-weight: 800; padding: 26px 0 0 0; margin-left: 15px">{{ getCurrency(getTextFromQuery('currency')).label }}</div>
       </div>
       <div style="margin-bottom: 28px">
         <div style="background-image: url('/binance/images/4.png'); width: 32px; height: 32px; margin-right: 20px"></div>
@@ -23,7 +23,7 @@
       </div>
       <div class="data-item" style="margin-bottom: 40px">
         <div class="text-gray">{{ getText('text6') }}</div>
-        <div :class="'text-' + theme">{{ networks[getTextFromQuery('network')].label }}</div>
+        <div :class="'text-' + theme">{{ getNetwork(getTextFromQuery('network')).label }}</div>
       </div>
       <div class="data-item" style="margin-bottom: 31px">
         <div class="text-gray">{{ getText('text7') }}</div>

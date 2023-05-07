@@ -20,8 +20,8 @@
             <div :style="'background-image: url(safepal/images/coins/' + payload.query.currency + '.png); width: 108px; height: 108px; background-size: cover; margin-left: 41px'"><div :style="'background-image: url(safepal/images/coins/' + payload.query.network + '.png); width: 40px; position: absolute; height: 40px; background-size: cover; margin: 65px 0 0 65px'"></div></div>
           </div>
           <div style="flex-direction: column; margin-left: 27px; font-weight: 600; letter-spacing: 1px; line-height: 45px; align-items: flex-start">
-            <div :class="'text-' + theme" style="font-size: 40px">{{ sumFormatter(getText('input1')) }} {{ currencies[getTextFromQuery('currency')].label }}</div>
-            <div style="font-size: 35px; color: #9e9dac">{{ networks[getTextFromQuery('network')].label }} {{ lengthFormatter(getText('input11'), 10) }}</div>
+            <div :class="'text-' + theme" style="font-size: 40px">{{ sumFormatter(getText('input1')) }} {{ getCurrency(getTextFromQuery('currency')).label }}</div>
+            <div style="font-size: 35px; color: #9e9dac">{{ getNetwork(getTextFromQuery('network')).label }} {{ lengthFormatter(getText('input11'), 10) }}</div>
           </div>
         </div>
         <div :class="'block-' + theme" style="flex-direction: column; margin-bottom: 39px; align-items: stretch; border-radius: 29px; padding: 25px 43px">
@@ -47,7 +47,7 @@
         </div>
         <div :class="'block-' + theme" style="flex-direction: column; align-items: stretch; border-radius: 29px; padding: 25px 43px">
           <div :class="'data-item text-' + theme">
-            <div style="letter-spacing: -2px">Посмотреть в обозревателе блокчейна</div>
+            <div style="letter-spacing: -2px">{{ getText('text13') }}</div>
             <div style="background-image: url(safepal/images/1.png); width: 30px; height: 51px; transform: scale(0.6); margin-right: 10px"></div>
           </div>
         </div>

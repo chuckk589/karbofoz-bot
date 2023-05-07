@@ -1,5 +1,6 @@
+import { UpdatePresetsDto } from './dto/update-presets.dto';
 import { CreatePresetDto } from './dto/create-preset.dto';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { PresetService } from './preset.service';
 
 @Controller({
@@ -17,7 +18,16 @@ export class PresetController {
   getPreview(@Body() body: CreatePresetDto) {
     return this.presetService.generatePreview(body);
   }
-  // createPreset(@Body() body: CreatePresetDto) {
-  //   return this.presetService.createPreset(body);
-  // }
+
+  @Patch(':id')
+  updatePreset(@Body() body: UpdatePresetsDto, @Param('id') id: string) {
+    console.log(body, id);
+    //https://192.168.1.14:3001/template?theme=1&language=en&currency=usdt&network=trc20&direction=out&input3=adress&input1=11111&input4=22222&input2=2023-05-12T14:45:08&input5=33333
+    return 'updatePreset';
+  }
+  @Post()
+  createPreset(@Body() body: CreatePresetDto) {
+    console.log(body);
+    return this.presetService.createPreset(body);
+  }
 }

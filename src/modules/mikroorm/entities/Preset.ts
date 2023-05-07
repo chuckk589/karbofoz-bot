@@ -1,6 +1,6 @@
-import { Entity, ManyToMany, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
 
-import { Template } from './Template';
+import { InputPreset } from './InputPreset';
 
 @Entity()
 export class Preset {
@@ -10,6 +10,6 @@ export class Preset {
   @Property()
   name!: string;
 
-  @ManyToOne(() => Template)
-  template: Template;
+  @OneToMany(() => InputPreset, (inputPreset) => inputPreset.preset)
+  inputPresets = new Collection<InputPreset>(this);
 }

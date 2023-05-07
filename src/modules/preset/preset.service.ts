@@ -22,10 +22,10 @@ export class PresetService {
       height: 1440,
       deviceScaleFactor: 1,
     });
-    const img = await page.$('#wobar');
+    const img = await page.$('#main');
     const screen = await img.screenshot({ path: 'example.png', encoding: 'base64' });
-    // await browser.close();
-    // return { screen };
+    await browser.close();
+    return { screen };
   }
 
   async createPreset(body: CreatePresetDto) {

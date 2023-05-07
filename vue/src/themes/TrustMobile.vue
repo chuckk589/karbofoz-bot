@@ -76,10 +76,10 @@ export default {
   },
   methods: {
     sumFormatter(value) {
-      return `${+parseFloat(value) > 0 ? '+' : ''}${value} ${this.currencies[this.getTextFromQuery('currency')].label}`;
+      return `${+parseFloat(value) > 0 ? '+' : ''}${value} ${this.getCurrency(this.getTextFromQuery('currency')).label}`;
     },
     sumApproxFormatter(value) {
-      return `≈ ${Math.abs(Math.round(parseFloat(value) * 100) / 100)} ${this.currencies[this.getTextFromQuery('currency')].icon}`;
+      return `≈ ${Math.abs(Math.round(parseFloat(value) * 100) / 100)} ${this.getCurrency(this.getTextFromQuery('currency')).icon}`;
     },
     dateFormatter(value) {
       return new Date(value).toLocaleString(this.payload.query.language, {
@@ -90,7 +90,7 @@ export default {
       });
     },
     bnbFormatter(value) {
-      return `${value} BNB (${320 * parseFloat(value).toFixed(2)} $)`;
+      return `${value} ${this.getNetwork(this.getTextFromQuery('network')).label} (${320 * parseFloat(value).toFixed(2)} $)`;
     },
   },
   computed: {

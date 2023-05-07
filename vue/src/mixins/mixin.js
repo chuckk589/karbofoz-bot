@@ -14,32 +14,25 @@ const themeMixin = {
   },
   data() {
     return {
-      networks: {
+      _networks: {
         trc20: {
           label: 'TRC20',
           coin: 'TRX',
         },
         bep20: {
           label: 'BEP20',
-          coin: 'BNB',
-        },
-        bep2: {
-          label: 'BEP2',
-          coin: 'BNB',
+          coin: 'BSC',
         },
         erc20: {
-          label: 'ERC20',
+          label: 'ETH',
           coin: 'ETH',
         },
       },
-      currencies: {
+      theme: '',
+      _currencies: {
         usdt: {
           label: 'USDT',
           icon: '$',
-        },
-        btc: {
-          label: 'BTC',
-          icon: '฿',
         },
       },
     };
@@ -48,8 +41,14 @@ const themeMixin = {
     this.theme = this.payload.path.split('/').pop();
   },
   methods: {
+    getNetwork(key) {
+      return this._networks[key] || { label: key, coin: '' };
+    },
+    getCurrency(key) {
+      return this._currencies[key] || { label: key, icon: '' };
+    },
     coinFormatter(value) {
-      return `${value} ${this.networks[this.payload.query.network].coin}`;
+      return `${value} ${this._networks[this.payload.query.network]?.coin || this.payload.query.network}`;
     },
     getBlocks(block) {
       return this[block]
@@ -88,7 +87,7 @@ const themeMixin = {
   },
   computed: {
     themeClass() {
-      return this.payload.path.split('/').pop();
+      return this.theme;
     },
   },
 };
