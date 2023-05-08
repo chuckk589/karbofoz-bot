@@ -76,7 +76,7 @@ const _binance = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
     .add({ type: HtmlInputType.NUMBER, name: 'Подтверждения' })
     .add({ type: HtmlInputType.TEXT, name: 'Имя кошелька' })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
     .add({
       type: HtmlInputType.DATETIME_LOCAL,
@@ -122,7 +122,7 @@ const _trust = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции' })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.NUMBER, name: 'Сетевой сбор' })
     .add({ type: HtmlInputType.TEXT, name: 'Nonce', optional: true })
     .add({
@@ -156,7 +156,7 @@ const _exodus = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции' })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
     .add({ type: HtmlInputType.NUMBER, name: 'Текущий баланс', optional: true })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', optional: true })
@@ -207,7 +207,7 @@ const _safepal = {
     .add({ type: HtmlInputType.NUMBER, name: 'Высота', optional: true })
     .add({ type: HtmlInputType.NUMBER, name: 'Block', optional: true })
     .add({ type: HtmlInputType.NUMBER, name: 'Nonce', optional: true })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',

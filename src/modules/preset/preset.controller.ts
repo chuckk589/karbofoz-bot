@@ -1,6 +1,7 @@
+import { DeletePresetsDto } from './dto/delete-presets.dto';
 import { UpdatePresetsDto } from './dto/update-presets.dto';
 import { CreatePresetDto } from './dto/create-preset.dto';
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { PresetService } from './preset.service';
 
 @Controller({
@@ -15,7 +16,7 @@ export class PresetController {
     return this.presetService.getPresets();
   }
   @Post('preview')
-  getPreview(@Body() body: CreatePresetDto) {
+  getPreview(@Body() body: UpdatePresetsDto) {
     return this.presetService.generatePreview(body);
   }
 
@@ -26,8 +27,11 @@ export class PresetController {
     return 'updatePreset';
   }
   @Post()
-  createPreset(@Body() body: CreatePresetDto) {
-    console.log(body);
-    return this.presetService.createPreset(body);
+  managePreset(@Body() body: CreatePresetDto) {
+    return this.presetService.managePreset(body);
+  }
+  @Delete()
+  bulkDeletePresets(@Body() body: DeletePresetsDto) {
+    return this.presetService.bulkDeletePresets(body);
   }
 }

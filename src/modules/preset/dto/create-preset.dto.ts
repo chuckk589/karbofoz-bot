@@ -1,9 +1,16 @@
-import { IsNumberString, IsString } from 'class-validator';
+type PresetFields = {
+  current: string;
+  name?: string;
+  comment?: string;
+};
 
 export class CreatePresetDto {
-  @IsNumberString()
   theme: string;
-  @IsString()
   language: string;
-  [key: string]: string | number;
+  currency: string;
+  network: string;
+  preset: PresetFields;
+  fields: {
+    [key: string]: string;
+  };
 }

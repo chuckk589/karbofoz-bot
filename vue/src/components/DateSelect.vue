@@ -45,3 +45,8 @@ export default {
   },
 };
 </script>
+<style module>
+i:hover {
+  cursor: pointer !important;
+}
+</style>

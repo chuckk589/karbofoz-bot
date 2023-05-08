@@ -1,6 +1,7 @@
 import { Collection, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { InputValue } from './InputValue';
 import { InputAlias } from './InputAlias';
+import { InputTheme } from './InputTheme';
 
 @Entity()
 export class Input {

@@ -2,7 +2,6 @@ import { Entity, ManyToOne, OneToOne, PrimaryKey, Property, Unique } from '@mikr
 import { Input } from './Input';
 import { Language } from './Language';
 import { Preset } from './Preset';
-import { Template } from './Template';
 
 @Entity()
 export class InputPreset {
@@ -17,7 +16,4 @@ export class InputPreset {
 
   @ManyToOne(() => Input)
   input: Input;
-
-  @ManyToOne(() => Template)
-  template: Template;
 }
