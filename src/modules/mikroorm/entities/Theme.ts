@@ -1,8 +1,7 @@
 import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
-import { Template } from './Template';
-import { Input } from './Input';
 import { InputTheme } from './InputTheme';
 import { ThemeLanguage } from './ThemeLanguage';
+import { Exchange } from './Exchange';
 
 @Entity()
 export class Theme {
@@ -15,8 +14,10 @@ export class Theme {
   @Property()
   name!: string;
 
-  @ManyToOne({ entity: () => Template })
-  template: Template;
+  // @ManyToOne({ entity: () => Template })
+  // template: Template;
+  @ManyToOne({ entity: () => Exchange })
+  exchange: Exchange;
 
   @OneToMany(() => InputTheme, (InputTheme) => InputTheme.theme)
   themeInputs = new Collection<InputTheme>(this);

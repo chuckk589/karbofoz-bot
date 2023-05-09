@@ -5,7 +5,6 @@ import { Preset } from '../mikroorm/entities/Preset';
 import { CreatePresetDto } from './dto/create-preset.dto';
 import puppeteer from 'puppeteer';
 import puppeteerOptions from 'src/configs/puppeteer.config';
-import { DeletePresetsDto } from './dto/delete-presets.dto';
 import { UpdatePresetsDto } from './dto/update-presets.dto';
 import { Input } from '../mikroorm/entities/Input';
 import { Theme } from '../mikroorm/entities/Theme';
@@ -16,29 +15,30 @@ import { Language } from '../mikroorm/entities/Language';
 @Injectable()
 export class PresetService {
   constructor(private readonly em: EntityManager) {}
-
-  async bulkDeletePresets(body: DeletePresetsDto) {
-    const presets = await this.em.find(Preset, { id: { $in: body.ids.map((id) => parseInt(id)) } });
-    return await this.em.removeAndFlush(presets);
+  async remove(id: number) {
+    const preset = await this.em.find(Preset, id, { populate: ['inputPresets'] });
+    return await this.em.removeAndFlush(preset);
   }
 
   async generatePreview(body?: UpdatePresetsDto) {
-    const queryString = Object.keys(body)
-      .map((key) => `${key}=${body.fields[key]}`)
+    const bodyFlat = { ...body, ...body.fields };
+    delete bodyFlat.fields;
+    const queryString = Object.keys(bodyFlat)
+      .map((key) => `${key}=${(bodyFlat as any)[key]}`)
       .join('&');
-    // const browser = await puppeteer.launch(puppeteerOptions);
-    // const page = await browser.newPage();
-    // await page.goto(`${process.env.NODE_ENV === 'dev' ? 'https://192.168.1.14:3001' : 'http://localhost:443'}/template?${queryString}`, { waitUntil: 'networkidle2' });
-    // await page.setViewport({
-    //   width: 2560,
-    //   height: 1440,
-    //   deviceScaleFactor: 1,
-    // });
-    // const img = await page.$('#main');
-    // const screen = await img.screenshot({ path: 'example.png', encoding: 'base64' });
-    // await browser.close();
-    // return { screen };
-    return { screen: 'example.png' };
+    const browser = await puppeteer.launch(puppeteerOptions);
+    const page = await browser.newPage();
+    await page.goto(`${process.env.NODE_ENV === 'dev' ? 'https://192.168.1.14:3001' : 'http://localhost:443'}/template?${queryString}`, { waitUntil: 'networkidle2' });
+    await page.setViewport({
+      width: 2560,
+      height: 1440,
+      deviceScaleFactor: 1,
+    });
+    const img = await page.$('#main');
+    const screen = await img.screenshot({ path: 'example.png', encoding: 'base64' });
+    await browser.close();
+    return { screen };
+    // return { screen: 'example.png' };
   }
 
   async managePreset(body: CreatePresetDto) {
@@ -60,7 +60,7 @@ export class PresetService {
       });
       return await this.em.persistAndFlush(preset);
     } else {
-      const preset = await this.em.findOne(Preset, { id: parseInt(body.preset.current) }, { populate: ['inputPresets.input'] });
+      const preset = await this.em.findOneOrFail(Preset, { id: parseInt(body.preset.current) }, { populate: ['inputPresets.input'] });
       preset.inputPresets.removeAll();
       Object.keys(body.fields).forEach((key) => {
         preset.inputPresets.add(
@@ -73,8 +73,8 @@ export class PresetService {
       return await this.em.persistAndFlush(preset);
     }
   }
-  async getPresets(): Promise<RetrievePresetDto[]> {
-    const presets = await this.em.find(Preset, {}, { populate: ['currency', 'network', 'language', 'theme.template.exchange', 'inputPresets.input'] });
+  async getPresets() {
+    const presets = await this.em.find(Preset, {}, { populate: ['currency', 'network', 'language', 'theme.exchange', 'inputPresets.input'] });
     return presets.map((preset) => new RetrievePresetDto(preset));
   }
 }

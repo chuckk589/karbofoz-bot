@@ -70,7 +70,7 @@ const themeMixin = {
       } else if (chunks[0] === 'text') {
         raw = this.payload.theme.inputs.find((input) => input.alias === fieldName)?.value || 'No data';
       } else {
-        raw = this.payload.theme.inputs.find((input) => input.alias === this.getTextFromQuery(fieldName) + key)?.value || 'No data';
+        raw = this.payload.theme.inputs.find((input) => input.alias === this.getTextFromQuery(fieldName) + key)?.value || this.getTextFromQuery(fieldName);
       }
       return raw;
     },

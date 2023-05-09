@@ -11,6 +11,7 @@ import { PresetModule } from './modules/preset/preset.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ThemeModule } from './modules/theme/theme.module';
+import { WalletModule } from './modules/wallet/wallet.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ThemeModule } from './modules/theme/theme.module';
     ConfigModule,
     PresetModule,
     ThemeModule,
+    WalletModule,
   ],
   controllers: [],
   providers: [],

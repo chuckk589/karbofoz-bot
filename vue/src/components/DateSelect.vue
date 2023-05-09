@@ -5,7 +5,7 @@
         <slot name="label"></slot>
       </template>
     </v-combobox>
-    <input hidden ref="date" type="datetime-local" @change="(evt) => $emit('update:modelValue', evt.target.value)" />
+    <input hidden ref="date" type="datetime-local" @change="(evt) => $emit('update:modelValue', evt.target.value)" step="1" />
   </div>
 </template>
 

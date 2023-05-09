@@ -16,7 +16,9 @@
         <div style="background-image: url('/binance/images/4.png'); width: 32px; height: 32px; margin-right: 20px"></div>
         <div style="color: #2cb682ff; font-weight: 700; font-size: 42px; letter-spacing: 1px">{{ getText('text3') }}</div>
       </div>
-      <div :class="'line-' + theme" class="text-gray" style="font-size: 33px; text-align: center; line-height: 39px; font-weight: 500; height: 161px; align-items: flex-start; margin-bottom: 76px">{{ getText('text4') }}</div>
+      <div :class="'line-' + theme" class="text-gray" style="font-size: 33px; text-align: center; line-height: 39px; font-weight: 500; height: 161px; align-items: flex-start; margin-bottom: 76px">
+        {{ getText('text4') }}
+      </div>
       <div class="data-item" style="margin-bottom: 40px">
         <div class="text-gray">{{ getText('text5') }}</div>
         <div :class="'text-' + theme">{{ getText('input2') }} / 1</div>
@@ -31,17 +33,17 @@
       </div>
       <div class="data-item" style="margin-bottom: 70px">
         <div class="text-gray" style="margin-right: auto">{{ getText('text8') }}</div>
-        <div :class="'text-' + theme" style="margin-right: 25px; max-width: 560px; word-break: break-word; align-content: stretch; text-align: end">{{ getText('input4') }}</div>
+        <div :class="'text-' + theme" style="margin-right: 25px; max-width: 560px; word-break: break-word; align-content: stretch; text-align: end">{{ getTextFromQuery('address') }}</div>
         <div style="background-image: url('/binance/images/5.png'); width: 37px; height: 41px; margin-right: 10px"></div>
       </div>
       <div class="data-item" style="margin-bottom: 81px">
         <div class="text-gray" style="margin-right: auto">{{ getText('text9') }}</div>
-        <div :class="'text-' + theme" style="margin-right: 25px; max-width: 560px; word-break: break-word; align-content: stretch; text-align: end; text-decoration: underline">{{ getText('input5') }}</div>
+        <div :class="'text-' + theme" style="margin-right: 25px; max-width: 560px; word-break: break-word; align-content: stretch; text-align: end; text-decoration: underline">{{ getTextFromQuery('txid') }}</div>
         <div style="background-image: url('/binance/images/5.png'); width: 37px; height: 41px; margin-right: 10px"></div>
       </div>
       <div class="data-item" style="margin-bottom: 62px">
         <div class="text-gray">{{ getText('text10') }}</div>
-        <div :class="'text-' + theme">{{ dateFormatter(getText('input6')) }}</div>
+        <div :class="'text-' + theme">{{ dateFormatter(getTextFromQuery('date')) }}</div>
       </div>
       <div :class="'block-' + theme" style="height: 360px; border-radius: 20px; margin: 0 40px; flex: -; /* flex-direction: column; */ align-items: stretch">
         <div style="flex-direction: column; /* flex-grow: 1; */ flex: 1; align-items: flex-start; justify-content: flex-start; margin: 64px 0 0 50px">
@@ -83,7 +85,9 @@ export default {
 .mobile-dark {
   background-color: #1f2630;
 }
-
+.mobile-light {
+  background-color: white;
+}
 .text-mobile-dark {
   color: #edeef1ff;
 }

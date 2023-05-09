@@ -2,7 +2,6 @@ import { Dictionary, EntityManager, FilterQuery, Loaded } from '@mikro-orm/core'
 import { Seeder } from '@mikro-orm/seeder';
 import { Exchange } from '../entities/Exchange';
 import { Language } from '../entities/Language';
-import { Template } from '../entities/Template';
 import { Theme } from '../entities/Theme';
 import { Input } from '../entities/Input';
 import { HtmlInputType, InputAlias } from '../entities/InputAlias';
@@ -12,30 +11,92 @@ import { Currency } from '../entities/Currency';
 type selectValue = { value: string; alias: string };
 type field = { [key: string]: string } | { type: HtmlInputType; name: string; optional?: boolean; values?: selectValue[]; alias?: string };
 type data = { name: string; languages: string[]; themes: { alias: string; name: string }[]; fields: Set<field> };
-
 export class ConfigSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
     // сети
-    em.create(Network, { alias: 'bep20', name: 'BSC' });
-    em.create(Network, { alias: 'erc20', name: 'ETH' });
-    em.create(Network, { alias: 'trc20', name: 'TRX' });
+    const bsc = em.create(Network, { alias: 'bep20', name: 'BSC' });
+    const eth = em.create(Network, { alias: 'erc20', name: 'ETH' });
+    const trx = em.create(Network, { alias: 'trc20', name: 'TRX' });
     //валюты
-    em.create(Currency, { alias: 'usdt', name: 'USDT' });
+    const usdt = em.create(Currency, { alias: 'usdt', name: 'USDT' });
     //языки
     em.create(Language, { alias: 'en', name: 'Английский' });
     em.create(Language, { alias: 'es', name: 'Испанский' });
     em.create(Language, { alias: 'ru', name: 'Русский' });
     em.create(Language, { alias: 'ua', name: 'Украинский' });
     //биржи
-    const exchange = em.create(Exchange, { alias: 'binance', name: 'Binance' });
-    const trust = em.create(Exchange, { alias: 'trust', name: 'Trust' });
-    const exodus = em.create(Exchange, { alias: 'exodus', name: 'Exodus' });
-    const safepal = em.create(Exchange, { alias: 'safepal', name: 'Safepal' });
-    //шаблоны
-    em.create(Template, { exchange: exchange });
-    em.create(Template, { exchange: trust });
-    em.create(Template, { exchange: exodus });
-    em.create(Template, { exchange: safepal });
+    const exchange = em.create(Exchange, {
+      alias: 'binance',
+      name: 'Binance',
+      exchangeNetworks: [
+        {
+          network: bsc,
+          networkCurrencies: [{ currency: usdt }],
+        },
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+        },
+      ],
+    });
+    const trust = em.create(Exchange, {
+      alias: 'trust',
+      name: 'Trust',
+      exchangeNetworks: [
+        {
+          network: bsc,
+          networkCurrencies: [{ currency: usdt }],
+        },
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+        },
+      ],
+    });
+    const exodus = em.create(Exchange, {
+      alias: 'exodus',
+      name: 'Exodus',
+      exchangeNetworks: [
+        {
+          network: bsc,
+          networkCurrencies: [{ currency: usdt }],
+        },
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+        },
+      ],
+    });
+    const safepal = em.create(Exchange, {
+      alias: 'safepal',
+      name: 'Safepal',
+      exchangeNetworks: [
+        {
+          network: bsc,
+          networkCurrencies: [{ currency: usdt }],
+        },
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+        },
+      ],
+    });
 
     await GenerateThemesForExchange.call({ em: em }, _binance);
     await GenerateThemesForExchange.call({ em: em }, _trust);
@@ -121,7 +182,7 @@ const _trust = {
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.NUMBER, name: 'Сетевой сбор' })
     .add({ type: HtmlInputType.TEXT, name: 'Nonce', optional: true })
@@ -155,7 +216,7 @@ const _exodus = {
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
     .add({ type: HtmlInputType.NUMBER, name: 'Текущий баланс', optional: true })
@@ -199,11 +260,11 @@ const _safepal = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', optional: true })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
     .add({ type: HtmlInputType.TEXT, name: 'От' })
     .add({ type: HtmlInputType.TEXT, name: 'На' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', optional: true, alias: 'txid' })
-    .add({ type: HtmlInputType.TEXT, name: 'Transaction Hash', optional: true, alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Transaction Hash', optional: true })
     .add({ type: HtmlInputType.NUMBER, name: 'Высота', optional: true })
     .add({ type: HtmlInputType.NUMBER, name: 'Block', optional: true })
     .add({ type: HtmlInputType.NUMBER, name: 'Nonce', optional: true })
@@ -237,7 +298,6 @@ const _safepal = {
 async function GenerateThemesForExchange(this: { em: EntityManager }, data: data) {
   const languages = await this.em.find(Language, { alias: { $in: data.languages } });
   const exchange = await this.em.findOneOrFail(Exchange, { alias: data.name });
-  const template = await this.em.findOneOrFail(Template, { exchange });
   const count = { input: 0, text: 0 };
   const inputs: Input[] = [];
   for await (const field of data.fields) {
@@ -267,7 +327,7 @@ async function GenerateThemesForExchange(this: { em: EntityManager }, data: data
   data.themes.map((theme: any) =>
     this.em.create(Theme, {
       ...theme,
-      template,
+      exchange,
       themeLanguages: [...Array(languages.length).keys()].map((i) => ({ language: languages[i] })),
       themeInputs: [...Array(inputs.length).keys()].map((i) => ({ input: inputs[i] })),
     }),

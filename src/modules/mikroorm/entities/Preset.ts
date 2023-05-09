@@ -1,7 +1,6 @@
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
+import { Cascade, Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
 
 import { InputPreset } from './InputPreset';
-import { Template } from './Template';
 import { Language } from './Language';
 import { Theme } from './Theme';
 import { Currency } from './Currency';

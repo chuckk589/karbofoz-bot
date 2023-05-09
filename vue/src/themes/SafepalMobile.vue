@@ -17,11 +17,13 @@
         </div>
         <div :class="'block-' + theme" style="height: 168px; margin-bottom: 40px; justify-content: flex-start; border-radius: 29px">
           <div style="font-size: 64px; font-weight: 500">
-            <div :style="'background-image: url(safepal/images/coins/' + payload.query.currency + '.png); width: 108px; height: 108px; background-size: cover; margin-left: 41px'"><div :style="'background-image: url(safepal/images/coins/' + payload.query.network + '.png); width: 40px; position: absolute; height: 40px; background-size: cover; margin: 65px 0 0 65px'"></div></div>
+            <div :style="'background-image: url(safepal/images/coins/' + payload.query.currency + '.png); width: 108px; height: 108px; background-size: cover; margin-left: 41px'">
+              <div :style="'background-image: url(safepal/images/coins/' + payload.query.network + '.png); width: 40px; position: absolute; height: 40px; background-size: cover; margin: 65px 0 0 65px'"></div>
+            </div>
           </div>
           <div style="flex-direction: column; margin-left: 27px; font-weight: 600; letter-spacing: 1px; line-height: 45px; align-items: flex-start">
-            <div :class="'text-' + theme" style="font-size: 40px">{{ sumFormatter(getText('input1')) }} {{ getCurrency(getTextFromQuery('currency')).label }}</div>
-            <div style="font-size: 35px; color: #9e9dac">{{ getNetwork(getTextFromQuery('network')).label }} {{ lengthFormatter(getText('input11'), 10) }}</div>
+            <div :class="'text-' + theme" style="font-size: 40px">{{ sumFormatter(getText('input1')) }} {{ getCurrency(getText('currency')).label }}</div>
+            <div style="font-size: 35px; color: #9e9dac">{{ getNetwork(getText('network')).label }} {{ lengthFormatter(getText('txid'), 10) }}</div>
           </div>
         </div>
         <div :class="'block-' + theme" style="flex-direction: column; margin-bottom: 39px; align-items: stretch; border-radius: 29px; padding: 25px 43px">
@@ -78,20 +80,20 @@ export default {
         },
         {
           text: 'text4',
-          value: 'input3',
+          value: 'date',
           formatter: 'dateFormatter',
         },
       ],
       block2: [
         {
           text: 'text5',
-          value: 'input4',
+          value: 'input3',
           icon: '5.png',
           formatter: 'lengthFormatter',
         },
         {
           text: 'text6',
-          value: 'input5',
+          value: 'input4',
           icon: '5.png',
           formatter: 'lengthFormatter',
         },
@@ -99,27 +101,27 @@ export default {
       block3: [
         {
           text: 'text7',
-          value: 'input7',
+          value: 'input5',
           icon: '5.png',
           formatter: 'lengthFormatter',
         },
         {
           text: 'text9',
-          value: 'input9',
+          value: 'input7',
         },
         {
           text: 'text10',
-          value: 'input10',
+          value: 'input8',
         },
         {
           text: 'text11',
-          value: 'input6',
+          value: 'txid',
           formatter: 'lengthFormatter',
           icon: '5.png',
         },
         {
           text: 'text12',
-          value: 'input8',
+          value: 'input6',
         },
       ],
     };
@@ -131,7 +133,7 @@ export default {
   },
   methods: {
     sumFormatter(value) {
-      return `${+parseFloat(value) > 0 ? '+' : ''}${value}`;
+      return `${parseFloat(value) > 0 ? '+' : ''}${value}`;
     },
   },
 };

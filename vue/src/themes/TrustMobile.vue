@@ -46,7 +46,7 @@ export default {
       block1: [
         {
           text: 'text2',
-          value: 'input2',
+          value: 'date',
           formatter: 'dateFormatter',
         },
         {
@@ -55,7 +55,7 @@ export default {
           icon: '1.png',
         },
         {
-          value: 'input3',
+          value: 'address',
           alias: 'direction',
           formatter: 'lengthFormatter',
         },
@@ -63,13 +63,13 @@ export default {
       block2: [
         {
           text: 'text4',
-          value: 'input4',
+          value: 'input2',
           icon: '1.png',
           formatter: 'bnbFormatter',
         },
         {
           text: 'text6',
-          value: 'input5',
+          value: 'input3',
         },
       ],
     };
@@ -90,7 +90,7 @@ export default {
       });
     },
     bnbFormatter(value) {
-      return `${value} ${this.getNetwork(this.getTextFromQuery('network')).label} (${320 * parseFloat(value).toFixed(2)} $)`;
+      return `${value} ${this.getNetwork(this.getTextFromQuery('network')).coin} (${320 * parseFloat(value).toFixed(2)} $)`;
     },
   },
   computed: {
@@ -116,6 +116,9 @@ body {
 
 .text-mobile-dark {
   color: #edeef1ff;
+}
+.text-mobile-light {
+  color: black;
 }
 .text2-mobile-light {
   color: #7f7f7f;

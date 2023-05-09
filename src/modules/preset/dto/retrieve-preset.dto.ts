@@ -11,7 +11,7 @@ export class RetrievePresetDto extends CreatePresetDto {
     this.language = preset.language.alias;
     this.currency = preset.currency.alias;
     this.network = preset.network.alias;
-    this.exchange = preset.theme.template.exchange.id.toString();
+    this.exchange = preset.theme.exchange.id.toString();
     this.fields = preset.inputPresets.getItems().reduce((acc: any, inputPreset) => {
       acc[inputPreset.input.alias] = inputPreset.value;
       return acc;

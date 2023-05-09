@@ -14,7 +14,9 @@
       <div class="data-item" style="height: 488px; justify-content: space-evenly">
         <kek style="background-image: url(exodus/images/3.png); width: 91px; height: 92px; margin-top: 36px"></kek>
         <div style="font-size: 42px">{{ getText('text7') }}</div>
-        <div style="margin-bottom: 36px; font-size: 53px; background: #907df0; background: linear-gradient(to left, #907df0 0%, #604ebf 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent">{{ getText('text7') }}</div>
+        <div style="margin-bottom: 36px; font-size: 53px; background: #907df0; background: linear-gradient(to left, #907df0 0%, #604ebf 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent">
+          {{ getText('text9') }}
+        </div>
       </div>
     </div>
   </div>
@@ -39,7 +41,7 @@ export default {
         },
         {
           text: 'text8',
-          value: 'input6',
+          value: 'input3',
           formatter: 'coinFormatter',
           style: 'color:#9599a5',
         },
@@ -50,19 +52,21 @@ export default {
         },
         {
           text: 'text4',
-          value: 'input2',
+          value: 'date',
           formatter: 'dateFormatter',
         },
         {
-          value: 'input3',
+          value: 'address',
           alias: 'direction',
           key: 'd',
-          style: 'line-height: 47px;font-size: 40px;margin-top: 17px;color: #3f099f;background: #907DF0;background: linear-gradient(to left, #907DF0 0%, #604EBF 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;',
+          style:
+            'line-height: 47px;font-size: 40px;margin-top: 17px;color: #3f099f;background: #907DF0;background: linear-gradient(to left, #907DF0 0%, #604EBF 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;',
         },
         {
           text: 'text5',
-          value: 'input4',
-          style: 'line-height: 47px;font-size: 40px;margin-top: 17px;color: #3f099f;background: #907DF0;background: linear-gradient(to left, #907DF0 0%, #604EBF 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;',
+          value: 'txid',
+          style:
+            'line-height: 47px;font-size: 40px;margin-top: 17px;color: #3f099f;background: #907DF0;background: linear-gradient(to left, #907DF0 0%, #604EBF 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;',
         },
         {
           text: 'text6',
