@@ -38,6 +38,16 @@
                     <span>{{ field.name }}<strong class="text-red" v-if="!field.optional">&nbsp;&nbsp;*</strong></span>
                   </template>
                 </component>
+                <div class="d-flex align-center justify-space-between">
+                  <div class="text-grey">Статус бар</div>
+                  <v-checkbox-btn style="flex: 0" v-model="statusbar.show"></v-checkbox-btn>
+                </div>
+                <v-expand-transition>
+                  <div v-show="statusbar.show">
+                    <v-text-field v-model="preset.name" label="Название" density="compact"></v-text-field>
+                    <v-textarea v-model="preset.comment" label="Комментарий" density="compact"></v-textarea>
+                  </div>
+                </v-expand-transition>
               </v-form>
             </v-card-text>
           </v-window-item>
@@ -167,6 +177,7 @@ export default {
       language: '',
       currency: null,
       network: null,
+      statusbar: { show: false },
       presets: [],
       preset: {},
       fields: {},

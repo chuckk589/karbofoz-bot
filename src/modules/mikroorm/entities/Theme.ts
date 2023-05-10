@@ -14,8 +14,6 @@ export class Theme {
   @Property()
   name!: string;
 
-  // @ManyToOne({ entity: () => Template })
-  // template: Template;
   @ManyToOne({ entity: () => Exchange })
   exchange: Exchange;
 
@@ -24,4 +22,7 @@ export class Theme {
 
   @OneToMany(() => ThemeLanguage, (ThemeLanguage) => ThemeLanguage.theme)
   themeLanguages = new Collection<ThemeLanguage>(this);
+
+  @Property()
+  statusbar: boolean;
 }

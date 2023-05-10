@@ -25,7 +25,7 @@ export class ConfigSeeder extends Seeder {
     em.create(Language, { alias: 'ru', name: 'Русский' });
     em.create(Language, { alias: 'ua', name: 'Украинский' });
     //биржи
-    const exchange = em.create(Exchange, {
+    em.create(Exchange, {
       alias: 'binance',
       name: 'Binance',
       exchangeNetworks: [
@@ -43,7 +43,7 @@ export class ConfigSeeder extends Seeder {
         },
       ],
     });
-    const trust = em.create(Exchange, {
+    em.create(Exchange, {
       alias: 'trust',
       name: 'Trust',
       exchangeNetworks: [
@@ -61,7 +61,7 @@ export class ConfigSeeder extends Seeder {
         },
       ],
     });
-    const exodus = em.create(Exchange, {
+    em.create(Exchange, {
       alias: 'exodus',
       name: 'Exodus',
       exchangeNetworks: [
@@ -79,7 +79,7 @@ export class ConfigSeeder extends Seeder {
         },
       ],
     });
-    const safepal = em.create(Exchange, {
+    em.create(Exchange, {
       alias: 'safepal',
       name: 'Safepal',
       exchangeNetworks: [
