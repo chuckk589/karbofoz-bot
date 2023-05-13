@@ -205,12 +205,12 @@ export default {
     this.$http({ method: 'GET', url: `/v1/config/` }).then((e) => {
       this.table = e.data;
       console.log(e.data);
-      this.exchange = '1';
-      this.theme = '1';
-      this.language = 'en';
-      this.currency = 'usdt';
-      this.network = 'trc20';
-      this.step = 2;
+      // this.exchange = '1';
+      // this.theme = '1';
+      // this.language = 'en';
+      // this.currency = 'usdt';
+      // this.network = 'trc20';
+      // this.step = 2;
     });
     this.$http({ method: 'GET', url: `/v1/preset/` }).then((e) => {
       this.presets = e.data;
