@@ -316,6 +316,12 @@ const _safepal = {
 const _xiaomi = {
   name: 'xiaomi',
   fields: [
+    { alias: 'wifiAPS', name: 'Wi-Fi AP signal', type: HtmlInputType.NUMBER, dependsOn: 'wifiAP' },
+    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-5' },
+    { alias: '4g', name: '4g signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-5' },
+    { alias: 'bluetooth', name: 'Bluetooth' },
+    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER },
+    { alias: 'time', name: 'Время', type: HtmlInputType.TIME },
     { alias: 'moon', name: 'moon' },
     { alias: 'vibro', name: 'vibro' },
     { alias: 'alarm', name: 'alarm' },
@@ -324,12 +330,6 @@ const _xiaomi = {
     { alias: 'cog', name: 'Cog' },
     { alias: 'volte', name: 'voLTE' },
     { alias: 'wifiAP', name: 'Wi-Fi access point' },
-    { alias: 'wifiAPS', name: 'Wi-Fi AP signal', type: HtmlInputType.NUMBER, dependsOn: 'wifiAP' },
-    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, meta: '5' },
-    { alias: '4g', name: '4g signal', type: HtmlInputType.NUMBER, meta: '5' },
-    { alias: 'bluetooth', name: 'Bluetooth' },
-    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER },
-    { alias: 'time', name: 'Время', type: HtmlInputType.TIME },
   ],
 };
 
@@ -353,7 +353,7 @@ const _iphone = {
       ],
     },
 
-    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, meta: '3' },
+    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-3' },
     {
       alias: 'simnum',
       name: 'SIM',
@@ -363,7 +363,7 @@ const _iphone = {
         { value: 'Dual SIM', alias: 'sim2' },
       ],
     },
-    { alias: '4g', name: '4g signal', type: HtmlInputType.NUMBER, meta: '4' },
+    { alias: '4g', name: '4g signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4' },
     { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER },
     { alias: 'time', name: 'Время', type: HtmlInputType.TIME },
   ],
@@ -382,8 +382,8 @@ const _samsung = {
         { value: 'Dual SIM', alias: 'sim2' },
       ],
     },
-    { alias: 'wifiS1', name: 'Wi-Fi 1 signal', type: HtmlInputType.NUMBER, meta: '4' },
-    { alias: 'wifiS2', name: 'Wi-Fi 2 signal', type: HtmlInputType.NUMBER, meta: '4', dependsOn: 'simnum', dependsValue: 'sim2' },
+    { alias: 'wifiS1', name: 'Wi-Fi 1 signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4' },
+    { alias: 'wifiS2', name: 'Wi-Fi 2 signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4', dependsOn: 'simnum', dependsValue: 'sim2' },
     {
       alias: 'sound',
       name: 'Sound',
@@ -412,7 +412,7 @@ const _samsung = {
         { value: 'Прием', alias: 'in' },
       ],
     },
-    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, meta: '4', dependsOn: 'wifiShare', dependsValue: 'in' },
+    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4', dependsOn: 'wifiShare', dependsValue: 'in' },
     { alias: 'volte', name: 'voLTE', dependsOn: 'wifiShare', dependsValue: 'in' },
     {
       alias: 'wifiMode',
@@ -475,7 +475,7 @@ async function GenerateThemesForExchange(this: { em: EntityManager }, data: data
 async function GenerateDeviceInputs(this: { em: EntityManager }, data: deviceData) {
   const device = await this.em.findOneOrFail(Device, { alias: data.name });
   const barinputs = await this.em.find(BarInput, { alias: { $in: data.fields.map((field) => field.alias) } });
-  data.fields.map((field: field & { meta?: string; dependsOn?: string; dependsValue?: string }) => {
+  data.fields.map((field: field & { hint?: string; dependsOn?: string; dependsValue?: string }) => {
     let existing = barinputs.find((barinput) => barinput.alias == field.alias);
     if (!existing) {
       existing = this.em.create(BarInput, {
@@ -488,7 +488,7 @@ async function GenerateDeviceInputs(this: { em: EntityManager }, data: deviceDat
     return this.em.create(DeviceBarInput, {
       device,
       input: existing,
-      meta: field.meta,
+      hint: field.hint,
       dependsOn: field.dependsOn,
       dependsValue: field.dependsValue,
     });

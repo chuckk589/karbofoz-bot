@@ -52,6 +52,7 @@
                       :key="index"
                       v-show="field.dependsOn ? (field.dependsValue ? statusbar[field.dependsOn] == field.dependsValue : statusbar[field.dependsOn]) : true"
                       :label="field.name"
+                      :hint="field.hint"
                       :items="fieldItems(field)"
                       density="compact"
                       v-model="statusbar[field.alias]"

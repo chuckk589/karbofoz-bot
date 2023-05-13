@@ -14,7 +14,7 @@ export class DeviceBarInput {
   input: BarInput;
 
   @Property({ nullable: true })
-  meta?: string;
+  hint?: string;
 
   @Property({ nullable: true })
   dependsOn?: string;
