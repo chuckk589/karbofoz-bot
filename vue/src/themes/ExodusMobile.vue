@@ -1,6 +1,7 @@
 <template>
   <div id="main" style="left: 0px; overflow: hidden; top: 0px; width: 1080px; height: 2274px; background-image: url(exodus/images/4.png)">
-    <div style="height: 103px; background-color: red"></div>
+    <!-- <div style="height: 103px; background-color: red"></div> -->
+    <StatusBar :query="payload.query" :theme="theme"></StatusBar>
     <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch">
       <div style="font-size: 37px; margin-bottom: 80px; margin-top: 15px">
         <div style="background-image: url(exodus/images/1.png); width: 55px; height: 39px; margin-left: 64px"></div>
@@ -24,10 +25,13 @@
 
 <script>
 import themeMixin from '../mixins/mixin';
+import StatusBar from '../components/StatusBar.vue';
 export default {
   name: 'ExodusMobile',
   mixins: [themeMixin],
-
+  components: {
+    StatusBar,
+  },
   data() {
     return {
       theme: '',

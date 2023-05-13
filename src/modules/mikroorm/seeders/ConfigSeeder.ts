@@ -7,10 +7,16 @@ import { Input } from '../entities/Input';
 import { HtmlInputType, InputAlias } from '../entities/InputAlias';
 import { Network } from '../entities/Network';
 import { Currency } from '../entities/Currency';
+import { Device } from '../entities/Device';
+import { BarInput } from '../entities/BarInput';
+import { BarInputVariant } from '../entities/BarInputVariant';
+import { DeviceBarInput } from '../entities/DeviceBarInput';
 
 type selectValue = { value: string; alias: string };
 type field = { [key: string]: string } | { type: HtmlInputType; name: string; optional?: boolean; values?: selectValue[]; alias?: string };
-type data = { name: string; languages: string[]; themes: { alias: string; name: string }[]; fields: Set<field> };
+type data = { name: string; statusbar?: boolean; languages: string[]; themes: { alias: string; name: string }[]; fields: Set<field> };
+
+type deviceData = { name: string; fields: field[] };
 export class ConfigSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
     // сети
@@ -97,6 +103,14 @@ export class ConfigSeeder extends Seeder {
         },
       ],
     });
+    //devices
+    em.create(Device, { alias: 'samsung', name: 'Samsung' });
+    em.create(Device, { alias: 'iphone', name: 'Iphone' });
+    em.create(Device, { alias: 'xiaomi', name: 'Xiaomi' });
+
+    await GenerateDeviceInputs.call({ em: em }, _xiaomi);
+    await GenerateDeviceInputs.call({ em: em }, _samsung);
+    await GenerateDeviceInputs.call({ em: em }, _iphone);
 
     await GenerateThemesForExchange.call({ em: em }, _binance);
     await GenerateThemesForExchange.call({ em: em }, _trust);
@@ -107,6 +121,7 @@ export class ConfigSeeder extends Seeder {
 const _binance = {
   name: 'binance',
   languages: ['en', 'es'],
+  statusbar: true,
   themes: [
     {
       alias: 'mobile-dark',
@@ -170,6 +185,7 @@ const _binance = {
 const _trust = {
   name: 'trust',
   languages: ['en'],
+  statusbar: true,
   themes: [
     {
       alias: 'mobile-dark',
@@ -208,6 +224,7 @@ const _trust = {
 const _exodus = {
   name: 'exodus',
   languages: ['en'],
+  statusbar: true,
   themes: [
     {
       alias: 'mobile-dark',
@@ -247,6 +264,7 @@ const _exodus = {
 const _safepal = {
   name: 'safepal',
   languages: ['ru'],
+  statusbar: true,
   themes: [
     {
       alias: 'mobile-dark',
@@ -295,6 +313,125 @@ const _safepal = {
     .add({ ru: 'Посмотреть в обозревателе блокчейна' }),
 };
 
+const _xiaomi = {
+  name: 'xiaomi',
+  fields: [
+    { alias: 'moon', name: 'moon' },
+    { alias: 'vibro', name: 'vibro' },
+    { alias: 'alarm', name: 'alarm' },
+    { alias: 'nfc', name: 'NFC' },
+    { alias: 'vpn', name: 'VPN' },
+    { alias: 'cog', name: 'Cog' },
+    { alias: 'volte', name: 'voLTE' },
+    { alias: 'wifiAP', name: 'Wi-Fi access point' },
+    { alias: 'wifiAPS', name: 'Wi-Fi AP signal', type: HtmlInputType.NUMBER, dependsOn: 'wifiAP' },
+    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, meta: '5' },
+    { alias: '4g', name: '4g signal', type: HtmlInputType.NUMBER, meta: '5' },
+    { alias: 'bluetooth', name: 'Bluetooth' },
+    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER },
+    { alias: 'time', name: 'Время', type: HtmlInputType.TIME },
+  ],
+};
+
+const _iphone = {
+  name: 'iphone',
+  fields: [
+    { alias: 'geoloc', name: 'Geolocation' },
+    {
+      alias: 'network',
+      name: 'WiFi/LTE',
+      type: HtmlInputType.SELECT,
+      values: [
+        {
+          value: 'LTE',
+          alias: 'lte',
+        },
+        {
+          value: 'WiFi',
+          alias: 'wifi',
+        },
+      ],
+    },
+
+    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, meta: '3' },
+    {
+      alias: 'simnum',
+      name: 'SIM',
+      type: HtmlInputType.SELECT,
+      values: [
+        { value: '1 SIM', alias: 'sim1' },
+        { value: 'Dual SIM', alias: 'sim2' },
+      ],
+    },
+    { alias: '4g', name: '4g signal', type: HtmlInputType.NUMBER, meta: '4' },
+    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER },
+    { alias: 'time', name: 'Время', type: HtmlInputType.TIME },
+  ],
+};
+
+const _samsung = {
+  name: 'samsung',
+  fields: [
+    { alias: 'time', name: 'Время', type: HtmlInputType.TIME },
+    {
+      alias: 'simnum',
+      name: 'SIM',
+      type: HtmlInputType.SELECT,
+      values: [
+        { value: '1 SIM', alias: 'sim1' },
+        { value: 'Dual SIM', alias: 'sim2' },
+      ],
+    },
+    { alias: 'wifiS1', name: 'Wi-Fi 1 signal', type: HtmlInputType.NUMBER, meta: '4' },
+    { alias: 'wifiS2', name: 'Wi-Fi 2 signal', type: HtmlInputType.NUMBER, meta: '4', dependsOn: 'simnum', dependsValue: 'sim2' },
+    {
+      alias: 'sound',
+      name: 'Sound',
+      type: HtmlInputType.SELECT,
+      values: [
+        {
+          value: 'None',
+          alias: 'null',
+        },
+        {
+          value: 'No sound',
+          alias: 'nosound',
+        },
+        {
+          value: 'No vibro',
+          alias: 'novibro',
+        },
+      ],
+    },
+    {
+      alias: 'wifiShare',
+      name: 'Wi-Fi share',
+      type: HtmlInputType.SELECT,
+      values: [
+        { value: 'Раздача', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+    },
+    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, meta: '4', dependsOn: 'wifiShare', dependsValue: 'in' },
+    { alias: 'volte', name: 'voLTE', dependsOn: 'wifiShare', dependsValue: 'in' },
+    {
+      alias: 'wifiMode',
+      name: 'H+ / Volte',
+      type: HtmlInputType.SELECT,
+      values: [
+        { value: 'H+', alias: 'h' },
+        { value: 'Volte', alias: 'volte' },
+      ],
+      dependsOn: 'wifiShare',
+      dependsValue: 'out',
+    },
+    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER },
+    { alias: 'geoloc', name: 'Geolocation' },
+    { alias: 'geoloc2', name: 'Geolocation2' },
+    { alias: 'vpn', name: 'VPN' },
+  ],
+};
+
 async function GenerateThemesForExchange(this: { em: EntityManager }, data: data) {
   const languages = await this.em.find(Language, { alias: { $in: data.languages } });
   const exchange = await this.em.findOneOrFail(Exchange, { alias: data.name });
@@ -328,8 +465,33 @@ async function GenerateThemesForExchange(this: { em: EntityManager }, data: data
     this.em.create(Theme, {
       ...theme,
       exchange,
+      statusbar: data.statusbar,
       themeLanguages: [...Array(languages.length).keys()].map((i) => ({ language: languages[i] })),
       themeInputs: [...Array(inputs.length).keys()].map((i) => ({ input: inputs[i] })),
     }),
   );
+}
+
+async function GenerateDeviceInputs(this: { em: EntityManager }, data: deviceData) {
+  const device = await this.em.findOneOrFail(Device, { alias: data.name });
+  const barinputs = await this.em.find(BarInput, { alias: { $in: data.fields.map((field) => field.alias) } });
+  data.fields.map((field: field & { meta?: string; dependsOn?: string; dependsValue?: string }) => {
+    let existing = barinputs.find((barinput) => barinput.alias == field.alias);
+    if (!existing) {
+      existing = this.em.create(BarInput, {
+        alias: field.alias,
+        name: field.name,
+        type: field.type as HtmlInputType,
+        ...(field.values ? { variants: (field.values as any).map((value: any) => this.em.create(BarInputVariant, { name: value.value, alias: value.alias })) } : {}),
+      });
+    }
+    return this.em.create(DeviceBarInput, {
+      device,
+      input: existing,
+      meta: field.meta,
+      dependsOn: field.dependsOn,
+      dependsValue: field.dependsValue,
+    });
+  });
+  await this.em.flush();
 }

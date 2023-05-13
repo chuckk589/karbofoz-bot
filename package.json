@@ -28,6 +28,7 @@
     "schema:initial": "mikro-orm schema:create --run",
     "schema:seeder": "mikro-orm seeder:run",
     "schema:update": "yarn mikro-orm schema:update --run",
+    "schema:clean": "yarn mikro-orm schema:drop&&yarn mikro-orm schema:update --run&&mikro-orm seeder:run",
     "docker:dev": "docker-compose -f docker-compose.dev.yml up -d --build --force-recreate"
   },
   "dependencies": {

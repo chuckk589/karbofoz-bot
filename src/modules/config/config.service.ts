@@ -1,7 +1,9 @@
+import { RetrieveDeviceConfigDto } from './dto/retrieve-device-config.dto';
 import { RetrieveExchangeConfigDto } from './dto/retrieve-exchange-config.dto';
 import { EntityManager, PopulateHint } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 import { Exchange } from '../mikroorm/entities/Exchange';
+import { Device } from '../mikroorm/entities/Device';
 
 @Injectable()
 export class ConfigService {
@@ -15,8 +17,10 @@ export class ConfigService {
         populateWhere: PopulateHint.INFER,
       },
     );
+    const devices = await this.em.find(Device, {}, { populate: ['deviceBarInputs.input.variants'] });
     return {
       exchanges: exchanges.map((exchange) => new RetrieveExchangeConfigDto(exchange)),
+      devices: devices.map((device) => new RetrieveDeviceConfigDto(device)),
     };
   }
 }

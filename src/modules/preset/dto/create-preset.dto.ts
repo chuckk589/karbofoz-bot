@@ -13,4 +13,7 @@ export class CreatePresetDto {
   fields: {
     [key: string]: string;
   };
+  statusbar: {
+    [key: string]: string;
+  } & { show: boolean };
 }

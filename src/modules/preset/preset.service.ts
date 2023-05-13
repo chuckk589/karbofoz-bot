@@ -20,12 +20,24 @@ export class PresetService {
     return await this.em.removeAndFlush(preset);
   }
 
-  async generatePreview(body?: UpdatePresetsDto) {
-    const bodyFlat = { ...body, ...body.fields };
-    delete bodyFlat.fields;
-    const queryString = Object.keys(bodyFlat)
-      .map((key) => `${key}=${(bodyFlat as any)[key]}`)
-      .join('&');
+  async generatePreview(body: UpdatePresetsDto) {
+    const {
+      fields = undefined,
+      statusbar = undefined,
+      _show = undefined,
+      ...bodyFlat
+    } = {
+      ...body,
+      ...body.fields,
+      ...(body.statusbar.show
+        ? Object.keys(body.statusbar).reduce((acc: any, sum) => {
+            acc[`_${sum}`] = typeof body.statusbar[sum] == 'boolean' ? +body.statusbar[sum] : body.statusbar[sum];
+            return acc;
+          }, {})
+        : {}),
+    };
+    console.log(_show);
+    const queryString = new URLSearchParams(bodyFlat).toString();
     const browser = await puppeteer.launch(puppeteerOptions);
     const page = await browser.newPage();
     await page.goto(`${process.env.NODE_ENV === 'dev' ? 'https://192.168.1.14:3001' : 'http://localhost:443'}/template?${queryString}`, { waitUntil: 'networkidle2' });
@@ -34,11 +46,10 @@ export class PresetService {
       height: 1440,
       deviceScaleFactor: 1,
     });
-    const img = await page.$('#main');
+    const img = await page.$(_show === 1 ? '#main' : '#wobar');
     const screen = await img.screenshot({ path: 'example.png', encoding: 'base64' });
     await browser.close();
     return { screen };
-    // return { screen: 'example.png' };
   }
 
   async managePreset(body: CreatePresetDto) {

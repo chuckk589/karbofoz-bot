@@ -30,6 +30,9 @@ export default defineConfig({
       '/safepal': {
         target: 'http://localhost:3000/',
       },
+      '/devices': {
+        target: 'http://localhost:3000/',
+      },
     },
   },
   plugins: [vue(), vuetify({ autoImport: true }), vueJsx()],

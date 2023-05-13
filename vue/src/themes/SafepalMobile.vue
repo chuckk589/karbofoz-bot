@@ -1,6 +1,7 @@
 <template>
   <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px; height: 2274px">
-    <div style="height: 98px; background-color: red"></div>
+    <!-- <div style="height: 98px; background-color: red"></div> -->
+    <StatusBar :query="payload.query" :theme="theme"></StatusBar>
     <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch">
       <div2 style="margin: 25px 42px 0 42px">
         <div style="font-size: 48px; margin-bottom: 78px">
@@ -60,10 +61,13 @@
 
 <script>
 import themeMixin from '../mixins/mixin';
+import StatusBar from '../components/StatusBar.vue';
 export default {
   name: 'SafepalMobile',
   mixins: [themeMixin],
-
+  components: {
+    StatusBar,
+  },
   data() {
     return {
       theme: '',

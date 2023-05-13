@@ -4,9 +4,9 @@ import { AliasVariant } from './AliasVariant';
 export enum HtmlInputType {
   TEXT = 'text',
   NUMBER = 'number',
-  DATE = 'date',
   SELECT = 'select',
   DATETIME_LOCAL = 'datetime-local',
+  TIME = 'time',
 }
 
 @Entity()

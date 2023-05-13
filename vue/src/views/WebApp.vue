@@ -44,8 +44,18 @@
                 </div>
                 <v-expand-transition>
                   <div v-show="statusbar.show">
-                    <v-text-field v-model="preset.name" label="Название" density="compact"></v-text-field>
-                    <v-textarea v-model="preset.comment" label="Комментарий" density="compact"></v-textarea>
+                    <v-select v-model="statusbar.device" :items="table.devices" label="Тип" density="compact"></v-select>
+                    <component
+                      v-for="(field, index) in deviceFields"
+                      :is="getComponentDeviceName(field)"
+                      :type="field.type"
+                      :key="index"
+                      v-show="field.dependsOn ? (field.dependsValue ? statusbar[field.dependsOn] == field.dependsValue : statusbar[field.dependsOn]) : true"
+                      :label="field.name"
+                      :items="fieldItems(field)"
+                      density="compact"
+                      v-model="statusbar[field.alias]"
+                    />
                   </div>
                 </v-expand-transition>
               </v-form>
@@ -152,6 +162,7 @@
 import { VTextField } from 'vuetify/components/VTextField';
 import { VSelect } from 'vuetify/components/VSelect';
 import { VCombobox } from 'vuetify/components/VCombobox';
+import { VCheckbox } from 'vuetify/components/VCheckbox';
 import sha256 from 'crypto-js/sha256';
 import DateSelect from '../components/DateSelect.vue';
 export default {
@@ -160,6 +171,7 @@ export default {
     VSelect,
     DateSelect,
     VCombobox,
+    VCheckbox,
   },
   name: 'WebApp',
   data() {
@@ -192,6 +204,12 @@ export default {
     this.$http({ method: 'GET', url: `/v1/config/` }).then((e) => {
       this.table = e.data;
       console.log(e.data);
+      this.exchange = '1';
+      this.theme = '1';
+      this.language = 'en';
+      this.currency = 'usdt';
+      this.network = 'trc20';
+      this.step = 2;
     });
     this.$http({ method: 'GET', url: `/v1/preset/` }).then((e) => {
       this.presets = e.data;
@@ -215,6 +233,7 @@ export default {
 
     next() {
       console.log(this.exchange, this.theme, this.language, this.currency, this.network);
+
       this.errorMessage = '';
       this.$refs.form1.validate().then((res) => {
         if (res.valid) {
@@ -281,6 +300,11 @@ export default {
       else if (field.alias == 'address') return 'v-combobox';
       else return 'v-text-field';
     },
+    getComponentDeviceName(field) {
+      if (field.type == 'select') return 'v-select';
+      else if (field.type == 'number' || field.type == 'time') return 'v-text-field';
+      else return 'v-checkbox';
+    },
     deletePreset(id) {
       this.$http.delete(`/v1/preset/${id}`).then((res) => {
         this.presets = this.presets.filter((item) => item.value != id);
@@ -304,6 +328,7 @@ export default {
                 currency: this.currency.value || this.currency,
                 network: this.network.value || this.network,
                 fields: this.form,
+                statusbar: this.filteredStatusBar(),
               }),
             );
             const now = new Date();
@@ -340,6 +365,7 @@ export default {
                 }
                 return acc;
               }, {}),
+              statusbar: this.filteredStatusBar(),
             };
             this.$http.post('/v1/preset/', body).then(() => (this.step = 1));
           }
@@ -365,6 +391,28 @@ export default {
       this.preset = null;
       this.fields = {};
     },
+    filteredStatusBar() {
+      const fields = this.table.devices.find((item) => item.value == this.statusbar.device)?.inputs;
+      const keys = Object.keys(this.statusbar);
+      return keys.reduce((acc, item) => {
+        const dependsOn = fields.find((field) => field.alias == item)?.dependsOn;
+        const dependsValue = fields.find((field) => field.alias == item)?.dependsValue;
+        if (dependsOn) {
+          if (dependsValue) {
+            if (this.statusbar[dependsOn] == dependsValue) {
+              acc[item] = this.statusbar[item];
+            }
+          } else {
+            if (this.statusbar[dependsOn] === true) {
+              acc[item] = this.statusbar[item];
+            }
+          }
+        } else {
+          acc[item] = this.statusbar[item];
+        }
+        return acc;
+      }, {});
+    },
   },
   computed: {
     themeItems() {
@@ -387,6 +435,9 @@ export default {
     },
     walletStyle() {
       return this.walletAction ? 'height: 0vh' : 'height: calc(100vh - 100px);';
+    },
+    deviceFields() {
+      return this.table.devices.find((item) => item.value == this.statusbar.device)?.inputs || [];
     },
 
     currentTitle: function () {

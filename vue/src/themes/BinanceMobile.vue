@@ -1,5 +1,6 @@
 <template>
   <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px; height: 2184px">
+    <StatusBar :query="payload.query" :theme="theme"></StatusBar>
     <div id="wobar">
       <div :class="'text-' + theme" style="height: 120px; margin-bottom: 75px; font-size: 49px">
         <div style="background-image: url('/binance/images/3.png'); width: 51px; height: 40px; margin-right: auto; margin: 0 auto 0 32px"></div>
@@ -61,10 +62,13 @@
 </template>
 <script>
 import themeMixin from '../mixins/mixin';
+import StatusBar from '../components/StatusBar.vue';
 export default {
   name: 'BinanceMobile',
   mixins: [themeMixin],
-
+  components: {
+    StatusBar,
+  },
   data() {
     return {
       theme: '',
