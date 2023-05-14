@@ -107,10 +107,12 @@ export class ConfigSeeder extends Seeder {
     em.create(Device, { alias: 'samsung', name: 'Samsung' });
     em.create(Device, { alias: 'iphone', name: 'Iphone' });
     em.create(Device, { alias: 'xiaomi', name: 'Xiaomi' });
+    em.create(Device, { alias: 'realme', name: 'Realme' });
 
     await GenerateDeviceInputs.call({ em: em }, _xiaomi);
     await GenerateDeviceInputs.call({ em: em }, _samsung);
     await GenerateDeviceInputs.call({ em: em }, _iphone);
+    await GenerateDeviceInputs.call({ em: em }, _realme);
 
     await GenerateThemesForExchange.call({ em: em }, _binance);
     await GenerateThemesForExchange.call({ em: em }, _trust);
@@ -431,7 +433,31 @@ const _samsung = {
     { alias: 'vpn', name: 'VPN' },
   ],
 };
-
+const _realme = {
+  name: 'realme',
+  fields: [
+    { alias: 'time', name: 'Время', type: HtmlInputType.TIME },
+    { alias: 'nfc', name: 'NFC' },
+    { alias: 'alarm', name: 'alarm' },
+    { alias: 'bluetooth', name: 'Bluetooth' },
+    { alias: 'speed', name: 'Speed', type: HtmlInputType.NUMBER },
+    { alias: 'volte', name: 'voLTE' },
+    {
+      alias: 'simnum',
+      name: 'SIM',
+      type: HtmlInputType.SELECT,
+      values: [
+        { value: '1 SIM', alias: 'sim1' },
+        { value: 'Dual SIM', alias: 'sim2' },
+      ],
+    },
+    { alias: 'bar1', name: 'Sim 1 signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4' },
+    { alias: 'bar2', name: 'Sim2 signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4', dependsOn: 'simnum', dependsValue: 'sim2' },
+    { alias: 'wifiAP', name: 'Wi-Fi access point' },
+    { alias: 'wifiAPS', name: 'Wi-Fi AP signal', type: HtmlInputType.NUMBER, dependsOn: 'wifiAP' },
+    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER },
+  ],
+};
 async function GenerateThemesForExchange(this: { em: EntityManager }, data: data) {
   const languages = await this.em.find(Language, { alias: { $in: data.languages } });
   const exchange = await this.em.findOneOrFail(Exchange, { alias: data.name });

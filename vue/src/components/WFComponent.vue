@@ -52,9 +52,36 @@
       <FakeImg v-for="(part, index) in samsung_wf" :key="index" :style="'background-image: url(' + part.path + ');' + part.style" :path="part.path" :class="part.class || '' + samsungFillStyle(index - 1 < value)">
       </FakeImg>
     </div>
+    <div v-else-if="name == 'realme_btr'" style="position: relative">
+      <div style="justify-content: start; width: 89%; height: 95%; position: absolute; left: 1px">
+        <div class="realme_bar_fill" :style="'background-color:white;width:' + value + '%;height: 100%;border-radius: 5px;margin-left: 3px;'"></div>
+        <div class="realme" style="position: absolute; width: 100%; font-size: 20px; font-family: 'Roboto'">{{ value }}</div>
+      </div>
+      <FakeImg class="realme" :path="'/devices/realme/6.png'"></FakeImg>
+    </div>
+    <div v-else-if="name == 'realme_bar'" style="align-items: end; position: relative">
+      <div v-if="meta" style="font-weight: 600; width: 17px">
+        <div class="realme" style="right: 3px; position: relative; transform: scale(1.1, 0.75); font-size: 18px; top: -23px">
+          <div style="position: absolute; top: -15px">^</div>
+          <div style="position: absolute">⌄</div>
+        </div>
+        <div class="realme" style="transform: scale(1, 1.2); font-size: 18px; right: 21px; bottom: 10px; letter-spacing: 1px; position: absolute; font-weight: 600">4G</div>
+      </div>
+      <FakeImg v-for="(part, index) in realme_bar" :key="index" :style="'background-image: url(' + part.path + ');' + part.style" :path="part.path" :class="part.class || '' + realmeFillStyle(index < value)"> </FakeImg>
+    </div>
+    <div v-else-if="name == 'realme_wf'">
+      <div>
+        <div style="flex-direction: column-reverse; position: relative">
+          <FakeImg v-for="(part, index) in realme_wf" :key="index" :style="'background-image: url(' + part.path + ');' + part.style" :path="part.path" :class="part.class || '' + realmeFillStyle(index < value)" />
+        </div>
+        <div class="realme" style="right: 8px; position: relative; transform: scale(1.1, 0.75); font-size: 18px; font-weight: 900; width: 10px; bottom: -7px">
+          <div style="position: absolute; top: -15px">^</div>
+          <div style="position: absolute">⌄</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-
 <script>
 import FakeImg from './FakeImg.vue';
 
@@ -77,6 +104,18 @@ export default {
 
   data() {
     return {
+      realme_wf: [
+        { path: '/devices/realme/wifi1.png', style: 'margin-top: 1px' },
+        { path: '/devices/realme/wifi2.png', style: '' },
+        { path: '/devices/realme/wifi3.png', style: 'margin-top: -3px;' },
+        { path: '/devices/realme/wifi4.png', style: '' },
+      ],
+      realme_bar: [
+        { path: '/devices/realme/bar1.png', style: '' },
+        { path: '/devices/realme/bar2.png', style: 'margin-left: 7px;' },
+        { path: '/devices/realme/bar3.png', style: 'margin-left: 7px;' },
+        { path: '/devices/realme/bar4.png', style: 'margin-left: 7px;' },
+      ],
       samsung_wf: [
         { path: '/devices/samsung/wifi0.png', style: 'position: absolute;    right: -7px;bottom: -5px;', class: 'samsung' },
         { path: '/devices/samsung/wifi1.png', style: 'margin-top: 1px' },
@@ -134,6 +173,9 @@ export default {
     samsungFillStyle(state) {
       return state ? 'samsung' : 'samsung_bar_fill';
     },
+    realmeFillStyle(state) {
+      return state ? 'realme' : 'realme_bar_fill';
+    },
   },
   computed: {
     iphoneBtrClass() {
@@ -163,5 +205,13 @@ export default {
 
 .samsung_bar_fill {
   filter: brightness(0) saturate(100%) invert(92%) sepia(0%) saturate(1%) hue-rotate(184deg) brightness(82%) contrast(92%);
+}
+
+.mobile-light-bar .realme_bar_fill {
+  filter: brightness(0) saturate(100%) invert(99%) sepia(3%) saturate(265%) hue-rotate(334deg) brightness(118%) contrast(77%);
+}
+
+.mobile-dark-bar .realme_bar_fill {
+  filter: brightness(0) saturate(100%) invert(18%) sepia(0%) saturate(2%) hue-rotate(64deg) brightness(101%) contrast(94%);
 }
 </style>
