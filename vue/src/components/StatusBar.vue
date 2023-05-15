@@ -1,5 +1,5 @@
 <template>
-  <div v-if="query._device == 'xiaomi'" class="s-bar" style="height: 213px; margin-top: 24px; margin-left: 35px" :class="theme + '-bar'">
+  <div v-if="query._device == 'xiaomi'" class="s-bar" style="height: 213px; margin-left: 35px" :class="theme + '-bar'">
     <div>
       <div class="xiaomi" style="font-size: 35px; font-family: 'Roboto'; letter-spacing: 1px">{{ query['_time'] }}</div>
       <FakeImg class="xiaomi" v-if="!!+query._moon" :path="'/devices/xiaomi/12.png'" style="margin-left: 10px" />
@@ -30,8 +30,8 @@
       <WFComponent :value="query['_charge']" name="iphone_btr" style="margin-right: 77px; margin-top: 5px" />
     </div>
   </div>
-  <div v-else-if="query._device == 'samsung'" style="height: 149px; align-items: stretch" :class="theme + '-bar'">
-    <div style="flex: 1 1; margin-top: -35px; margin-left: 75px">
+  <div v-else-if="query._device == 'samsung'" style="height: 100px; align-items: stretch" :class="theme + '-bar'">
+    <div style="flex: 1 1; margin-left: 75px">
       <div class="samsung" style="font-size: 35px; font-family: 'Roboto'; letter-spacing: 1px">{{ query['_time'] }}</div>
       <FakeImg class="samsung" v-if="!!+query._geoloc" :path="'/devices/samsung/1.png'" style="margin-left: 19px; margin-top: 6px" />
       <v-spacer></v-spacer>
@@ -123,7 +123,6 @@ export default {
 .s-bar {
   flex-direction: column !important;
   align-items: stretch !important;
-  justify-content: flex-start !important;
 }
 </style>
 <style>
