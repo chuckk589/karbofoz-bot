@@ -25,7 +25,7 @@
             <div v-for="(block, index) in getBlocks('block2')" :key="index" class="data-item" :style="'border-bottom: 1px solid ' + borderColor">
               <div :class="'text-' + theme">{{ block.text }}</div>
               <div v-if="block.icon" :style="'margin: 1px auto 0 27px;height: 33px;width: 33px;background-image: url(/trust/images/' + block.icon + ')'"></div>
-              <div :class="'text2-' + theme">{{ block.value }}</div>
+              <div :style="block.style" :class="'text2-' + theme">{{ block.value }}</div>
             </div>
           </div>
         </div>
@@ -67,34 +67,48 @@ export default {
       block2: [
         {
           text: 'text4',
-          value: 'input2',
+          value: '',
           icon: '1.png',
-          formatter: 'bnbFormatter',
+          formatter: 'feeTrustFormatter',
+          style: 'text-align: end; flex: 1 1 0%;justify-content: end;',
         },
         {
           text: 'text6',
-          value: 'input3',
+          value: 'input2',
         },
       ],
     };
   },
   methods: {
     sumFormatter(value) {
-      return `${+parseFloat(value) > 0 ? '+' : ''}${value} ${this.getCurrency(this.getTextFromQuery('currency')).label}`;
+      return `${+parseFloat(value) > 0 ? '+' : ''}${this.fixedFormatter('input1', 8)} ${this.payload.currency.name}`;
     },
     sumApproxFormatter(value) {
-      return `≈ ${Math.abs(Math.round(parseFloat(value) * 100) / 100)} ${this.getCurrency(this.getTextFromQuery('currency')).icon}`;
+      return `≈ ${Math.abs(Math.round(parseFloat(value) * 100) / 100)} $`;
     },
     dateFormatter(value) {
-      return new Date(value).toLocaleString(this.payload.query.language, {
-        day: 'numeric',
-        month: 'short',
-        hour: 'numeric',
-        minute: 'numeric',
-      });
+      const date = new Date(value);
+      const today = new Date();
+      if (today.toDateString() === date.toDateString()) {
+        return (
+          `${this.getText('text8')}, ` +
+          new Date(value).toLocaleString(this.payload.query.language, {
+            hour: 'numeric',
+            minute: 'numeric',
+          })
+        );
+      } else {
+        return new Date(value).toLocaleString(this.payload.query.language, {
+          day: 'numeric',
+          month: 'short',
+          hour: 'numeric',
+          minute: 'numeric',
+        });
+      }
     },
-    bnbFormatter(value) {
-      return `${value} ${this.getNetwork(this.getTextFromQuery('network')).coin} (${320 * parseFloat(value).toFixed(2)} $)`;
+    feeTrustFormatter() {
+      const value = this.feeFormatter();
+      return `${value} ${this.payload.network.coin} ${value ? `($${(value * this.payload.course).toFixed(2)})` : ''}`;
     },
   },
   computed: {

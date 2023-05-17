@@ -14,42 +14,45 @@ const themeMixin = {
   },
   data() {
     return {
-      _networks: {
-        trc20: {
-          label: 'TRC20',
-          coin: 'TRX',
-        },
-        bep20: {
-          label: 'BEP20',
-          coin: 'BSC',
-        },
-        erc20: {
-          label: 'ETH',
-          coin: 'ETH',
-        },
-      },
+      // _networks: {
+      //   trc20: {
+      //     label: 'TRC20',
+      //     coin: 'TRX',
+      //   },
+      //   bep20: {
+      //     label: 'BEP20',
+      //     coin: 'BSC',
+      //   },
+      //   erc20: {
+      //     label: 'ETH',
+      //     coin: 'ETH',
+      //   },
+      // },
       theme: '',
-      _currencies: {
-        usdt: {
-          label: 'USDT',
-          icon: '$',
-        },
-      },
+      // _currencies: {
+      //   usdt: {
+      //     label: 'USDT',
+      //     icon: '$',
+      //   },
+      // },
     };
   },
   mounted() {
     this.theme = this.payload.path.split('/').pop();
   },
   methods: {
-    getNetwork(key) {
-      return this._networks[key] || { label: key, coin: '' };
+    fixedFormatter(key, fixed) {
+      return +parseFloat(this.getText(key)).toFixed(fixed);
     },
-    getCurrency(key) {
-      return this._currencies[key] || { label: key, icon: '' };
-    },
-    coinFormatter(value) {
-      return `${value} ${this._networks[this.payload.query.network]?.coin || this.payload.query.network}`;
-    },
+    // getNetwork(key) {
+    //   return this._networks[key] || { label: key, coin: '' };
+    // },
+    // getCurrency(key) {
+    //   return this._currencies[key] || { label: key, icon: '' };
+    // },
+    // coinFormatter(value) {
+    //   return `${value} ${this._networks[this.payload.query.network]?.coin || this.payload.query.network}`;
+    // },
     getBlocks(block) {
       return this[block]
         .map((item) => {
@@ -74,6 +77,9 @@ const themeMixin = {
       }
       return raw;
     },
+    getConstant(fieldName) {
+      return this.payload.theme.inputs.find((input) => input.alias === fieldName)?.value;
+    },
     getTextFromQuery(fieldName) {
       return this.payload.query[fieldName];
     },
@@ -83,6 +89,13 @@ const themeMixin = {
     },
     dateFormatter(value) {
       return value.replace(/T/, ' ');
+    },
+    feeFormatter() {
+      const data = this.getConstant('cs_com')
+        .split(' ')
+        .map((item) => +item);
+      if (data.length != 3) return data[0];
+      return +(Math.random() * (data[1] - data[0]) + data[0]).toFixed(data[2]);
     },
   },
   computed: {

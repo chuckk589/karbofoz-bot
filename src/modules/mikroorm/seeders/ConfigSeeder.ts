@@ -20,9 +20,9 @@ type deviceData = { name: string; fields: field[] };
 export class ConfigSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
     // сети
-    const bsc = em.create(Network, { alias: 'bep20', name: 'BSC' });
-    const eth = em.create(Network, { alias: 'erc20', name: 'ETH' });
-    const trx = em.create(Network, { alias: 'trc20', name: 'TRX' });
+    const bsc = em.create(Network, { alias: 'bep20', name: 'BSC', coin: 'BNB' });
+    const eth = em.create(Network, { alias: 'erc20', name: 'ETH', coin: 'ETH' });
+    const trx = em.create(Network, { alias: 'trc20', name: 'TRX', coin: 'TRX' });
     //валюты
     const usdt = em.create(Currency, { alias: 'usdt', name: 'USDT' });
     //языки
@@ -38,17 +38,30 @@ export class ConfigSeeder extends Seeder {
         {
           network: bsc,
           networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_confirm', value: '20 / 15' },
+            { alias: 'cs_com', value: '0.21 0.29 1' },
+          ],
         },
         {
           network: eth,
           networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_confirm', value: '65 / 64' },
+            { alias: 'cs_com', value: '4.5 5.9 1' },
+          ],
         },
         {
           network: trx,
           networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_confirm', value: '50 / 1' },
+            { alias: 'cs_com', value: '1' },
+          ],
         },
       ],
     });
+
     em.create(Exchange, {
       alias: 'trust',
       name: 'Trust',
@@ -56,14 +69,17 @@ export class ConfigSeeder extends Seeder {
         {
           network: bsc,
           networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '0.0001 0.00025 9' }],
         },
         {
           network: eth,
           networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '0.003 0.004 18' }],
         },
         {
           network: trx,
           networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '0' }],
         },
       ],
     });
@@ -122,7 +138,7 @@ export class ConfigSeeder extends Seeder {
 }
 const _binance = {
   name: 'binance',
-  languages: ['en', 'es'],
+  languages: ['en'],
   statusbar: true,
   themes: [
     {
@@ -135,24 +151,25 @@ const _binance = {
     },
   ],
   fields: new Set()
-    .add({ en: 'Deposit Details', es: 'Detalles de depósito' })
+    .add({ en: 'Deposit Details', es: 'Detalles de depósito', alias: 'indep' })
     .add({ en: 'Amount', es: 'Cantidad' })
     .add({ en: 'Completed', es: 'Completed' })
     .add({
       en: 'Crypto has arrived in your Binance account. View your spot account balance for more details.',
       es: 'La criptomoneda ha llegado a tu cuenta de Binance. Comprueba el saldo de tu cuenta spot para obtener más información.',
+      alias: 'inmsg',
     })
     .add({ en: 'Confirmations', es: 'Confirmaciones' })
     .add({ en: 'Network', es: 'Red' })
-    .add({ en: 'Deposit Wallet', es: 'Billetera de depósito' })
+    .add({ en: 'Deposit Wallet', es: 'Billetera de depósito', alias: 'inwlt' })
     .add({ en: 'Address', es: 'Dirección' })
     .add({ en: 'Txid', es: 'Txid' })
     .add({ en: 'Date', es: 'Fecha' })
     .add({ en: 'Receive', es: 'Simple Earn' })
     .add({ en: 'Receive Crypto With Zero Fee', es: 'USDT APR de hasta 4.06%' })
     .add({ en: 'Discover Now', es: 'Descubrir ahora' })
+    .add({ en: 'Spot Wallet', es: 'Billetera Spot' })
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
-    .add({ type: HtmlInputType.NUMBER, name: 'Подтверждения' })
     .add({ type: HtmlInputType.TEXT, name: 'Имя кошелька' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
@@ -182,7 +199,15 @@ const _binance = {
         { value: 'Прием', alias: 'in' },
       ],
       alias: 'direction',
-    }),
+    })
+    .add({ en: 'Withdrawal Details', alias: 'outdep' })
+    .add({ en: 'Crypto transferred out of Binance. Please contact the recipient platform for your transaction receipt.', alias: 'outmsg' })
+    .add({ en: "Why hasn't my withdrawal arrived?" })
+    .add({ en: 'Withdrawal Wallet', alias: 'outwlt' })
+    .add({ en: 'Save address' })
+    .add({ en: 'Network fee' })
+    .add({ en: 'Need help? Check FAQs' })
+    .add({ en: 'Scam Report' }),
 };
 const _trust = {
   name: 'trust',
@@ -202,7 +227,6 @@ const _trust = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
-    .add({ type: HtmlInputType.NUMBER, name: 'Сетевой сбор' })
     .add({ type: HtmlInputType.TEXT, name: 'Nonce', optional: true })
     .add({
       type: HtmlInputType.SELECT,
@@ -221,7 +245,8 @@ const _trust = {
     .add({ en: 'Nonce' })
     .add({ en: 'Completed' })
     .add({ en: 'Sender', alias: 'in' })
-    .add({ en: 'Recipient', alias: 'out' }),
+    .add({ en: 'Recipient', alias: 'out' })
+    .add({ en: 'Today' }),
 };
 const _exodus = {
   name: 'exodus',
@@ -239,7 +264,6 @@ const _exodus = {
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
     .add({ type: HtmlInputType.NUMBER, name: 'Текущий баланс', optional: true })
-    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', optional: true })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',

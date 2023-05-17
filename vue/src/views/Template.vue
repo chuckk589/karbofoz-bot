@@ -27,7 +27,8 @@ export default {
         .map((word) => word[0].toUpperCase() + word.slice(1))
         .join('');
       this.payload = e.data;
-      this.payload.query = this.$route.query;
+      const { currency, network, ...rest } = this.$route.query;
+      this.payload.query = rest;
       console.log(this.payload);
       this.loaded = true;
     });

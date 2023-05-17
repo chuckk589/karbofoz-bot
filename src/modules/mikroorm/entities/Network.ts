@@ -9,6 +9,9 @@ export class Network {
   @Unique()
   alias!: string;
 
+  @Property()
+  coin!: string;
+
   @Property({ nullable: true })
   name!: string;
 }

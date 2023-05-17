@@ -46,7 +46,7 @@ export default {
         {
           text: 'text8',
           value: 'input3',
-          formatter: 'coinFormatter',
+          formatter: 'sumFormatter',
           style: 'color:#9599a5',
         },
         {
@@ -85,7 +85,7 @@ export default {
       return value && `$ ${value}`;
     },
     sumFormatter2(value) {
-      return `${this.payload.query.direction === 'in' ? '+' : ''} ${value} ${this.getCurrency(this.getTextFromQuery('currency')).label}`;
+      return `${this.payload.query.direction === 'in' ? '+' : ''} ${value} ${this.payload.currency.name}`;
     },
     dateFormatter(value) {
       return new Date(value).toLocaleString(this.payload.query.language, {

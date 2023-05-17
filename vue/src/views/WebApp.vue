@@ -13,8 +13,8 @@
                 <v-select v-model="exchange" :items="table.exchanges" label="Биржа" density="compact" :rules="notEmpty"></v-select>
                 <v-select v-model="theme" :items="themeItems" label="Тема" density="compact" :rules="notEmpty"></v-select>
                 <v-select v-model="language" :items="themeLanguages" label="Язык" density="compact" :rules="notEmpty"></v-select>
-                <v-combobox :return-object="false" v-model="network" :items="themeNetworks" label="Сеть" density="compact" :rules="notEmpty"></v-combobox>
-                <v-combobox :return-object="false" v-model="currency" :items="themeCurrencies" label="Валюта" density="compact" :rules="notEmpty"></v-combobox>
+                <v-combobox v-model="network" :items="themeNetworks" label="Сеть" density="compact" :rules="notEmpty"></v-combobox>
+                <v-combobox v-model="currency" :items="themeCurrencies" label="Валюта" density="compact" :rules="notEmpty"></v-combobox>
               </v-form>
             </v-card-text>
           </v-window-item>
@@ -204,13 +204,13 @@ export default {
   mounted() {
     this.$http({ method: 'GET', url: `/v1/config/` }).then((e) => {
       this.table = e.data;
-      // console.log(e.data);
-      // this.exchange = '1';
-      // this.theme = '1';
-      // this.language = 'en';
-      // this.currency = 'usdt';
-      // this.network = 'trc20';
-      // this.step = 2;
+      console.log(e.data);
+      this.exchange = '1';
+      this.theme = '1';
+      this.language = 'en';
+      this.currency = 'usdt';
+      this.network = 'trc20';
+      this.step = 2;
     });
     this.$http({ method: 'GET', url: `/v1/preset/` }).then((e) => {
       this.presets = e.data;
@@ -393,6 +393,7 @@ export default {
       this.fields = {};
     },
     filteredStatusBar() {
+      if (!this.statusbar.device) return {};
       const fields = this.table.devices.find((item) => item.value == this.statusbar.device)?.inputs;
       const keys = Object.keys(this.statusbar);
       return keys.reduce((acc, item) => {
@@ -426,7 +427,7 @@ export default {
       return this.table.exchanges?.find((item) => item.value == this.exchange)?.networks || [];
     },
     themeCurrencies() {
-      return this.table.exchanges?.find((item) => item.value == this.exchange)?.networks.find((item) => item.value == this.network)?.currencies || [];
+      return this.table.exchanges?.find((item) => item.value == this.exchange)?.networks.find((item) => item.value == this.network.value || this.network)?.currencies || [];
     },
     themeFields() {
       return this.table.exchanges?.find((item) => item.value == this.exchange)?.themes.find((item) => item.value == this.theme)?.inputs || [];
