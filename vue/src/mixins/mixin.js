@@ -14,27 +14,7 @@ const themeMixin = {
   },
   data() {
     return {
-      // _networks: {
-      //   trc20: {
-      //     label: 'TRC20',
-      //     coin: 'TRX',
-      //   },
-      //   bep20: {
-      //     label: 'BEP20',
-      //     coin: 'BSC',
-      //   },
-      //   erc20: {
-      //     label: 'ETH',
-      //     coin: 'ETH',
-      //   },
-      // },
       theme: '',
-      // _currencies: {
-      //   usdt: {
-      //     label: 'USDT',
-      //     icon: '$',
-      //   },
-      // },
     };
   },
   mounted() {
@@ -44,15 +24,6 @@ const themeMixin = {
     fixedFormatter(key, fixed) {
       return +parseFloat(this.getText(key)).toFixed(fixed);
     },
-    // getNetwork(key) {
-    //   return this._networks[key] || { label: key, coin: '' };
-    // },
-    // getCurrency(key) {
-    //   return this._currencies[key] || { label: key, icon: '' };
-    // },
-    // coinFormatter(value) {
-    //   return `${value} ${this._networks[this.payload.query.network]?.coin || this.payload.query.network}`;
-    // },
     getBlocks(block) {
       return this[block]
         .map((item) => {
@@ -77,8 +48,13 @@ const themeMixin = {
       }
       return raw;
     },
+
+    //////
     getConstant(fieldName) {
       return this.payload.theme.inputs.find((input) => input.alias === fieldName)?.value;
+    },
+    fixed(value, fixed) {
+      return parseFloat(value).toFixed(fixed);
     },
     getTextFromQuery(fieldName) {
       return this.payload.query[fieldName];
@@ -90,11 +66,11 @@ const themeMixin = {
     dateFormatter(value) {
       return value.replace(/T/, ' ');
     },
-    feeFormatter() {
-      const data = this.getConstant('cs_com')
-        .split(' ')
-        .map((item) => +item);
+    feeFormatter(key = 'cs_com') {
+      let data = this.getConstant(key)?.split(' ');
+      if (!data) return undefined;
       if (data.length != 3) return data[0];
+      data = data.map((item) => +item);
       return +(Math.random() * (data[1] - data[0]) + data[0]).toFixed(data[2]);
     },
   },

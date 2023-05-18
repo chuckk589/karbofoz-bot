@@ -108,7 +108,7 @@ export default {
     },
     feeTrustFormatter() {
       const value = this.feeFormatter();
-      return `${value} ${this.payload.network.coin} ${value ? `($${(value * this.payload.course).toFixed(2)})` : ''}`;
+      return `${value} ${this.payload.network.coin} ${value ? `($${(value * this.payload.network.course).toFixed(2)})` : ''}`;
     },
   },
   computed: {

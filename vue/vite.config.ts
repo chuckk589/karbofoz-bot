@@ -30,6 +30,15 @@ export default defineConfig({
       '/safepal': {
         target: 'http://localhost:3000/',
       },
+      '/gate': {
+        target: 'http://localhost:3000/',
+      },
+      '/huobi': {
+        target: 'http://localhost:3000/',
+      },
+      '/kucoin': {
+        target: 'http://localhost:3000/',
+      },
       '/devices': {
         target: 'http://localhost:3000/',
       },

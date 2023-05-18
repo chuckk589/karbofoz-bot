@@ -7,6 +7,7 @@ export enum HtmlInputType {
   SELECT = 'select',
   DATETIME_LOCAL = 'datetime-local',
   TIME = 'time',
+  TEXTAREA = 'textarea',
 }
 
 @Entity()

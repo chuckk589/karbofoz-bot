@@ -61,7 +61,6 @@ export class ConfigSeeder extends Seeder {
         },
       ],
     });
-
     em.create(Exchange, {
       alias: 'trust',
       name: 'Trust',
@@ -90,14 +89,17 @@ export class ConfigSeeder extends Seeder {
         {
           network: bsc,
           networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '0.0002 0.0003 8' }],
         },
         {
           network: eth,
           networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '0.01 0.03 8' }],
         },
         {
           network: trx,
           networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '12 28 4' }],
         },
       ],
     });
@@ -108,14 +110,91 @@ export class ConfigSeeder extends Seeder {
         {
           network: bsc,
           networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_height', value: '22197612' },
+            { alias: 'cs_noncein', value: '4236183' },
+            { alias: 'cs_nonceout', value: '9' },
+            { alias: 'cs_comin', value: '0.0005 0.0008 8' },
+            { alias: 'cs_comout', value: '0.0002 0.0004 8' },
+          ],
         },
         {
           network: eth,
           networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_height', value: '16984270' },
+            { alias: 'cs_noncein', value: '6374408' },
+            { alias: 'cs_nonceout', value: '0' },
+            { alias: 'cs_com', value: '0.0002 0.0004 8' },
+          ],
         },
         {
           network: trx,
           networkCurrencies: [{ currency: usdt }],
+        },
+      ],
+    });
+    em.create(Exchange, {
+      alias: 'gate',
+      name: 'Gate.io',
+      exchangeNetworks: [
+        {
+          network: bsc,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '1' }],
+        },
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '7.7' }],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '1' }],
+        },
+      ],
+    });
+    em.create(Exchange, {
+      alias: 'huobi',
+      name: 'Huobi',
+      exchangeNetworks: [
+        {
+          network: bsc,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '4 8 8' }],
+        },
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '4 8 8' }],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '1.00000000' }],
+        },
+      ],
+    });
+    em.create(Exchange, {
+      alias: 'kucoin',
+      name: 'KuCoin',
+      exchangeNetworks: [
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_com', value: '20.00' },
+            { alias: 'cs_block', value: '12/64' },
+          ],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_com', value: '1.00' },
+            { alias: 'cs_block', value: '3/3' },
+          ],
         },
       ],
     });
@@ -134,8 +213,12 @@ export class ConfigSeeder extends Seeder {
     await GenerateThemesForExchange.call({ em: em }, _trust);
     await GenerateThemesForExchange.call({ em: em }, _exodus);
     await GenerateThemesForExchange.call({ em: em }, _safepal);
+    await GenerateThemesForExchange.call({ em: em }, _gate);
+    await GenerateThemesForExchange.call({ em: em }, _huobi);
+    await GenerateThemesForExchange.call({ em: em }, _kucoin);
   }
 }
+/////////////////////////////////////////
 const _binance = {
   name: 'binance',
   languages: ['en'],
@@ -263,7 +346,6 @@ const _exodus = {
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
-    .add({ type: HtmlInputType.NUMBER, name: 'Текущий баланс', optional: true })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -277,6 +359,7 @@ const _exodus = {
     .add({ en: 'Personal Note' })
     .add({ en: 'Add Note' })
     .add({ en: 'Created' })
+    .add({ en: 'Timestamp' })
     .add({ en: 'Transaction ID' })
     .add({ en: 'Now' })
     .add({ en: 'Need help?' })
@@ -303,15 +386,11 @@ const _safepal = {
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
-    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', optional: true })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
     .add({ type: HtmlInputType.TEXT, name: 'От' })
     .add({ type: HtmlInputType.TEXT, name: 'На' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', optional: true, alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Transaction Hash', optional: true })
-    .add({ type: HtmlInputType.NUMBER, name: 'Высота', optional: true })
-    .add({ type: HtmlInputType.NUMBER, name: 'Block', optional: true })
-    .add({ type: HtmlInputType.NUMBER, name: 'Nonce', optional: true })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({
       type: HtmlInputType.SELECT,
@@ -332,13 +411,143 @@ const _safepal = {
     .add({ ru: 'Успех' })
     .add({ ru: 'Получить', alias: 'in' })
     .add({ ru: 'Отправить', alias: 'out' })
-    .add({ ru: 'Block' })
     .add({ ru: 'Nonce' })
     .add({ ru: 'TxID' })
     .add({ ru: 'Высота' })
     .add({ ru: 'Посмотреть в обозревателе блокчейна' }),
 };
+const _gate = {
+  name: 'gate',
+  languages: ['en'],
+  statusbar: true,
+  themes: [
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({ type: HtmlInputType.NUMBER, name: 'ID Ордера', optional: true, alias: 'order' })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Deposit Details', alias: 't1in' })
+    .add({ en: 'Withdrawal Details', alias: 't1out' })
+    .add({ en: 'Quantity', alias: 't2' })
+    .add({ en: 'Success', alias: 't3' })
+    .add({ en: 'Deposit Method', alias: 't4in' })
+    .add({ en: 'Withdrawal Method', alias: 't4out' })
+    .add({ en: 'Onchain Deposit', alias: 't5in' })
+    .add({ en: 'Onchain Withdrawal', alias: 't5out' })
+    .add({ en: 'Time', alias: 't6' })
+    .add({ en: 'Network', alias: 't7' })
+    .add({ en: 'Order ID', alias: 't8' })
+    .add({ en: 'Deposit Address', alias: 't9in' })
+    .add({ en: 'Address', alias: 't9out' })
+    .add({ en: 'TXID', alias: 't10' })
+    .add({ en: 'Fee', alias: 't11' }),
+};
+const _huobi = {
+  name: 'huobi',
+  languages: ['en'],
+  statusbar: true,
+  themes: [
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Type', alias: 't1' })
+    .add({ en: 'Ordinary Deposit', alias: 't2in' })
+    .add({ en: 'General Withdrawal', alias: 't2out' })
+    .add({ en: 'Status', alias: 't3' })
+    .add({ en: 'Completed', alias: 't4' })
+    .add({ en: 'Copy', alias: 't5' })
+    .add({ en: 'Time', alias: 't6' })
+    .add({ en: 'Withdrawal Address', alias: 't7' })
+    .add({ en: 'Withdrawal Network', alias: 't8' })
+    .add({ en: 'Fees', alias: 't9' })
+    .add({ en: 'TxID', alias: 't10' }),
+};
+const _kucoin = {
+  name: 'kucoin',
+  languages: ['en'],
+  statusbar: true,
+  themes: [
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({ type: HtmlInputType.TEXT, name: 'TxHash', alias: 'thash' })
+    .add({ type: HtmlInputType.TEXTAREA, name: 'Сообщение', alias: 'msg', optional: true })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Deposit Details', alias: 't1in' })
+    .add({ en: 'Withdrawal Details', alias: 't1out' })
+    .add({ en: 'Completed', alias: 't2' })
+    .add({ en: 'Deposit completed. View details in your account', alias: 't3' })
+    .add({ en: 'Block(s)', alias: 't4' })
+    .add({ en: 'Time', alias: 't5' })
+    .add({ en: 'Network', alias: 't6' })
+    .add({ en: 'Deposit Account', alias: 't7in' })
+    .add({ en: 'Withdrawal Account', alias: 't7out' })
+    .add({ en: 'Main Account', alias: 't8' })
+    .add({ en: 'Remarks', alias: 't9' })
+    .add({ en: 'Address/Account', alias: 't10' })
+    .add({ en: 'TxHash', alias: 't11' })
+    .add({ en: 'Fee', alias: 't12' }),
+};
 
+/////////////////////////////////////////
 const _xiaomi = {
   name: 'xiaomi',
   fields: [

@@ -8,15 +8,66 @@
         <div style="color: #9ca6c8; font-size: 37px; margin: auto">{{ getText('text1') }}</div>
         <div style="background-image: url(exodus/images/2.png); width: 46px; height: 65px; margin-right: 71px"></div>
       </div>
-      <div v-for="(block, index) in getBlocks('block1')" :key="index" class="data-item">
-        <div>{{ block.text }}</div>
-        <div :style="block.style">{{ block.value }}</div>
+
+      <div class="data-item">
+        <div>{{ getConstant(payload.query.direction + 'f') }}</div>
+        <div :style="payload.query.direction === 'in' ? 'color:#5fa697' : 'color:#9599a5'">{{ sumFormatter() }}</div>
+      </div>
+      <div class="data-item" v-if="payload.query.direction === 'out'">
+        <div>{{ getConstant('text9') }}</div>
+        <div style="color: #9599a5">{{ feeFormatter() }} {{ payload.network.coin }}</div>
+      </div>
+      <div class="data-item">
+        <div>{{ getConstant('text2') }}</div>
+        <div style="color: #6c5dc3">{{ getConstant('text3') }}</div>
+      </div>
+      <div class="data-item">
+        <div>{{ timeStampHeader() }}</div>
+        <div>{{ timeStampValue() }}</div>
+      </div>
+      <div class="data-item">
+        <div>{{ getConstant(payload.query.direction + 'd') }}</div>
+        <div
+          style="
+            line-height: 47px;
+            font-size: 40px;
+            margin-top: 17px;
+            color: #3f099f;
+            background: #907df0;
+            background: linear-gradient(to left, #907df0 0%, #604ebf 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          "
+        >
+          {{ payload.query.address }}
+        </div>
+      </div>
+      <div class="data-item">
+        <div>{{ getConstant('text6') }}</div>
+        <div
+          style="
+            line-height: 47px;
+            font-size: 40px;
+            margin-top: 17px;
+            color: #3f099f;
+            background: #907df0;
+            background: linear-gradient(to left, #907df0 0%, #604ebf 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          "
+        >
+          {{ payload.query.txid }}
+        </div>
+      </div>
+      <div class="data-item">
+        <div>{{ getConstant('text7') }}</div>
+        <div>{{ usdFormatter() }}</div>
       </div>
       <div class="data-item" style="height: 488px; justify-content: space-evenly">
         <kek style="background-image: url(exodus/images/3.png); width: 91px; height: 92px; margin-top: 36px"></kek>
-        <div style="font-size: 42px">{{ getText('text7') }}</div>
+        <div style="font-size: 42px">{{ getConstant('text8') }}</div>
         <div style="margin-bottom: 36px; font-size: 53px; background: #907df0; background: linear-gradient(to left, #907df0 0%, #604ebf 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent">
-          {{ getText('text9') }}
+          {{ getConstant('text10') }}
         </div>
       </div>
     </div>
@@ -35,66 +86,29 @@ export default {
   data() {
     return {
       theme: '',
-      block1: [
-        {
-          value: 'input1',
-          alias: 'direction',
-          key: 'f',
-          style: this.payload.query.direction === 'in' ? 'color:#5fa697' : 'color:#9599a5',
-          formatter: 'sumFormatter2',
-        },
-        {
-          text: 'text8',
-          value: 'input3',
-          formatter: 'sumFormatter',
-          style: 'color:#9599a5',
-        },
-        {
-          text: 'text2',
-          value: 'text3',
-          style: 'color:#6c5dc3',
-        },
-        {
-          text: 'text4',
-          value: 'date',
-          formatter: 'dateFormatter',
-        },
-        {
-          value: 'address',
-          alias: 'direction',
-          key: 'd',
-          style:
-            'line-height: 47px;font-size: 40px;margin-top: 17px;color: #3f099f;background: #907DF0;background: linear-gradient(to left, #907DF0 0%, #604EBF 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;',
-        },
-        {
-          text: 'text5',
-          value: 'txid',
-          style:
-            'line-height: 47px;font-size: 40px;margin-top: 17px;color: #3f099f;background: #907DF0;background: linear-gradient(to left, #907DF0 0%, #604EBF 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;',
-        },
-        {
-          text: 'text6',
-          value: 'input5',
-          formatter: 'sumFormatter',
-        },
-      ],
     };
   },
   methods: {
-    sumFormatter(value) {
-      return value && `$ ${value}`;
+    timeStampHeader() {
+      return this.$dayjs(this.payload.query.date).isToday() ? this.getConstant('text4') : this.getConstant('text5');
     },
-    sumFormatter2(value) {
-      return `${this.payload.query.direction === 'in' ? '+' : ''} ${value} ${this.payload.currency.name}`;
+    timeStampValue() {
+      if (this.$dayjs().diff(this.payload.query.date, 'day')) {
+        return new Date(this.payload.query.date).toLocaleString(this.payload.query.language, {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+        });
+      }
+      return this.$dayjs().locale(this.payload.query.language).to(this.$dayjs(this.payload.query.date)) + '...';
     },
-    dateFormatter(value) {
-      return new Date(value).toLocaleString(this.payload.query.language, {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-      });
+    usdFormatter() {
+      return '$' + (+this.payload.query.input1 + (Math.random() * (0.005 - 0.001) + 0.001) * +this.payload.query.input1).toFixed(2);
+    },
+    sumFormatter() {
+      return `${this.payload.query.direction === 'in' ? '+' : ''} ${this.fixedFormatter('input1', 4)} ${this.payload.currency.name}`;
     },
   },
 };

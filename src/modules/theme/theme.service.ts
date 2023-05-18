@@ -23,8 +23,7 @@ export class ThemeService {
     return {
       theme: new RetrieveInputValuesDto(theme, query),
       path: `${theme.exchange.alias}/${theme.alias}`,
-      course: course.data.price,
-      network: network.network,
+      network: { ...network.network, course: course.data.price },
       currency: currency.currency,
     };
   }

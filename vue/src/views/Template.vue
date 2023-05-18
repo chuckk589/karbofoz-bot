@@ -3,14 +3,11 @@
 </template>
 
 <script>
-import { BinanceMobile, TrustMobile, ExodusMobile, SafepalMobile } from '../themes';
+import * as themes from '../themes';
 export default {
   name: 'TemplateView',
   components: {
-    BinanceMobile,
-    TrustMobile,
-    ExodusMobile,
-    SafepalMobile,
+    ...themes,
   },
   data() {
     return {
@@ -26,6 +23,7 @@ export default {
         .split('/')
         .map((word) => word[0].toUpperCase() + word.slice(1))
         .join('');
+      console.log(this.theme);
       this.payload = e.data;
       const { currency, network, ...rest } = this.$route.query;
       this.payload.query = rest;

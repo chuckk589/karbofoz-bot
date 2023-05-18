@@ -164,6 +164,7 @@ import { VTextField } from 'vuetify/components/VTextField';
 import { VSelect } from 'vuetify/components/VSelect';
 import { VCombobox } from 'vuetify/components/VCombobox';
 import { VCheckbox } from 'vuetify/components/VCheckbox';
+import { VTextarea } from 'vuetify/components/VTextarea';
 import sha256 from 'crypto-js/sha256';
 import DateSelect from '../components/DateSelect.vue';
 export default {
@@ -173,6 +174,7 @@ export default {
     DateSelect,
     VCombobox,
     VCheckbox,
+    VTextarea,
   },
   name: 'WebApp',
   data() {
@@ -210,7 +212,7 @@ export default {
       this.language = 'en';
       this.currency = 'usdt';
       this.network = 'trc20';
-      this.step = 2;
+      // this.step = 2;
     });
     this.$http({ method: 'GET', url: `/v1/preset/` }).then((e) => {
       this.presets = e.data;
@@ -299,6 +301,7 @@ export default {
       if (field.type == 'select') return 'v-select';
       else if (field.type == 'datetime-local') return 'date-select';
       else if (field.alias == 'address') return 'v-combobox';
+      else if (field.type == 'textarea') return 'v-textarea';
       else return 'v-text-field';
     },
     getComponentDeviceName(field) {
