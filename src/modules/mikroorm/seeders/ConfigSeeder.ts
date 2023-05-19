@@ -198,6 +198,88 @@ export class ConfigSeeder extends Seeder {
         },
       ],
     });
+    em.create(Exchange, {
+      alias: 'bitfinex',
+      name: 'Bitfinex',
+      exchangeNetworks: [
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_idin', value: '20210896' },
+            { alias: 'cs_idout', value: '20279138' },
+          ],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_idin', value: '20210896' },
+            { alias: 'cs_idout', value: '20279138' },
+          ],
+        },
+      ],
+    });
+    em.create(Exchange, {
+      alias: 'bitmart',
+      name: 'BitMart',
+      exchangeNetworks: [
+        {
+          network: bsc,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_proc', value: '25/25' },
+            { alias: 'cs_com', value: '1' },
+            { alias: 'cs_id', value: '16953075' },
+          ],
+        },
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_proc', value: '25/25' },
+            { alias: 'cs_com', value: '11' },
+            { alias: 'cs_id', value: '16953075' },
+          ],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_proc', value: '50/50' },
+            { alias: 'cs_com', value: '1' },
+            { alias: 'cs_id', value: '16953075' },
+          ],
+        },
+      ],
+    });
+    em.create(Exchange, {
+      alias: 'cryptocom',
+      name: 'Cryptocom',
+      exchangeNetworks: [
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '10' }],
+        },
+      ],
+    });
+    em.create(Exchange, {
+      alias: 'okx',
+      name: 'OKX',
+      exchangeNetworks: [
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '3 7' }],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '1' }],
+        },
+      ],
+    });
     //devices
     em.create(Device, { alias: 'samsung', name: 'Samsung' });
     em.create(Device, { alias: 'iphone', name: 'Iphone' });
@@ -216,6 +298,10 @@ export class ConfigSeeder extends Seeder {
     await GenerateThemesForExchange.call({ em: em }, _gate);
     await GenerateThemesForExchange.call({ em: em }, _huobi);
     await GenerateThemesForExchange.call({ em: em }, _kucoin);
+    await GenerateThemesForExchange.call({ em: em }, _bitfinex);
+    await GenerateThemesForExchange.call({ em: em }, _bitmart);
+    await GenerateThemesForExchange.call({ em: em }, _cryptocom);
+    await GenerateThemesForExchange.call({ em: em }, _okx);
   }
 }
 /////////////////////////////////////////
@@ -545,6 +631,191 @@ const _kucoin = {
     .add({ en: 'Address/Account', alias: 't10' })
     .add({ en: 'TxHash', alias: 't11' })
     .add({ en: 'Fee', alias: 't12' }),
+};
+const _bitfinex = {
+  name: 'bitfinex',
+  languages: ['en'],
+  statusbar: true,
+  themes: [
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({
+      type: HtmlInputType.DATETIME_LOCAL,
+      name: 'Обновлено',
+      alias: 'dateup',
+      values: [
+        { value: 'Текущее время ', alias: '0' },
+        { value: '2 минуты назад ', alias: '120' },
+        { value: '5 минут назад ', alias: '300' },
+        { value: '10 минут назад ', alias: '600' },
+        { value: '30 минут назад ', alias: '1800' },
+        { value: '1 час назад ', alias: '3600' },
+        { value: '2 часа назад ', alias: '7200' },
+        { value: '3 часа назад  ', alias: '10800' },
+        { value: '6 часов назад ', alias: '21600' },
+        { value: '12 часов назад ', alias: '43200' },
+        { value: '1 день назад ', alias: '86400' },
+      ],
+      optional: true,
+    })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Deposit', alias: 't1in' })
+    .add({ en: 'Withdraw', alias: 't1out' })
+    .add({ en: 'ID', alias: 't2' })
+    .add({ en: 'Status', alias: 't3' })
+    .add({ en: 'Completed', alias: 't4' })
+    .add({ en: 'Amount', alias: 't5' })
+    .add({ en: 'Wallet', alias: 't6' })
+    .add({ en: 'Exchange', alias: 't7' })
+    .add({ en: 'Created', alias: 't8' })
+    .add({ en: 'Updated', alias: 't9' })
+    .add({ en: 'Address', alias: 't10' })
+    .add({ en: 'Txid', alias: 't11' })
+    .add({ en: 'Permalink', alias: 't12' })
+    .add({ en: '/deposit/', alias: 't13in' })
+    .add({ en: '/withdraw/', alias: 't13out' })
+    .add({ en: "If you didn't make this withdrawal then its possible your Account has been compromised. To prevent further account actions, ", alias: 't14' })
+    .add({ en: 'freeze your account.', alias: 't15' }),
+};
+const _bitmart = {
+  name: 'bitmart',
+  languages: ['en'],
+  statusbar: true,
+  themes: [
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', optional: true })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Detail', alias: 't1' })
+    .add({ en: 'Create', alias: 't2' })
+    .add({ en: 'Processing', alias: 't3' })
+    .add({ en: 'Complete', alias: 't4' })
+    .add({ en: 'Received Qty', alias: 't5' })
+    .add({ en: 'Fee', alias: 't6' })
+    .add({ en: 'Transaction ID', alias: 't7' })
+    .add({ en: 'Created', alias: 't8' })
+    .add({ en: 'Finished', alias: 't9' })
+    .add({ en: 'TXID', alias: 't10' })
+    .add({ en: 'Copy TXID', alias: 't11' })
+    .add({ en: 'Check TXID', alias: 't12' })
+    .add({ en: 'Notify me with SMS when deposit and withdrawal get done', alias: 't13' })
+    .add({ en: 'Enable now', alias: 't14' })
+    .add({ en: 'Address', alias: 't15' }),
+};
+const _cryptocom = {
+  name: 'cryptocom',
+  languages: ['en'],
+  statusbar: true,
+  themes: [
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Withdraw', alias: 't1out' })
+    .add({ en: 'Deposit', alias: 't1in' })
+    .add({ en: 'Completed', alias: 't2' })
+    .add({ en: 'Withdrawal details', alias: 't3out' })
+    .add({ en: 'Deposit details', alias: 't3in' })
+    .add({ en: 'Sending', alias: 't4' })
+    .add({ en: 'Withdraw to', alias: 't5out' })
+    .add({ en: 'Deposit from', alias: 't5in' })
+    .add({ en: 'Network Type', alias: 't6' })
+    .add({ en: 'Fee', alias: 't7' })
+    .add({ en: 'Total', alias: 't8' }),
+};
+const _okx = {
+  name: 'okx',
+  languages: ['en'],
+  statusbar: true,
+  themes: [
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Transaction details', alias: 't1' })
+    .add({ en: 'deposited', alias: 't2in' })
+    .add({ en: 'withdrawn', alias: 't2out' })
+    .add({ en: 'Status', alias: 't3' })
+    .add({ en: 'Completed', alias: 't4' })
+    .add({ en: 'Date', alias: 't5' })
+    .add({ en: 'From', alias: 't6' })
+    .add({ en: 'To', alias: 't7' })
+    .add({ en: 'Network', alias: 't8' })
+    .add({ en: 'Transaction ID', alias: 't9' })
+    .add({ en: 'Fee', alias: 't10' })
+    .add({ en: "Sender's wallet", alias: 't11' }),
 };
 
 /////////////////////////////////////////

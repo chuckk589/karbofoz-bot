@@ -2,7 +2,6 @@
   <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px; height: 2274px">
     <StatusBar class="bar" :query="payload.query" :theme="theme"></StatusBar>
     <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch; margin: 0 33px">
-      <div style="height: 92px; margin-bottom: 43px"></div>
       <div style="height: 60px; margin-bottom: 47px; justify-content: space-between" class="huobi">
         <FakeImg :path="'/huobi/images/1.png'" style="margin-left: 10px" />
         <div></div>
