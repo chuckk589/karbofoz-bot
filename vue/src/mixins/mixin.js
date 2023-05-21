@@ -21,9 +21,11 @@ const themeMixin = {
     this.theme = this.payload.path.split('/').pop();
   },
   methods: {
+    /* @deprecated */
     fixedFormatter(key, fixed) {
       return +parseFloat(this.getText(key)).toFixed(fixed);
     },
+    /* @deprecated */
     getBlocks(block) {
       return this[block]
         .map((item) => {
@@ -36,6 +38,7 @@ const themeMixin = {
         })
         .filter((item) => item.value);
     },
+    /* @deprecated */
     getText(fieldName, key = '') {
       const chunks = fieldName.split(/(\d.*)/);
       let raw = '';
@@ -48,6 +51,10 @@ const themeMixin = {
       }
       return raw;
     },
+    /* @deprecated */
+    getTextFromQuery(fieldName) {
+      return this.payload.query[fieldName];
+    },
 
     //////
     getConstant(fieldName) {
@@ -55,9 +62,6 @@ const themeMixin = {
     },
     fixed(value, fixed) {
       return parseFloat(value).toFixed(fixed);
-    },
-    getTextFromQuery(fieldName) {
-      return this.payload.query[fieldName];
     },
     lengthFormatter(value, maxlength = 20) {
       const excessive = (value.length - maxlength) / 2;
@@ -69,9 +73,14 @@ const themeMixin = {
     feeFormatter(key = 'cs_com') {
       let data = this.getConstant(key)?.split(' ');
       if (!data) return undefined;
-      if (data.length != 3) return data[0];
+      if (data.length == 1) return data[0];
       data = data.map((item) => +item);
       return +(Math.random() * (data[1] - data[0]) + data[0]).toFixed(data[2]);
+    },
+    formatSum(max, min = 0) {
+      const sum = +this.payload.query.sum;
+      const withfee = sum + (sum * (Math.random() * (max - min) + min)) / 100;
+      return withfee;
     },
   },
   computed: {

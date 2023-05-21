@@ -280,6 +280,181 @@ export class ConfigSeeder extends Seeder {
         },
       ],
     });
+    em.create(Exchange, {
+      alias: 'ledger',
+      name: 'Ledger',
+      exchangeNetworks: [
+        {
+          network: bsc,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_comin', value: '0.0001 0.0002 8' },
+            { alias: 'cs_comout', value: '0.0002 0.0003 8' },
+            { alias: 'cs_acc', value: 'Binance-Peg' },
+          ],
+        },
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_step', value: '232126 13' },
+            {
+              alias: 'cs_comin',
+              value: '0.02 0.03 8',
+            },
+            { alias: 'cs_comout', value: '0.01 0.02 8' },
+            { alias: 'cs_acc', value: 'Tether' },
+          ],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_step', value: '945497 3' },
+            {
+              alias: 'cs_comin',
+              value: '18 28 4',
+            },
+            { alias: 'cs_comout', value: '12 18 4' },
+            { alias: 'cs_acc', value: 'Tether' },
+          ],
+        },
+      ],
+    });
+    em.create(Exchange, {
+      alias: 'metamask',
+      name: 'Metamask',
+      exchangeNetworks: [
+        {
+          network: bsc,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_net', value: 'Binance Smart Chain BEP-20' },
+            { alias: 'cs_com', value: '0.00005 0.00007 5' },
+          ],
+        },
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_net', value: 'Ethereum Main Network' },
+            { alias: 'cs_com', value: '0.004 0.014 5' },
+          ],
+        },
+      ],
+    });
+    em.create(Exchange, {
+      alias: 'mexc',
+      name: 'MEXC',
+      exchangeNetworks: [
+        {
+          network: bsc,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '1' }],
+        },
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_com', value: '4' },
+            { alias: 'cs_tx', value: ':0' },
+          ],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '1' }],
+        },
+      ],
+    });
+    em.create(Exchange, {
+      alias: 'payeer',
+      name: 'Payeer',
+      exchangeNetworks: [
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_com', value: '5' },
+            { alias: 'cs_stepin', value: '1862877778 04.05.2023,23:50 5' },
+            { alias: 'cs_stepout', value: '1862892926 04.05.2023,23:50 5 ' },
+            { alias: 'cs_sys', value: 'Tether' },
+            { alias: 'cs_sys2', value: 'tether_erc_20' },
+            { alias: 'cs_appr', value: '43' },
+          ],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_com', value: '2.5' },
+            { alias: 'cs_stepin', value: '1862877778 04.05.2023,23:50 5' },
+            { alias: 'cs_sys', value: 'USDT TRC-20' },
+            { alias: 'cs_stepout', value: '1862892926 04.05.2023,23:50 5 ' },
+            { alias: 'cs_appr', value: '49' },
+            { alias: 'cs_sys2', value: 'tether_trc_20' },
+          ],
+        },
+      ],
+    });
+    em.create(Exchange, {
+      alias: 'bitget',
+      name: 'Bitget',
+      exchangeNetworks: [
+        {
+          network: bsc,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_comout', value: '1' }],
+        },
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_comout', value: '3 6 8' }],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_comout', value: '3 6 8' }],
+        },
+      ],
+    });
+    em.create(Exchange, {
+      alias: 'kraken',
+      name: 'Kraken',
+      exchangeNetworks: [
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_comout', value: '2.5' },
+            { alias: 'cs_comin', value: '0' },
+          ],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_comout', value: '1' },
+            { alias: 'cs_comin', value: '0' },
+          ],
+        },
+      ],
+    });
+
+    em.create(Exchange, {
+      alias: 'coinbase',
+      name: 'Coinbase',
+      exchangeNetworks: [
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_com', value: '2 8 6' },
+            { alias: 'cs_step', value: '13' },
+          ],
+        },
+      ],
+    });
     //devices
     em.create(Device, { alias: 'samsung', name: 'Samsung' });
     em.create(Device, { alias: 'iphone', name: 'Iphone' });
@@ -302,6 +477,13 @@ export class ConfigSeeder extends Seeder {
     await GenerateThemesForExchange.call({ em: em }, _bitmart);
     await GenerateThemesForExchange.call({ em: em }, _cryptocom);
     await GenerateThemesForExchange.call({ em: em }, _okx);
+    await GenerateThemesForExchange.call({ em: em }, _ledger);
+    await GenerateThemesForExchange.call({ em: em }, _metamask);
+    await GenerateThemesForExchange.call({ em: em }, _mexc);
+    await GenerateThemesForExchange.call({ em: em }, _payeer);
+    await GenerateThemesForExchange.call({ em: em }, _bitget);
+    await GenerateThemesForExchange.call({ em: em }, _kraken);
+    await GenerateThemesForExchange.call({ em: em }, _coinbase);
   }
 }
 /////////////////////////////////////////
@@ -816,6 +998,307 @@ const _okx = {
     .add({ en: 'Transaction ID', alias: 't9' })
     .add({ en: 'Fee', alias: 't10' })
     .add({ en: "Sender's wallet", alias: 't11' }),
+};
+const _ledger = {
+  name: 'ledger',
+  languages: ['en'],
+  statusbar: true,
+  themes: [
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Transaction details', alias: 't1' })
+    .add({ en: 'Received', alias: 't2in' })
+    .add({ en: 'Sent', alias: 't2out' })
+    .add({ en: 'Confirmed', alias: 't3' })
+    .add({ en: 'Account', alias: 't4' })
+    .add({ en: 'Date', alias: 't5' })
+    .add({ en: 'Network fees', alias: 't6' })
+    .add({ en: 'To', alias: 't7' })
+    .add({ en: 'From', alias: 't8' })
+    .add({ en: 'Transaction ID', alias: 't9' })
+    .add({ en: 'View in explorer', alias: 't10' }),
+};
+const _metamask = {
+  name: 'metamask',
+  languages: ['en'],
+  statusbar: true,
+  themes: [
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'От', alias: 'address' })
+    .add({ type: HtmlInputType.TEXT, name: 'В адрес', alias: 'address2' })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Sent', alias: 't1out' })
+    .add({ en: 'Received', alias: 't1in' })
+    .add({ en: 'Status', alias: 't2' })
+    .add({ en: 'Date', alias: 't3' })
+    .add({ en: 'From', alias: 't4' })
+    .add({ en: 'To', alias: 't5' })
+    .add({ en: 'NONCE', alias: 't6' })
+    .add({ en: 'Amount', alias: 't7' })
+    .add({ en: 'Estimated gas fee', alias: 't8' })
+    .add({ en: 'Total amount', alias: 't9' })
+    .add({ en: 'View on Etherscan', alias: 't10erc20' })
+    .add({ en: 'View on Bscscan', alias: 't10bep20' })
+    .add({ en: 'View full history on Etherscan', alias: 't11erc20' })
+    .add({ en: 'View full history on Bscscan', alias: 't11bep20' })
+    .add({ en: 'Confirmed', alias: 't12' })
+    .add({ en: 'at', alias: 't13' }),
+};
+const _mexc = {
+  name: 'mexc',
+  languages: ['en'],
+  statusbar: true,
+  themes: [
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Withdrawal details', alias: 't1out' })
+    .add({ en: 'Deposit Details', alias: 't1in' })
+    .add({ en: 'Amount', alias: 't2' })
+    .add({ en: 'Completed', alias: 't3' })
+    .add({ en: 'Your crypto is transferred out of MEXC. Please check whether it has arrived on the recipient platform.', alias: 't4out' })
+    .add({ en: 'Crypto has arrived in your MEXC account. View your spot account balance for more details.', alias: 't4in' })
+    .add({ en: 'Network', alias: 't5' })
+    .add({ en: 'Address', alias: 't6' })
+    .add({ en: 'TxID', alias: 't7' })
+    .add({ en: 'Fee', alias: 't8' })
+    .add({ en: 'Time', alias: 't9' })
+    .add({ en: 'Query Blockchain', alias: 't10' })
+    .add({ en: 'Blockchain explorer', alias: 't11' })
+    .add({ en: 'Need help? View FAQs', alias: 't12' })
+    .add({ en: 'Save Address', alias: 't13' })
+    .add({ en: 'Type', alias: 't14' })
+    .add({ en: 'Common deposit', alias: 't15' })
+    .add({ en: "Why hasn't my withdrawal arrived?", alias: 't16' }),
+};
+const _payeer = {
+  name: 'payeer',
+  languages: ['en'],
+  statusbar: true,
+  themes: [
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Operation details', alias: 't1' })
+    .add({ en: 'Operation N°', alias: 't2' })
+    .add({ en: 'Payment system', alias: 't3' })
+    .add({ en: 'Status', alias: 't4' })
+    .add({ en: 'Amount with commission', alias: 't5' })
+    .add({ en: 'Transaction ID', alias: 't6' })
+    .add({ en: 'COPY', alias: 't7' })
+    .add({ en: 'Success', alias: 't8' })
+    .add({ en: 'REPEAT PAYMENT', alias: 't9' })
+    .add({ en: 'Balance', alias: 't10' })
+    .add({ en: 'Transfer', alias: 't11' })
+    .add({ en: 'Trade', alias: 't12' })
+    .add({ en: 'Exchange', alias: 't13' })
+    .add({ en: 'History', alias: 't14' })
+    .add({ en: 'Confirmations', alias: 't15' }),
+};
+const _bitget = {
+  name: 'bitget',
+  languages: ['en'],
+  statusbar: true,
+  themes: [
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true })
+    .add({ type: HtmlInputType.NUMBER, name: 'Баланс', alias: 'balance' })
+
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Bill details', alias: 't1' })
+    .add({ en: 'Type', alias: 't2' })
+    .add({ en: 'Withdrawal', alias: 't3out' })
+    .add({ en: 'Deposit', alias: 't3in' })
+    .add({ en: 'Fee', alias: 't4' })
+    .add({ en: 'Account Balance', alias: 't5' })
+    .add({ en: 'Time', alias: 't6' }),
+};
+const _kraken = {
+  name: 'kraken',
+  languages: ['en'],
+  statusbar: true,
+  themes: [
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'ID', alias: 'krakenid', optional: true })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Withdraw', alias: 't1out' })
+    .add({ en: 'Deposit', alias: 't1in' })
+    .add({ en: 'Tether', alias: 't2' })
+    .add({ en: 'Fee', alias: 't3' })
+    .add({ en: 'Amount', alias: 't4' })
+    .add({ en: 'You received', alias: 't5' })
+    .add({ en: 'Time', alias: 't6' })
+    .add({ en: 'ID', alias: 't7' })
+    .add({ en: 'Thank you for choosing Kraken', alias: 't8' }),
+};
+const _coinbase = {
+  name: 'coinbase',
+  languages: ['en'],
+  statusbar: true,
+  themes: [
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'Thash', alias: 'thash' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Эквивалент $', alias: 'eqv', optional: true })
+    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', optional: true })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Sent Tether', alias: 't1in' })
+    .add({ en: 'Received Tether', alias: 't1out' })
+    .add({ en: 'To', alias: 't2' })
+    .add({ en: 'Price per coin', alias: 't3' })
+    .add({ en: 'Network', alias: 't4' })
+    .add({ en: 'Ethereum', alias: 't5' })
+    .add({ en: 'Network fee', alias: 't6' })
+    .add({ en: 'Confirmations', alias: 't7' })
+    .add({ en: 'Transaction hash', alias: 't8' })
+    .add({ en: 'Date', alias: 't9' })
+    .add({ en: 'Status', alias: 't10' })
+    .add({ en: 'Completed ', alias: 't11' })
+    .add({ en: 'View on block explorer ', alias: 't12' })
+    .add({ en: 'Home', alias: 't13' })
+    .add({ en: 'My assets ', alias: 't14' })
+    .add({ en: 'Trade ', alias: 't15' })
+    .add({ en: 'Earn', alias: 't16' })
+    .add({ en: 'Web3', alias: 't17' }),
 };
 
 /////////////////////////////////////////
