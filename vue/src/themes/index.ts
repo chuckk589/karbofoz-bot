@@ -19,7 +19,9 @@ import CoinbaseMobile from './CoinbaseMobile.vue';
 import BitpapaMobile from './BitpapaMobile.vue';
 import ExmoMobile from './ExmoMobile.vue';
 import GarantexMobile from './GarantexMobile.vue';
+import CexioMobile from './CexioMobile.vue';
 export {
+  CexioMobile,
   GarantexMobile,
   ExmoMobile,
   BitpapaMobile,

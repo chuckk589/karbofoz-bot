@@ -63,9 +63,13 @@ const themeMixin = {
     fixed(value, fixed, cutExc = false) {
       return cutExc ? +(+value).toFixed(fixed) : (+value).toFixed(fixed);
     },
-    lengthFormatter(value, maxlength = 20) {
-      const excessive = (value.length - maxlength) / 2;
-      return value.length > maxlength ? `${value.substring(0, value.length / 2 - excessive)}...${value.substring(value.length / 2 + excessive, value.length)}` : value;
+    lengthFormatter(value, maxlength = 20, where = 'mid') {
+      if (where == 'mid') {
+        const excessive = (value.length - maxlength) / 2;
+        return value.length > maxlength ? `${value.substring(0, value.length / 2 - excessive)}...${value.substring(value.length / 2 + excessive, value.length)}` : value;
+      } else if (where == 'end') {
+        return value.length > maxlength ? `${value.substring(0, maxlength)}...` : value;
+      }
     },
     dateFormatter(value) {
       return value.replace(/T/, ' ');

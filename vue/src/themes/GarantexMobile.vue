@@ -1,46 +1,49 @@
 <template>
   <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px">
     <StatusBar class="bar" :query="payload.query" :theme="theme"></StatusBar>
-    <div id="wobar" style="flex-direction: row">
-      <!-- <div style="flex-direction: column; align-items: stretch; margin-left: 40px">
-        <div style="font-size: 47px; padding: 20px 0 0 0; justify-content: space-between">
-          <div>
-            <FakeImg style="margin-right: 8px" :path="'/exmo/images/1.png'" />
-            <div class="text1">{{ payload.currency.name }}</div>
-          </div>
-          <div style="margin-right: 15px" class="text1">{{ fixed(payload.query.sum, 0, true).toLocaleString('en') }}</div>
-        </div>
-        <div class="data-item">
-          <div>{{ formatDate }}</div>
-          <div :class="payload.query.direction">
-            <FakeImg :style="'margin-right: 10px; transform: ' + (payload.query.direction == 'in' ? '' : 'rotate(180deg)')" :path="'/exmo/images/3.png'" />
-            <div>{{ getConstant('t1' + payload.query.direction) }}</div>
-          </div>
-        </div>
-        <div class="data-item">
-          <div>{{ getConstant('t3') }}</div>
-          <div style="font-size: 38px">{{ getConstant('t4' + payload.query.direction) }}</div>
-        </div>
-        <div class="data-item">
-          <div>{{ getConstant('t5') }}</div>
-          <div style="font-size: 38px">{{ payload.currency.name }} ({{ payload.network.alias.toUpperCase() }})</div>
-        </div>
-        <div class="data-item" v-if="payload.query.direction == 'out'">
-          <div>{{ getConstant('t7') }}</div>
-          <div class="text2" style="text-decoration: underline; text-align: end; overflow-wrap: anywhere; line-height: 40px">{{ formatAd }}</div>
-        </div>
-        <div class="data-item">
-          <div>{{ getConstant('t2') }}</div>
-          <div class="text2" style="text-decoration: underline; text-align: end; overflow-wrap: anywhere; line-height: 40px">{{ payload.query.txid }}</div>
-        </div>
-        <div class="data-item">
-          <div>{{ getConstant('t6') }}</div>
-          <div style="font-size: 38px">{{ formatConf('cs_step' + payload.query.direction) }}</div>
+    <div id="wobar" style="flex-direction: column; align-items: stretch; margin: 0 40px">
+      <div
+        v-if="payload.query.direction == 'out'"
+        class="text1"
+        style="font-weight: 600; font-size: 64px; padding: 22px 36px 32px 36px; justify-content: flex-start; border-bottom: 3px solid #f4f4f4; letter-spacing: -2px"
+      >
+        {{ getConstant('t1') }}
+      </div>
+      <div class="data-item" style="margin-top: 14px">
+        <div style="font-weight: 600">{{ formatDate }}</div>
+        <div>
+          <FakeImg style="margin-right: 20px" :path="'/garantex/images/2.png'" />
+          <div class="text2">{{ formatTime }}</div>
         </div>
       </div>
-      <div style="width: 166px; align-items: flex-start; margin-top: 77px">
-        <FakeImg :path="'/exmo/images/2.png'" />
-      </div> -->
+      <div class="data-item">
+        <div>{{ lengthFormatter(payload.query.txid, 28, 'end') }}</div>
+        <FakeImg class="garantex" style="flex-grow: 0; margin-left: auto" :path="'/garantex/images/3.png'" />
+      </div>
+      <div class="footer">
+        <div>
+          <div>{{ getConstant('t2') }}</div>
+          <div style="max-height: 75px">
+            <FakeImg style="transform: scale(0.55); margin-left: -27px; margin-right: -14px" :path="'safepal/images/coins/' + payload.currency.alias + '.png'" />
+            <div>{{ payload.currency.name }}</div>
+          </div>
+        </div>
+        <div>
+          <div>{{ getConstant('t3') }}</div>
+          <div>{{ fixed(payload.query.sum, 6, true) }}</div>
+        </div>
+        <div>
+          <div>{{ getConstant('t4') }}</div>
+          <div>{{ payload.query.com || getConstant('cs_com' + payload.query.direction) }}</div>
+        </div>
+        <div>
+          <div>{{ getConstant('t5') }}</div>
+          <div>
+            <FakeImg style="margin-right: 20px" :path="'/garantex/images/1.png'" />
+            <div style="color: #28af62">{{ getConstant('t6' + payload.query.direction) }}</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -62,7 +65,14 @@ export default {
     };
   },
   mounted() {},
-  computed: {},
+  computed: {
+    formatDate() {
+      return this.$dayjs(this.payload.query.date).locale(this.payload.query.language).format('DD.MM.YYYY');
+    },
+    formatTime() {
+      return this.$dayjs(this.payload.query.date).locale(this.payload.query.language).format('HH:mm');
+    },
+  },
 };
 </script>
 <style scoped>
@@ -86,59 +96,57 @@ export default {
   font-family: 'Gilroy';
 }
 .data-item {
-  font-size: 33px;
-  padding: 8px 0;
-  margin-bottom: 25px;
-  align-items: flex-start !important;
+  font-size: 53px;
+  padding: 16px 37px;
 }
 
 .data-item > div {
   flex-grow: 1;
 }
 .data-item > div:nth-child(1) {
-  min-width: 337px;
   justify-content: flex-start !important;
 }
 
 .data-item > div:nth-child(2) {
   justify-content: flex-end !important;
-  margin-right: 15px;
 }
-
+.footer {
+  justify-content: flex-start !important;
+  padding: 0 37px;
+  margin-bottom: 30px;
+}
 .footer > div {
+  align-items: flex-start !important;
   flex-direction: column;
+  margin-right: 30px;
 }
 .footer > div > div:nth-child(1) {
-  margin-bottom: 5px;
-  height: 51px;
+  padding: 4px 0;
+  font-size: 36px;
 }
-/*colors*/
-/* .out {
-  filter: brightness(0) saturate(100%) invert(54%) sepia(9%) saturate(3639%) hue-rotate(314deg) brightness(92%) contrast(93%);
+
+.footer > div > div:nth-child(2) {
+  font-size: 50px;
+  margin-top: -6px;
 }
-.in {
-  filter: brightness(0) saturate(100%) invert(66%) sepia(56%) saturate(369%) hue-rotate(72deg) brightness(89%) contrast(89%);
-}
-.mobile-dark {
-  background-color: #202336;
-}
-.mobile-light {
-  background-color: #fff8f5;
-}
-.mobile-dark .text1,
-.mobile-dark .data-item > div:nth-child(2) {
-  color: white;
-}
+
 .mobile-light .text1,
-.mobile-light .data-item > div:nth-child(2) {
+.mobile-light .data-item > div:nth-child(1),
+.mobile-light .footer > div > div:nth-child(2) {
   color: black;
 }
-.mobile-dark .text2,
-.mobile-dark .data-item > div:nth-child(1) {
-  color: #8995a1 !important;
+.mobile-light {
+  background-color: #f2f2f2;
+}
+.mobile-light #wobar {
+  background-color: white;
 }
 .mobile-light .text2,
-.mobile-light .data-item > div:nth-child(1) {
-  color: #8a969b !important;
-} */
+.mobile-light .footer > div > div:nth-child(1) {
+  color: #a4a4a4;
+}
+/*colors*/
+.garantex {
+  filter: brightness(0) saturate(100%) invert(77%) sepia(0%) saturate(506%) hue-rotate(174deg) brightness(85%) contrast(96%);
+}
 </style>

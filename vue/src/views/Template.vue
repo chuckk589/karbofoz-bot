@@ -23,7 +23,6 @@ export default {
         .split('/')
         .map((word) => word[0].toUpperCase() + word.slice(1))
         .join('');
-      console.log(this.theme);
       this.payload = e.data;
       const { currency, network, ...rest } = this.$route.query;
       this.payload.query = rest;

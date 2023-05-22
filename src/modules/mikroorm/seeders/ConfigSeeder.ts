@@ -488,7 +488,45 @@ export class ConfigSeeder extends Seeder {
         },
       ],
     });
-
+    em.create(Exchange, {
+      alias: 'garantex',
+      name: 'Garantex',
+      exchangeNetworks: [
+        {
+          network: bsc,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_comout', value: '0.5' }],
+        },
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_comout', value: '5' }],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_comout', value: '1' }],
+        },
+      ],
+    });
+    em.create(Exchange, {
+      alias: 'cexio',
+      name: 'CEX.IO',
+      exchangeNetworks: [
+        {
+          network: bsc,
+          networkCurrencies: [{ currency: usdt }],
+        },
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+        },
+      ],
+    });
     //devices
     em.create(Device, { alias: 'samsung', name: 'Samsung' });
     em.create(Device, { alias: 'iphone', name: 'Iphone' });
@@ -520,6 +558,8 @@ export class ConfigSeeder extends Seeder {
     await GenerateThemesForExchange.call({ em: em }, _coinbase);
     await GenerateThemesForExchange.call({ em: em }, _bitpapa);
     await GenerateThemesForExchange.call({ em: em }, _exmo);
+    await GenerateThemesForExchange.call({ em: em }, _garantex);
+    await GenerateThemesForExchange.call({ em: em }, _cexio);
   }
 }
 /////////////////////////////////////////
@@ -1409,6 +1449,68 @@ const _exmo = {
     .add({ en: 'Payment System', alias: 't5' })
     .add({ en: 'ID transaction', alias: 't6' })
     .add({ en: 'Address:', alias: 't7' }),
+};
+const _garantex = {
+  name: 'garantex',
+  languages: ['en'],
+  statusbar: false,
+  themes: [
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Withdrawal history', alias: 't1' })
+    .add({ en: 'Currency', alias: 't2' })
+    .add({ en: 'Amount', alias: 't3' })
+    .add({ en: 'Commision', alias: 't4' })
+    .add({ en: 'Status', alias: 't5' })
+    .add({ en: 'Succeed', alias: 't6out' })
+    .add({ en: 'Accepted', alias: 't6in' }),
+};
+const _cexio = {
+  name: 'cexio',
+  languages: ['en'],
+  statusbar: false,
+  themes: [
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Баланс', alias: 'balance' })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Deposit', alias: 't1in' })
+    .add({ en: 'Withdraw', alias: 't1out' })
+    .add({ en: 'Completed', alias: 't2' })
+    .add({ en: 'Balance:', alias: 't3' })
+    .add({ en: 'Transaction ID:', alias: 't4' }),
 };
 /////////////////////////////////////////
 const _xiaomi = {
