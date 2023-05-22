@@ -60,8 +60,8 @@ const themeMixin = {
     getConstant(fieldName) {
       return this.payload.theme.inputs.find((input) => input.alias === fieldName)?.value;
     },
-    fixed(value, fixed) {
-      return parseFloat(value).toFixed(fixed);
+    fixed(value, fixed, cutExc = false) {
+      return cutExc ? +(+value).toFixed(fixed) : (+value).toFixed(fixed);
     },
     lengthFormatter(value, maxlength = 20) {
       const excessive = (value.length - maxlength) / 2;
@@ -77,10 +77,17 @@ const themeMixin = {
       data = data.map((item) => +item);
       return +(Math.random() * (data[1] - data[0]) + data[0]).toFixed(data[2]);
     },
+
     formatSum(max, min = 0) {
       const sum = +this.payload.query.sum;
       const withfee = sum + (sum * (Math.random() * (max - min) + min)) / 100;
       return withfee;
+    },
+    formatConf(key = 'cs_step') {
+      const step = this.getConstant(key)?.split(' ');
+      if (!step) return '';
+      const iterations = Math.round(this.$dayjs().diff(this.$dayjs(this.payload.query.date), 'minute') / step[1]);
+      return `${+step[0] + iterations}`;
     },
   },
   computed: {

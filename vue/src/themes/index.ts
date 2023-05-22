@@ -16,7 +16,13 @@ import PayeerMobile from './PayeerMobile.vue';
 import BitgetMobile from './BitgetMobile.vue';
 import KrakenMobile from './KrakenMobile.vue';
 import CoinbaseMobile from './CoinbaseMobile.vue';
+import BitpapaMobile from './BitpapaMobile.vue';
+import ExmoMobile from './ExmoMobile.vue';
+import GarantexMobile from './GarantexMobile.vue';
 export {
+  GarantexMobile,
+  ExmoMobile,
+  BitpapaMobile,
   CoinbaseMobile,
   KrakenMobile,
   BitgetMobile,

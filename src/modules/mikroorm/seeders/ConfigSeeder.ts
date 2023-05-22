@@ -450,11 +450,45 @@ export class ConfigSeeder extends Seeder {
           networkCurrencies: [{ currency: usdt }],
           constants: [
             { alias: 'cs_com', value: '2 8 6' },
-            { alias: 'cs_step', value: '13' },
+            { alias: 'cs_step', value: '231900 13' },
           ],
         },
       ],
     });
+    em.create(Exchange, {
+      alias: 'bitpapa',
+      name: 'Bitpapa',
+      exchangeNetworks: [
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '3' }],
+        },
+      ],
+    });
+    em.create(Exchange, {
+      alias: 'exmo',
+      name: 'Exmo',
+      exchangeNetworks: [
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_stepin', value: '31816126 1 04.05.2023,00:30' },
+            { alias: 'cs_stepout', value: '11862389 1 04.05.2023,00:30' },
+          ],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [
+            { alias: 'cs_stepin', value: '31813729 1 04.05.2023,00:30' },
+            { alias: 'cs_stepout', value: '11861663 1 04.05.2023,00:30' },
+          ],
+        },
+      ],
+    });
+
     //devices
     em.create(Device, { alias: 'samsung', name: 'Samsung' });
     em.create(Device, { alias: 'iphone', name: 'Iphone' });
@@ -484,6 +518,8 @@ export class ConfigSeeder extends Seeder {
     await GenerateThemesForExchange.call({ em: em }, _bitget);
     await GenerateThemesForExchange.call({ em: em }, _kraken);
     await GenerateThemesForExchange.call({ em: em }, _coinbase);
+    await GenerateThemesForExchange.call({ em: em }, _bitpapa);
+    await GenerateThemesForExchange.call({ em: em }, _exmo);
   }
 }
 /////////////////////////////////////////
@@ -1281,8 +1317,8 @@ const _coinbase = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Sent Tether', alias: 't1in' })
-    .add({ en: 'Received Tether', alias: 't1out' })
+    .add({ en: 'Sent Tether', alias: 't1out' })
+    .add({ en: 'Received Tether', alias: 't1in' })
     .add({ en: 'To', alias: 't2' })
     .add({ en: 'Price per coin', alias: 't3' })
     .add({ en: 'Network', alias: 't4' })
@@ -1300,7 +1336,80 @@ const _coinbase = {
     .add({ en: 'Earn', alias: 't16' })
     .add({ en: 'Web3', alias: 't17' }),
 };
-
+const _bitpapa = {
+  name: 'bitpapa',
+  languages: ['en'],
+  statusbar: false,
+  themes: [
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', optional: true })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Withdrawal transaction', alias: 't1out' })
+    .add({ en: 'Deposit transaction', alias: 't1in' })
+    .add({ en: 'txid:', alias: 't2' })
+    .add({ en: 'Network fee & handling:', alias: 't3' })
+    .add({ en: 'Address:', alias: 't4' })
+    .add({ en: 'AT', alias: 't5' }),
+};
+const _exmo = {
+  name: 'exmo',
+  languages: ['en'],
+  statusbar: false,
+  themes: [
+    {
+      alias: 'mobile-light',
+      name: 'Mobile Light',
+    },
+    {
+      alias: 'mobile-dark',
+      name: 'Mobile Dark',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', optional: true })
+    .add({
+      type: HtmlInputType.SELECT,
+      name: 'Направление',
+      values: [
+        { value: 'Отправка', alias: 'out' },
+        { value: 'Прием', alias: 'in' },
+      ],
+      alias: 'direction',
+    })
+    .add({ en: 'Withdrawal', alias: 't1out' })
+    .add({ en: 'Deposit', alias: 't1in' })
+    .add({ en: 'Txid:', alias: 't2' })
+    .add({ en: 'Status', alias: 't3' })
+    .add({ en: 'Paid', alias: 't4out' })
+    .add({ en: 'Transferred', alias: 't4in' })
+    .add({ en: 'Payment System', alias: 't5' })
+    .add({ en: 'ID transaction', alias: 't6' })
+    .add({ en: 'Address:', alias: 't7' }),
+};
 /////////////////////////////////////////
 const _xiaomi = {
   name: 'xiaomi',

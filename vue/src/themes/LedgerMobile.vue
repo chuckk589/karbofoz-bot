@@ -104,7 +104,6 @@ export default {
     },
     formatHeight() {
       const step = this.getConstant('cs_step')?.split(' ');
-      console.log(step);
       if (!step) return '';
       const iterations = Math.round(this.$dayjs().diff(this.$dayjs(this.payload.query.date), 'minute') / step[1]);
       return `(${+step[0] + iterations})`;

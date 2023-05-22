@@ -1,61 +1,82 @@
 <template>
   <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px; height: 2274px">
     <StatusBar class="bar" :query="payload.query" :theme="theme"></StatusBar>
-    <div id="wobar" style="flex-direction: column; align-items: stretch; padding: 0px 52px">
-      <div style=""></div>
-      <div style="margin-bottom: 60px">
-        <FakeImg :path="'/kraken/images/2.png'" />
+    <div id="wobar" style="flex-direction: column; align-items: stretch">
+      <div style="margin-bottom: 103px; font-size: 49px; padding: 11px 48px; justify-content: space-between">
+        <FakeImg class="coinbase" :path="'/coinbase/images/1.png'" />
+        <div class="text1" style="font-weight: 500">{{ getConstant('t1' + payload.query.direction) }}</div>
         <div style="width: 36px"></div>
       </div>
-      <div style=""></div>
-      <div style=""></div>
-      <!-- <div style="flex-direction: column; align-items: stretch; padding: 0px 165px">
-        <div style="justify-content: space-between; padding: 55px 0px; margin-bottom: 35px; margin-right: -59px">
-          <div style="width: 36px"></div>
-          <FakeImg :path="'/kraken/images/2.png'" />
+      <div style="font-size: 50px" class="text2">{{ fixed(payload.query.sum, 8, true) }} {{ payload.currency.name }}</div>
+      <div style="font-size: 82px; padding-bottom: 96px; line-height: 75px" class="text1">${{ payload.query.eqv || fixed(formatSum(0.1, 0.5), 2) }}</div>
+      <div style="flex-direction: column; align-items: stretch; padding: 44px 64px 0px; border-bottom: 2px solid; border-top: 2px solid">
+        <div class="data-item" v-if="payload.query.direction == 'out'">
+          <div style="align-self: flex-start">{{ getConstant('t2') }}</div>
+          <div style="overflow-wrap: anywhere; text-align: end; max-width: 670px; line-height: 65px">{{ payload.query.address }}</div>
         </div>
-        <div style="margin-bottom: 58px; position: relative">
-          <FakeImg :path="'safepal/images/coins/' + payload.currency.name + '.png'" style="transform: scale(0.9)" />
-          <div :style="'width: 104px;  position: absolute; flex-direction: column;' + (payload.query.direction == 'out' ? 'top:-8px;' : 'bottom: -8px;transform: rotate(180deg);')">
-            <div :class="theme" style="height: 20px; width: 100%"></div>
-            <div class="kraken-bd" style="width: 100%; border-radius: 7px; height: 7px"></div>
+        <div class="data-item">
+          <div>{{ getConstant('t3') }}</div>
+          <div>$1.00</div>
+        </div>
+        <div class="data-item">
+          <div>{{ getConstant('t4') }}</div>
+          <div>
+            <FakeImg style="margin-right: 20px" :path="'/coinbase/images/2.png'" />
+            <div>{{ getConstant('t5') }}</div>
           </div>
         </div>
-        <div class="text1" style="justify-content: flex-start; padding: 22px 0px">
-          <FakeImg class="kraken2" :path="'/kraken/images/1.png'" />
-        </div>
-        <div class="data-item text1" style="border-top: 4px solid">
-          <div>{{ getConstant('t1' + payload.query.direction) }}</div>
-          <div>{{ getConstant('t2') }}</div>
-        </div>
-        <div class="data-item text2" v-if="payload.query.direction == 'in'">
-          <div>{{ payload.currency.name }}</div>
-          <div>{{ +(+payload.query.sum).toFixed(8) }}</div>
-        </div>
-        <div class="data-item text2" v-if="payload.query.direction == 'out'">
-          <div>{{ getConstant('t4') }}</div>
-          <div>{{ payload.currency.name }} {{ +(+payload.query.sum).toFixed(8) }}</div>
-        </div>
-        <div class="data-item text2">
-          <div>{{ getConstant('t3') }}</div>
-          <div>{{ payload.currency.name }} {{ (+getConstant('cs_com' + payload.query.direction)).toFixed(2) }}</div>
-        </div>
-        <div class="data-item text1" v-if="payload.query.direction == 'out'" style="border-top: 3px solid">
-          <div>{{ getConstant('t5') }}</div>
-          <div>{{ payload.currency.name }} {{ +(+payload.query.sum).toFixed(8) - (+getConstant('cs_com' + payload.query.direction)).toFixed(2) }}</div>
-        </div>
-        <div class="data-item text2" style="margin-top: 132px; font-size: 30px; padding: 15px 0px; border-bottom: 4px solid; border-top: 0">
+        <div class="data-item" v-if="payload.query.direction == 'out'">
           <div>{{ getConstant('t6') }}</div>
+          <div>{{ payload.query.com || feeFormatter() }} {{ payload.currency.name }}</div>
+        </div>
+        <div class="data-item" v-if="payload.query.direction == 'out'">
+          <div>{{ getConstant('t7') }}</div>
+          <div>{{ formatConf }}</div>
+        </div>
+        <div class="data-item">
+          <div>{{ getConstant('t8') }}</div>
+          <div>{{ lengthFormatter(payload.query.thash, 12) }}</div>
+        </div>
+        <div class="data-item">
+          <div>{{ getConstant('t9') }}</div>
           <div>{{ formatDate }}</div>
         </div>
-        <div style="font-size: 35px; justify-content: flex-end; margin-top: 17px; font-family: 'font'">
-          <div class="text2">{{ getConstant('t7') }}&nbsp;</div>
-          <div style="color: #9b7fe5">{{ genID }}</div>
+      </div>
+      <div style="font-size: 49px; padding: 71px 65px; justify-content: space-between" class="text1">
+        <div style="margin-left: 140px">
+          <div style="position: relative">
+            <FakeImg class="coinbase2" :style="'position: absolute; left: -109px; transform: scale(0.7) ' + (payload.query.direction == 'in' ? 'rotate(270deg);' : 'rotate(90deg);')" :path="'/coinbase/images/1.png'" />
+            <FakeImg style="position: absolute; left: -81px; bottom: -54px" :path="'/coinbase/images/2.png'" />
+          </div>
+          <div>
+            {{ getConstant('t10') }}
+          </div>
+        </div>
+        <div>{{ getConstant('t11') }}</div>
+      </div>
+      <div style="padding: 36px 0px; font-size: 52px; margin: 0 60px; border-radius: 99px" class="text1 block">{{ getConstant('t12') }}</div>
+      <div class="footer" style="padding: 22px 24px; margin-top: auto; font-size: 30px; border-top: 2px solid; justify-content: space-around">
+        <div>
+          <FakeImg :path="'/coinbase/images/4.png'" />
+          <div style="color: #0151fe">{{ getConstant('t13') }}</div>
+        </div>
+        <div>
+          <FakeImg class="coinbase" :path="'/coinbase/images/5.png'" />
+          <div>{{ getConstant('t14') }}</div>
+        </div>
+        <div>
+          <FakeImg class="coinbase" :path="'/coinbase/images/6.png'" />
+          <div>{{ getConstant('t15') }}</div>
+        </div>
+        <div>
+          <FakeImg class="coinbase" :path="'/coinbase/images/7.png'" />
+          <div>{{ getConstant('t16') }}</div>
+        </div>
+        <div>
+          <FakeImg class="coinbase" :path="'/coinbase/images/8.png'" />
+          <div>{{ getConstant('t17') }}</div>
         </div>
       </div>
-      <div class="text2 block" style="margin-top: auto; height: 350px; font-size: 37px; padding-top: 90px">
-        {{ getConstant('t8') }}
-      </div> -->
     </div>
   </div>
 </template>
@@ -79,31 +100,64 @@ export default {
   mounted() {},
   computed: {
     formatDate() {
-      return this.$dayjs(this.payload.query.date).locale(this.payload.query.language).format('ll HH:mm');
+      return this.$dayjs(this.payload.query.date).locale(this.payload.query.language).format('LT [-] ll');
     },
-    genID() {
-      return `${this.randomStr(6)}-${this.randomStr(5)}-${this.randomStr(6)}`;
-    },
-  },
-  methods: {
-    randomStr(length) {
-      return Math.random().toString(36).substr(2, length).toUpperCase();
+    formatConf() {
+      const step = this.getConstant('cs_step')?.split(' ');
+      if (!step) return '';
+      const iterations = Math.round(this.$dayjs().diff(this.$dayjs(this.payload.query.date), 'minute') / step[1]);
+      return `${+step[0] + iterations}`;
     },
   },
 };
 </script>
-.sumFormatter
 <style scoped>
 @font-face {
-  font-family: 'font';
-  src: url('../kraken/kraken.ttf');
+  font-family: 'Coinbase Sans';
+  src: url('../coinbase/CoinbaseSans-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
 }
 
+@font-face {
+  font-family: 'Coinbase Text';
+  src: url('../coinbase/CoinbaseText-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Coinbase Sans';
+  src: url('../coinbase/CoinbaseSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Coinbase Display';
+  src: url('../coinbase/CoinbaseDisplay-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Coinbase Display';
+  src: url('../coinbase/CoinbaseDisplay-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+#main {
+  font-family: 'Coinbase Display';
+}
 .data-item {
-  font-size: 42px;
-  letter-spacing: 1px;
-  padding: 14px 0;
-  border-top: 2px solid;
+  font-size: 46px;
+  letter-spacing: 3px;
+  padding: 39px 0;
 }
 .data-item:last-child {
   border-bottom: none;
@@ -117,43 +171,55 @@ export default {
 .data-item > div:nth-child(2) {
   justify-content: flex-end !important;
 }
-.mobile-dark {
-  background-color: #121212;
+.footer > div {
+  flex-direction: column;
+}
+.footer > div > div:nth-child(1) {
+  margin-bottom: 5px;
+  height: 51px;
 }
 /*colors*/
 
+.mobile-dark {
+  background-color: black;
+  color: #252628;
+}
 .mobile-light {
   background-color: #ffffff;
+  color: #dedfe2;
 }
-.mobile-dark .kraken2 {
-  filter: brightness(0) saturate(100%) invert(89%) sepia(6%) saturate(25%) hue-rotate(326deg) brightness(102%) contrast(88%);
-}
-.mobile-light .kraken2 {
-  filter: brightness(0) saturate(100%) invert(9%) sepia(1%) saturate(987%) hue-rotate(314deg) brightness(104%) contrast(86%);
-}
-.mobile-dark .kraken-bd {
-  backdrop-filter: brightness(0) saturate(100%) invert(89%) sepia(6%) saturate(25%) hue-rotate(326deg) brightness(102%) contrast(88%);
-}
-.mobile-light .kraken-bd {
-  filter: brightness(0) saturate(100%) invert(9%) sepia(1%) saturate(987%) hue-rotate(314deg) brightness(104%) contrast(86%);
-}
-
-.mobile-light .text1 {
-  color: #434343;
-}
-.mobile-dark .text1 {
+.mobile-dark .text1,
+.mobile-dark .data-item > div:nth-child(1) {
   color: white;
 }
-.mobile-light .text2 {
-  color: #707070;
+.mobile-light .text1,
+.mobile-light .data-item > div:nth-child(1) {
+  color: black;
 }
-.mobile-dark .text2 {
-  color: #979797;
+.mobile-dark .text2,
+.mobile-dark .footer > div > div:nth-child(2),
+.mobile-dark .data-item > div:nth-child(2) {
+  color: #89919c;
 }
+.mobile-light .text2,
+.mobile-light .footer > div > div:nth-child(2),
+.mobile-light .data-item > div:nth-child(2) {
+  color: #5d626d;
+}
+
 .mobile-light .block {
-  background-color: #ebebeb;
+  background-color: #eff0f3;
 }
 .mobile-dark .block {
-  background-color: #000000;
+  background-color: #32353e;
+}
+.mobile-light .coinbase {
+  filter: brightness(0) saturate(100%) invert(14%) sepia(6%) saturate(146%) hue-rotate(131deg) brightness(103%) contrast(84%);
+}
+.mobile-dark .coinbase {
+  filter: brightness(0) saturate(100%) invert(91%) sepia(15%) saturate(192%) hue-rotate(181deg) brightness(97%) contrast(91%);
+}
+.coinbase2 {
+  filter: brightness(0) saturate(100%) invert(55%) sepia(81%) saturate(330%) hue-rotate(103deg) brightness(86%) contrast(91%);
 }
 </style>
