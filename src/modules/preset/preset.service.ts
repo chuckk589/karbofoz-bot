@@ -46,6 +46,7 @@ export class PresetService {
       height: 1440,
       deviceScaleFactor: 1,
     });
+    console.log(_show);
     const img = await page.$(_show === 1 ? '#main' : '#wobar');
     const screen = await img.screenshot({ path: 'example.png', encoding: 'base64' });
     await browser.close();

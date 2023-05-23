@@ -13,7 +13,7 @@ import { BarInputVariant } from '../entities/BarInputVariant';
 import { DeviceBarInput } from '../entities/DeviceBarInput';
 
 type selectValue = { value: string; alias: string };
-type field = { [key: string]: string } | { type: HtmlInputType; name: string; optional?: boolean; values?: selectValue[]; alias?: string };
+type field = { [key: string]: string } | { type: HtmlInputType; name: string; optional?: boolean; hint?: string; values?: selectValue[]; alias?: string };
 type data = { name: string; statusbar?: boolean; languages: string[]; themes: { alias: string; name: string }[]; fields: Set<field> };
 
 type deviceData = { name: string; fields: field[] };
@@ -33,7 +33,7 @@ export class ConfigSeeder extends Seeder {
     //биржи
     em.create(Exchange, {
       alias: 'binance',
-      name: 'Binance',
+      name: 'Binance FIXME',
       exchangeNetworks: [
         {
           network: bsc,
@@ -63,7 +63,7 @@ export class ConfigSeeder extends Seeder {
     });
     em.create(Exchange, {
       alias: 'trust',
-      name: 'Trust',
+      name: 'Trust FIXME',
       exchangeNetworks: [
         {
           network: bsc,
@@ -84,7 +84,7 @@ export class ConfigSeeder extends Seeder {
     });
     em.create(Exchange, {
       alias: 'exodus',
-      name: 'Exodus',
+      name: 'Exodus FIXME',
       exchangeNetworks: [
         {
           network: bsc,
@@ -105,7 +105,7 @@ export class ConfigSeeder extends Seeder {
     });
     em.create(Exchange, {
       alias: 'safepal',
-      name: 'Safepal',
+      name: 'Safepal FIXME',
       exchangeNetworks: [
         {
           network: bsc,
@@ -565,45 +565,28 @@ export class ConfigSeeder extends Seeder {
 /////////////////////////////////////////
 const _binance = {
   name: 'binance',
-  languages: ['en'],
+  languages: ['en', 'ru', 'es', 'ua'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
   ],
   fields: new Set()
-    .add({ en: 'Deposit Details', es: 'Detalles de depósito', alias: 'indep' })
-    .add({ en: 'Amount', es: 'Cantidad' })
-    .add({ en: 'Completed', es: 'Completed' })
-    .add({
-      en: 'Crypto has arrived in your Binance account. View your spot account balance for more details.',
-      es: 'La criptomoneda ha llegado a tu cuenta de Binance. Comprueba el saldo de tu cuenta spot para obtener más información.',
-      alias: 'inmsg',
-    })
-    .add({ en: 'Confirmations', es: 'Confirmaciones' })
-    .add({ en: 'Network', es: 'Red' })
-    .add({ en: 'Deposit Wallet', es: 'Billetera de depósito', alias: 'inwlt' })
-    .add({ en: 'Address', es: 'Dirección' })
-    .add({ en: 'Txid', es: 'Txid' })
-    .add({ en: 'Date', es: 'Fecha' })
-    .add({ en: 'Receive', es: 'Simple Earn' })
-    .add({ en: 'Receive Crypto With Zero Fee', es: 'USDT APR de hasta 4.06%' })
-    .add({ en: 'Discover Now', es: 'Descubrir ahora' })
-    .add({ en: 'Spot Wallet', es: 'Billetera Spot' })
-    .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
-    .add({ type: HtmlInputType.TEXT, name: 'Имя кошелька' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.TEXT, name: 'Имя кошелька', alias: 'wallet' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
     .add({
       type: HtmlInputType.DATETIME_LOCAL,
       name: 'Дата транзакции',
       alias: 'date',
+      hint: 'Формат: YYYY-MM-DD HH:mm:ss',
       values: [
         { value: 'Текущее время ', alias: '0' },
         { value: '2 минуты назад ', alias: '120' },
@@ -627,34 +610,60 @@ const _binance = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Withdrawal Details', alias: 'outdep' })
-    .add({ en: 'Crypto transferred out of Binance. Please contact the recipient platform for your transaction receipt.', alias: 'outmsg' })
-    .add({ en: "Why hasn't my withdrawal arrived?" })
-    .add({ en: 'Withdrawal Wallet', alias: 'outwlt' })
-    .add({ en: 'Save address' })
-    .add({ en: 'Network fee' })
-    .add({ en: 'Need help? Check FAQs' })
-    .add({ en: 'Scam Report' }),
+    .add({ ua: 'Деталі депозиту', ru: 'Подробнее', en: 'Deposit Details', es: 'Detalles de depósito', alias: 't1in' })
+    .add({ ua: 'Деталі зняття коштів', ru: 'Детали вывода средств', en: 'Withdrawal Details', alias: 't1out' })
+    .add({ ua: 'Сума', ru: 'Количество', en: 'Amount', es: 'Cantidad', alias: 't2' })
+    .add({ ua: 'Completed', ru: 'Completed', en: 'Completed', es: 'Completed', alias: 't3' })
+    .add({
+      ua: 'Криптовалюта доставлена на ваш акаунт Binance. Для отримання більш докладної інформаціі перегляньте баланс свого спотового акаунта.',
+      ru: 'Криптовалюта поступила на ваш аккаунт Binance. Проверьте баланс на спотовом аккаунте.',
+      en: 'Crypto has arrived in your Binance account. View your spot account balance for more details.',
+      es: 'La criptomoneda ha llegado a tu cuenta de Binance. Comprueba el saldo de tu cuenta spot para obtener más información.',
+      alias: 't4in',
+    })
+    .add({
+      ua: "Криптовалюта переказана із Binance. Будь ласка, зв'яжіться з платформою одержувача для отримання квитанції npo транзакцію.",
+      ru: 'Криптовалюта была отправлена с Binance. Свяжитесь с платформой получателя для получения квитанции о транзакции.',
+      en: 'Crypto transferred out of Binance. Please contact the recipient platform for your transaction receipt.',
+      alias: 't4out',
+    })
+    .add({ ua: 'Підтвердження', ru: 'Подтверждения', en: 'Confirmations', es: 'Confirmaciones', alias: 't5' })
+    .add({ ua: 'Мережа', ru: 'Сеть', en: 'Network', es: 'Red', alias: 't6' })
+    .add({ ua: 'Гаманець депозиту', ru: 'Кошелек для ввода', en: 'Deposit Wallet', es: 'Billetera de depósito', alias: 't7in' })
+    .add({ ua: 'Гаманець зняття', ru: 'Кошелек для вывода', en: 'Withdrawal Wallet', alias: 't7out' })
+    .add({ ua: 'Адреса', ru: 'Адрес', en: 'Address', es: 'Dirección', alias: 't8' })
+    .add({ ua: 'Txid', ru: 'Txid', en: 'Txid', es: 'Txid', alias: 't9' })
+    .add({ ua: 'Дата', ru: 'Дата', en: 'Date', es: 'Fecha', alias: 't10' })
+    .add({ ua: 'Simple Earn', ru: 'Simple Earn', en: 'Receive', es: 'Simple Earn', alias: 't11' })
+    .add({ ua: 'APR до USDT 4.06%', ru: 'APR до USDT 4.06%', en: 'Receive Crypto With Zero Fee', es: 'USDT APR de hasta 4.06%', alias: 't12' })
+    .add({ ua: 'Спробувати зараз', ru: 'Начать', en: 'Discover Now', es: 'Descubrir ahora', alias: 't13' })
+    .add({ ua: 'Спотовий гаманець', ru: 'Спотовый кошелек', en: 'Spot Wallet', es: 'Billetera Spot', alias: 't14' })
+    .add({ ua: 'Чому мої зняті кошти не надійшли?', ru: 'Почему выведенные средства еще не поступили?', en: "Why hasn't my withdrawal arrived?", alias: 't15' })
+    .add({ ua: 'Зберегти адресу', ru: 'Сохранить адрес', en: 'Save address', alias: 't16' })
+    .add({ ua: 'Комісія мережі', ru: 'Комиссия сети', en: 'Network fee', alias: 't17' })
+    .add({ ua: 'Потрібна допомога? Перевірити FAQ', ru: 'Нужна помощь? Читать FAQ', en: 'Need help? Check FAQs', alias: 't18' })
+    .add({ ua: 'Звіт про шахрайство', ru: 'Отчет о мошенничестве', en: 'Scam Report', alias: 't19' }),
 };
+
 const _trust = {
   name: 'trust',
-  languages: ['en'],
+  languages: ['en', 'ru', 'ua', 'es'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
   ],
   fields: new Set()
-    .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
-    .add({ type: HtmlInputType.TEXT, name: 'Nonce', optional: true })
+    .add({ type: HtmlInputType.TEXT, name: 'Nonce', optional: true, alias: 'nonce' })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -664,17 +673,17 @@ const _trust = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Transfer' })
-    .add({ en: 'Date' })
-    .add({ en: 'Status' })
-    .add({ en: 'Network Fee' })
-    .add({ en: 'MORE DETAILS' })
-    .add({ en: 'Nonce' })
-    .add({ en: 'Completed' })
-    .add({ en: 'Sender', alias: 'in' })
-    .add({ en: 'Recipient', alias: 'out' })
-    .add({ en: 'Today' }),
+    .add({ es: 'Transferencia', ua: 'Переказ', ru: 'Перевод', en: 'Transfer', alias: 't1' })
+    .add({ es: 'Fecha', ua: 'Дата', ru: 'Дата', en: 'Date', alias: 't2' })
+    .add({ es: 'Estatus', ua: 'Статус', ru: 'Статус', en: 'Status', alias: 't3' })
+    .add({ es: 'Tarifa de red', ua: 'Комісія мережі', ru: 'Сетевой сбор', en: 'Network Fee', alias: 't4' })
+    .add({ es: 'MÁS DETALLES', ua: 'ДЕТАЛЬНІШЕ', ru: 'ПОДРОБНЕЕ', en: 'MORE DETAILS', alias: 't5' })
+    .add({ es: 'Nonce', ua: 'Nonce', ru: 'Nonce', en: 'Nonce', alias: 't6' })
+    .add({ es: 'Completado', ua: 'Завершено', ru: 'Завершено', en: 'Completed', alias: 't7' })
+    .add({ es: 'Remitente', ua: 'Відправник', ru: 'Отправитель', en: 'Sender', alias: 't8in' })
+    .add({ es: 'Destinatario', ua: 'Одержувач', ru: 'Получатель', en: 'Recipient', alias: 't8out' }),
 };
+
 const _exodus = {
   name: 'exodus',
   languages: ['en'],
@@ -682,12 +691,12 @@ const _exodus = {
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
   ],
   fields: new Set()
-    .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
     .add({
@@ -699,42 +708,43 @@ const _exodus = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'TRANSACTION DETAILS' })
-    .add({ en: 'Personal Note' })
-    .add({ en: 'Add Note' })
-    .add({ en: 'Created' })
-    .add({ en: 'Timestamp' })
-    .add({ en: 'Transaction ID' })
-    .add({ en: 'Now' })
-    .add({ en: 'Need help?' })
-    .add({ en: 'Fee' })
-    .add({ en: 'Received from', alias: 'ind' })
-    .add({ en: 'Sent to', alias: 'outd' })
-    .add({ en: 'Received', alias: 'inf' })
-    .add({ en: 'Sent', alias: 'outf' })
-    .add({ en: 'Contact Support' }),
+    .add({ en: 'TRANSACTION DETAILS', alias: 't1' })
+    .add({ en: 'Personal Note', alias: 't2' })
+    .add({ en: 'Add Note', alias: 't3' })
+    .add({ en: 'Created', alias: 't4' })
+    .add({ en: 'Timestamp', alias: 't5' })
+    .add({ en: 'Transaction ID', alias: 't6' })
+    .add({ en: 'Now', alias: 't7' })
+    .add({ en: 'Need help?', alias: 't8' })
+    .add({ en: 'Fee', alias: 't9' })
+    .add({ en: 'Received from', alias: 't10in' })
+    .add({ en: 'Sent to', alias: 't10out' })
+    .add({ en: 'Received', alias: 't11in' })
+    .add({ en: 'Sent', alias: 't11out' })
+    .add({ en: 'Contact Support', alias: 't12' }),
 };
+
 const _safepal = {
   name: 'safepal',
-  languages: ['ru'],
+  languages: ['ru', 'en', 'es'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
   ],
   fields: new Set()
-    .add({ type: HtmlInputType.NUMBER, name: 'Сумма' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
-    .add({ type: HtmlInputType.TEXT, name: 'От' })
-    .add({ type: HtmlInputType.TEXT, name: 'На' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.TEXT, name: 'От', alias: 'from' })
+    .add({ type: HtmlInputType.TEXT, name: 'На', alias: 'to' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', optional: true, alias: 'txid' })
-    .add({ type: HtmlInputType.TEXT, name: 'Transaction Hash', optional: true })
+    .add({ type: HtmlInputType.TEXT, name: 'Transaction Hash', optional: true, alias: 'thash' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({
       type: HtmlInputType.SELECT,
@@ -745,38 +755,39 @@ const _safepal = {
       ],
       alias: 'direction',
     })
-    .add({ ru: 'Детали транзакции' })
-    .add({ ru: 'Статус' })
-    .add({ ru: 'Комиссия сети' })
-    .add({ ru: 'Время' })
-    .add({ ru: 'От' })
-    .add({ ru: 'На' })
-    .add({ ru: 'Transaction Hash' })
-    .add({ ru: 'Успех' })
-    .add({ ru: 'Получить', alias: 'in' })
-    .add({ ru: 'Отправить', alias: 'out' })
-    .add({ ru: 'Nonce' })
-    .add({ ru: 'TxID' })
-    .add({ ru: 'Высота' })
-    .add({ ru: 'Посмотреть в обозревателе блокчейна' }),
+    .add({ en: 'Transaction Details', es: 'Detalles de la transacción', ru: 'Детали транзакции', alias: 't1' })
+    .add({ en: 'Status', es: 'Estado', ru: 'Статус', alias: 't2' })
+    .add({ en: 'Network Fee', es: 'Tarifa', ru: 'Комиссия сети', alias: 't3' })
+    .add({ en: 'Time', es: 'Hora', ru: 'Время', alias: 't4' })
+    .add({ en: 'From', es: 'Desde', ru: 'От', alias: 't5' })
+    .add({ en: 'To', es: 'A', ru: 'На', alias: 't6' })
+    .add({ en: 'Transaction Hash', es: 'Transaction Hash', ru: 'Transaction Hash', alias: 't7' })
+    .add({ en: 'Success', es: 'Éxito', ru: 'Успех', alias: 't8' })
+    .add({ en: 'Receive', es: 'Enviar', ru: 'Получить', alias: 't9in' })
+    .add({ en: 'Send', es: 'Recibir', ru: 'Отправить', alias: 't9out' })
+    .add({ en: 'Nonce', es: 'Nonce', ru: 'Nonce', alias: 't10' })
+    .add({ en: 'TxID', es: 'TxID', ru: 'TxID', alias: 't11' })
+    .add({ en: 'Height', es: 'Altura', ru: 'Высота', alias: 't12' })
+    .add({ en: 'View on Blockchain Explorer', es: 'Ver en el explorador de cadena', ru: 'Посмотреть в обозревателе блокчейна', alias: 't13' }),
 };
+
 const _gate = {
   name: 'gate',
-  languages: ['en'],
+  languages: ['en', 'ru', 'es', 'ua'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.NUMBER, name: 'ID Ордера', optional: true, alias: 'order' })
@@ -789,39 +800,40 @@ const _gate = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Deposit Details', alias: 't1in' })
-    .add({ en: 'Withdrawal Details', alias: 't1out' })
-    .add({ en: 'Quantity', alias: 't2' })
-    .add({ en: 'Success', alias: 't3' })
-    .add({ en: 'Deposit Method', alias: 't4in' })
-    .add({ en: 'Withdrawal Method', alias: 't4out' })
-    .add({ en: 'Onchain Deposit', alias: 't5in' })
-    .add({ en: 'Onchain Withdrawal', alias: 't5out' })
-    .add({ en: 'Time', alias: 't6' })
-    .add({ en: 'Network', alias: 't7' })
-    .add({ en: 'Order ID', alias: 't8' })
-    .add({ en: 'Deposit Address', alias: 't9in' })
-    .add({ en: 'Address', alias: 't9out' })
-    .add({ en: 'TXID', alias: 't10' })
-    .add({ en: 'Fee', alias: 't11' }),
+    .add({ ru: 'Сведения о депозите', ua: 'Данi депозиту', es: 'Detalles del depósito', en: 'Deposit Details', alias: 't1in' })
+    .add({ ru: 'Сведения о выводе средств', ua: 'Данi виведення коштiв', es: 'Detalles de la retirada', en: 'Withdrawal Details', alias: 't1out' })
+    .add({ ru: 'Количество', ua: 'Кiлькiсть', es: 'Cantidad', en: 'Quantity', alias: 't2' })
+    .add({ ru: 'Success', ua: 'Success', es: 'Success', en: 'Success', alias: 't3' })
+    .add({ ru: 'Метод депозита', ua: 'Метод внесяння депозиту', es: 'Modo de depósito', en: 'Deposit Method', alias: 't4in' })
+    .add({ ru: 'Метод вывода средств', ua: 'Спосiб виведення коштiв', es: 'Modo de retirada', en: 'Withdrawal Method', alias: 't4out' })
+    .add({ ru: 'Депозит ончейн', ua: 'Депозит ончейн', es: 'Depósito onchain', en: 'Onchain Deposit', alias: 't5in' })
+    .add({ ru: 'Вывод средств ончейн', ua: 'Виведення коштiв ончейн', es: 'Retirada de onchain', en: 'Onchain Withdrawal', alias: 't5out' })
+    .add({ ru: 'Время', ua: 'Час', es: 'Hora', en: 'Time', alias: 't6' })
+    .add({ ru: 'Сеть', ua: 'Мережа', es: 'Red', en: 'Network', alias: 't7' })
+    .add({ ru: 'ID Ордера', ua: 'ID Ордера', es: 'ID de la orden', en: 'Order ID', alias: 't8' })
+    .add({ ru: 'Адрес депозита', ua: 'Адреса депозиту', es: 'Dirección de depósito', en: 'Deposit Address', alias: 't9in' })
+    .add({ ru: 'Адрес', ua: 'Адреса', es: 'Dirección', en: 'Address', alias: 't9out' })
+    .add({ ru: 'TXID', ua: 'TXID', es: 'TXID', en: 'TXID', alias: 't10' })
+    .add({ ru: 'Оплата', ua: 'Оплата', es: 'Tarifa', en: 'Fee', alias: 't11' }),
 };
+
 const _huobi = {
   name: 'huobi',
-  languages: ['en'],
+  languages: ['en', 'ru', 'es', 'ua'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({
@@ -833,35 +845,36 @@ const _huobi = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Type', alias: 't1' })
-    .add({ en: 'Ordinary Deposit', alias: 't2in' })
-    .add({ en: 'General Withdrawal', alias: 't2out' })
-    .add({ en: 'Status', alias: 't3' })
-    .add({ en: 'Completed', alias: 't4' })
-    .add({ en: 'Copy', alias: 't5' })
-    .add({ en: 'Time', alias: 't6' })
-    .add({ en: 'Withdrawal Address', alias: 't7' })
-    .add({ en: 'Withdrawal Network', alias: 't8' })
-    .add({ en: 'Fees', alias: 't9' })
-    .add({ en: 'TxID', alias: 't10' }),
+    .add({ ua: 'Тип', es: 'Tipo', ru: 'Тип', en: 'Type', alias: 't1' })
+    .add({ ua: 'Звичайние внесення коштів', es: 'Depósito Normal', ru: 'Обычный депозит', en: 'Ordinary Deposit', alias: 't2in' })
+    .add({ ua: 'Звичайние виведення', es: 'Retiro Normal', ru: 'Обычный вывод', en: 'General Withdrawal', alias: 't2out' })
+    .add({ ua: 'Статус', es: 'Estado', ru: 'Статус', en: 'Status', alias: 't3' })
+    .add({ ua: 'Завершено', es: 'Hecho', ru: 'Готово', en: 'Completed', alias: 't4' })
+    .add({ ua: 'Копіювати', es: 'Copiar', ru: 'Скопировать', en: 'Copy', alias: 't5' })
+    .add({ ua: 'Час', es: 'Fecha', ru: 'Время', en: 'Time', alias: 't6' })
+    .add({ ua: 'Адреса виведення', es: 'Dirección de retiro', ru: 'Адрес вывода', en: 'Withdrawal Address', alias: 't7' })
+    .add({ ua: 'Виберіть ланцюг', es: 'Red de retiro', ru: 'Выбрать цепочку', en: 'Withdrawal Network', alias: 't8' })
+    .add({ ua: 'Комісія', es: 'Comisión', ru: 'Комиссия', en: 'Fees', alias: 't9' })
+    .add({ ua: 'TxID', es: 'TxID', ru: 'TxID', en: 'TxID', alias: 't10' }),
 };
+
 const _kucoin = {
   name: 'kucoin',
-  languages: ['en'],
+  languages: ['en', 'ru', 'es'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'TxHash', alias: 'thash' })
@@ -875,38 +888,39 @@ const _kucoin = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Deposit Details', alias: 't1in' })
-    .add({ en: 'Withdrawal Details', alias: 't1out' })
-    .add({ en: 'Completed', alias: 't2' })
-    .add({ en: 'Deposit completed. View details in your account', alias: 't3' })
-    .add({ en: 'Block(s)', alias: 't4' })
-    .add({ en: 'Time', alias: 't5' })
-    .add({ en: 'Network', alias: 't6' })
-    .add({ en: 'Deposit Account', alias: 't7in' })
-    .add({ en: 'Withdrawal Account', alias: 't7out' })
-    .add({ en: 'Main Account', alias: 't8' })
-    .add({ en: 'Remarks', alias: 't9' })
-    .add({ en: 'Address/Account', alias: 't10' })
-    .add({ en: 'TxHash', alias: 't11' })
-    .add({ en: 'Fee', alias: 't12' }),
+    .add({ es: 'Detalles del depósito', ru: 'Детали Депозита', en: 'Deposit Details', alias: 't1in' })
+    .add({ es: 'Detalles de retirada', ru: 'Детали Вывода', en: 'Withdrawal Details', alias: 't1out' })
+    .add({ es: 'Completado', ru: 'Завершено', en: 'Completed', alias: 't2' })
+    .add({ es: 'Depósito completado. Mira los detalles en tu cuenta.', ru: 'Депозит завершен. Посмотрите детали в своем аккаунте.', en: 'Deposit completed. View details in your account', alias: 't3' })
+    .add({ es: 'bloque(s)', ru: 'блок(ов)', en: 'Block(s)', alias: 't4' })
+    .add({ es: 'Hora', ru: 'Время', en: 'Time', alias: 't5' })
+    .add({ es: 'Red', ru: 'Сеть', en: 'Network', alias: 't6' })
+    .add({ es: 'Cuenta de depósito', ru: 'Депозитный аккаунт', en: 'Deposit Account', alias: 't7in' })
+    .add({ es: 'Cuenta de retirada', ru: 'Аккаунт для вывода средств', en: 'Withdrawal Account', alias: 't7out' })
+    .add({ es: 'Cuenta principal', ru: 'Основной Аккаунт', en: 'Main Account', alias: 't8' })
+    .add({ es: 'Observaciones', ru: 'Сообщение:', en: 'Remarks', alias: 't9' })
+    .add({ es: 'Dirección/cuenta', ru: 'Адрес/Аккаунт', en: 'Address/Account', alias: 't10' })
+    .add({ es: 'TxHash', ru: 'TxHash', en: 'TxHash', alias: 't11' })
+    .add({ es: 'Comisión', ru: 'Комиссия', en: 'Fee', alias: 't12' }),
 };
+
 const _bitfinex = {
   name: 'bitfinex',
-  languages: ['en'],
+  languages: ['en', 'ru', 'es'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({
@@ -937,41 +951,47 @@ const _bitfinex = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Deposit', alias: 't1in' })
-    .add({ en: 'Withdraw', alias: 't1out' })
-    .add({ en: 'ID', alias: 't2' })
-    .add({ en: 'Status', alias: 't3' })
-    .add({ en: 'Completed', alias: 't4' })
-    .add({ en: 'Amount', alias: 't5' })
-    .add({ en: 'Wallet', alias: 't6' })
-    .add({ en: 'Exchange', alias: 't7' })
-    .add({ en: 'Created', alias: 't8' })
-    .add({ en: 'Updated', alias: 't9' })
-    .add({ en: 'Address', alias: 't10' })
-    .add({ en: 'Txid', alias: 't11' })
-    .add({ en: 'Permalink', alias: 't12' })
-    .add({ en: '/deposit/', alias: 't13in' })
-    .add({ en: '/withdraw/', alias: 't13out' })
-    .add({ en: "If you didn't make this withdrawal then its possible your Account has been compromised. To prevent further account actions, ", alias: 't14' })
-    .add({ en: 'freeze your account.', alias: 't15' }),
+    .add({ ru: 'Пополнение средств', es: 'Deposito', en: 'Deposit', alias: 't1in' })
+    .add({ ru: 'Вывод', es: 'Retiro', en: 'Withdraw', alias: 't1out' })
+    .add({ ru: 'ID', es: 'ID', en: 'ID', alias: 't2' })
+    .add({ ru: 'Статус', es: 'Estado', en: 'Status', alias: 't3' })
+    .add({ ru: 'Завершено', es: 'Completado', en: 'Completed', alias: 't4' })
+    .add({ ru: 'Сумма', es: 'Monto', en: 'Amount', alias: 't5' })
+    .add({ ru: 'Кошелек', es: 'Cartera', en: 'Wallet', alias: 't6' })
+    .add({ ru: 'Обменный', es: 'Exchange', en: 'Exchange', alias: 't7' })
+    .add({ ru: 'Создано', es: 'Creado', en: 'Created', alias: 't8' })
+    .add({ ru: 'Обновлено', es: 'Actualizado', en: 'Updated', alias: 't9' })
+    .add({ ru: 'Адрес', es: 'Dirección', en: 'Address', alias: 't10' })
+    .add({ ru: 'Txid', es: 'Txid', en: 'Txid', alias: 't11' })
+    .add({ ru: 'Ссылка', es: 'Enlace Permanente', en: 'Permalink', alias: 't12' })
+    .add({ ru: '/deposit/', es: '/deposit/', en: '/deposit/', alias: 't13in' })
+    .add({ ru: '/withdraw/', es: '/withdraw/', en: '/withdraw/', alias: 't13out' })
+    .add({
+      ru: 'Если вы не выводили средства, то возможно ваш аккаунт был взломан. Чтобы предотвратить дальнейшие действия с аккаунтом,',
+      es: 'Si no realizaste este retiro y crees que tu cuenta pudo haber sido comprometida. Para evitar acciones adicionales en tu cuenta,',
+      en: "If you didn't make this withdrawal then its possible your Account has been compromised. To prevent further account actions, ",
+      alias: 't14',
+    })
+    .add({ ru: 'заблокируйте аккаунт.', es: 'congela tu cuenta.', en: 'freeze your account.', alias: 't15' }),
 };
+
 const _bitmart = {
   name: 'bitmart',
-  languages: ['en'],
+  languages: ['en', 'ru', 'es'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', optional: true })
     .add({
@@ -983,35 +1003,36 @@ const _bitmart = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Detail', alias: 't1' })
-    .add({ en: 'Create', alias: 't2' })
-    .add({ en: 'Processing', alias: 't3' })
-    .add({ en: 'Complete', alias: 't4' })
-    .add({ en: 'Received Qty', alias: 't5' })
-    .add({ en: 'Fee', alias: 't6' })
-    .add({ en: 'Transaction ID', alias: 't7' })
-    .add({ en: 'Created', alias: 't8' })
-    .add({ en: 'Finished', alias: 't9' })
-    .add({ en: 'TXID', alias: 't10' })
-    .add({ en: 'Copy TXID', alias: 't11' })
-    .add({ en: 'Check TXID', alias: 't12' })
-    .add({ en: 'Notify me with SMS when deposit and withdrawal get done', alias: 't13' })
-    .add({ en: 'Enable now', alias: 't14' })
-    .add({ en: 'Address', alias: 't15' }),
+    .add({ es: 'Detalles', ru: 'Подробнее', en: 'Detail', alias: 't1' })
+    .add({ es: 'Crear', ru: 'Создать', en: 'Create', alias: 't2' })
+    .add({ es: 'Procesando', ru: 'Обработка', en: 'Processing', alias: 't3' })
+    .add({ es: 'Completar', ru: 'Завершить', en: 'Complete', alias: 't4' })
+    .add({ es: 'Cantidad recibida', ru: 'Полученное количество', en: 'Received Qty', alias: 't5' })
+    .add({ es: 'Comisión', ru: 'Комиссия', en: 'Fee', alias: 't6' })
+    .add({ es: 'Numero de transacción', ru: 'ID транзакции', en: 'Transaction ID', alias: 't7' })
+    .add({ es: 'Creado', ru: 'Создано', en: 'Created', alias: 't8' })
+    .add({ es: 'Finalizado', ru: 'Завершено', en: 'Finished', alias: 't9' })
+    .add({ es: 'TXID', ru: 'TXID', en: 'TXID', alias: 't10' })
+    .add({ es: 'Copiar TXID', ru: 'Копировать TXID', en: 'Copy TXID', alias: 't11' })
+    .add({ es: 'Comprobar TXID', ru: 'Проверить TXID', en: 'Check TXID', alias: 't12' })
+    .add({ es: 'Notificarme por SMS cuando se realice depósitos y retiradas', ru: 'Уведомлять меня с помощью SMS о вводе и выводе средств', en: 'Notify me with SMS when deposit and withdrawal get done', alias: 't13' })
+    .add({ es: 'Activar', ru: 'Включить сейчас', en: 'Enable now', alias: 't14' })
+    .add({ es: 'Dirección', ru: 'Адрес', en: 'Address', alias: 't15' }),
 };
+
 const _cryptocom = {
   name: 'cryptocom',
-  languages: ['en'],
+  languages: ['en', 'ru', 'es'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({
       type: HtmlInputType.SELECT,
@@ -1022,35 +1043,36 @@ const _cryptocom = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Withdraw', alias: 't1out' })
-    .add({ en: 'Deposit', alias: 't1in' })
-    .add({ en: 'Completed', alias: 't2' })
-    .add({ en: 'Withdrawal details', alias: 't3out' })
-    .add({ en: 'Deposit details', alias: 't3in' })
-    .add({ en: 'Sending', alias: 't4' })
-    .add({ en: 'Withdraw to', alias: 't5out' })
-    .add({ en: 'Deposit from', alias: 't5in' })
-    .add({ en: 'Network Type', alias: 't6' })
-    .add({ en: 'Fee', alias: 't7' })
-    .add({ en: 'Total', alias: 't8' }),
+    .add({ es: 'Withdraw', ru: 'Withdraw', en: 'Withdraw', alias: 't1out' })
+    .add({ es: 'Deposit', ru: 'Deposit', en: 'Deposit', alias: 't1in' })
+    .add({ es: 'Completado', ru: 'Завершено', en: 'Completed', alias: 't2' })
+    .add({ es: 'Detalles de retiro', ru: 'Подробности вывода', en: 'Withdrawal details', alias: 't3out' })
+    .add({ es: 'Detalles de depósito', ru: 'Детали перевода', en: 'Deposit details', alias: 't3in' })
+    .add({ es: 'Enviando', ru: 'Отправка', en: 'Sending', alias: 't4' })
+    .add({ es: 'Retirar a', ru: 'Вывести на', en: 'Withdraw to', alias: 't5out' })
+    .add({ es: 'Depositar desde', ru: 'Перевести от', en: 'Deposit from', alias: 't5in' })
+    .add({ es: 'Tipo de red', ru: 'Тип сети', en: 'Network Type', alias: 't6' })
+    .add({ es: 'Comisión', ru: 'Комиссия', en: 'Fee', alias: 't7' })
+    .add({ es: 'Total', ru: 'Итого', en: 'Total', alias: 't8' }),
 };
+
 const _okx = {
   name: 'okx',
-  languages: ['en'],
+  languages: ['en', 'ru', 'es', 'ua'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({
@@ -1062,36 +1084,37 @@ const _okx = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Transaction details', alias: 't1' })
-    .add({ en: 'deposited', alias: 't2in' })
-    .add({ en: 'withdrawn', alias: 't2out' })
-    .add({ en: 'Status', alias: 't3' })
-    .add({ en: 'Completed', alias: 't4' })
-    .add({ en: 'Date', alias: 't5' })
-    .add({ en: 'From', alias: 't6' })
-    .add({ en: 'To', alias: 't7' })
-    .add({ en: 'Network', alias: 't8' })
-    .add({ en: 'Transaction ID', alias: 't9' })
-    .add({ en: 'Fee', alias: 't10' })
-    .add({ en: "Sender's wallet", alias: 't11' }),
+    .add({ es: 'Detalles de transacción', ua: 'Відомості про транзакцію', ru: 'Детали транзакции', en: 'Transaction details', alias: 't1' })
+    .add({ es: 'depositado', ua: 'внесено', ru: 'внесено', en: 'deposited', alias: 't2in' })
+    .add({ es: 'retiro', ua: 'виведено', ru: 'выведено', en: 'withdrawn', alias: 't2out' })
+    .add({ es: 'Estado', ua: 'Стан', ru: 'Статус', en: 'Status', alias: 't3' })
+    .add({ es: 'Completado', ua: 'Завершено', ru: 'Выполнено', en: 'Completed', alias: 't4' })
+    .add({ es: 'Fecha', ua: 'Дата', ru: 'Дата', en: 'Date', alias: 't5' })
+    .add({ es: 'De', ua: 'Звідки', ru: 'От', en: 'From', alias: 't6' })
+    .add({ es: 'Para', ua: 'На адресу', ru: 'Кому', en: 'To', alias: 't7' })
+    .add({ es: 'Red', ua: 'Мережа', ru: 'Сеть', en: 'Network', alias: 't8' })
+    .add({ es: 'ID de transacción', ua: 'ID транзакції', ru: 'ID транзакции', en: 'Transaction ID', alias: 't9' })
+    .add({ es: 'Comisión', ua: 'Комісія', ru: 'Комиссия', en: 'Fee', alias: 't10' })
+    .add({ es: 'Wallet del remitente ', ua: 'Гаманець відправника', ru: 'Кошелек отправителя ', en: "Sender's wallet", alias: 't11' }),
 };
+
 const _ledger = {
   name: 'ledger',
-  languages: ['en'],
+  languages: ['en', 'ru', 'es'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({
@@ -1103,35 +1126,36 @@ const _ledger = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Transaction details', alias: 't1' })
-    .add({ en: 'Received', alias: 't2in' })
-    .add({ en: 'Sent', alias: 't2out' })
-    .add({ en: 'Confirmed', alias: 't3' })
-    .add({ en: 'Account', alias: 't4' })
-    .add({ en: 'Date', alias: 't5' })
-    .add({ en: 'Network fees', alias: 't6' })
-    .add({ en: 'To', alias: 't7' })
-    .add({ en: 'From', alias: 't8' })
-    .add({ en: 'Transaction ID', alias: 't9' })
-    .add({ en: 'View in explorer', alias: 't10' }),
+    .add({ ru: 'Детали транзакции', es: 'Detalles de las transacciones', en: 'Transaction details', alias: 't1' })
+    .add({ ru: 'Получение', es: 'Recibido', en: 'Received', alias: 't2in' })
+    .add({ ru: 'Отправка', es: 'Enviado', en: 'Sent', alias: 't2out' })
+    .add({ ru: 'Подтверждена', es: 'Confirmada', en: 'Confirmed', alias: 't3' })
+    .add({ ru: 'Счёт', es: 'Cuenta', en: 'Account', alias: 't4' })
+    .add({ ru: 'Дата', es: 'Fecha', en: 'Date', alias: 't5' })
+    .add({ ru: 'Комиссия сети', es: 'Tarifas de red', en: 'Network fees', alias: 't6' })
+    .add({ ru: 'Куда', es: 'A', en: 'To', alias: 't7' })
+    .add({ ru: 'Откуда', es: 'De', en: 'From', alias: 't8' })
+    .add({ ru: 'ID транзакции', es: 'ID de transacción', en: 'Transaction ID', alias: 't9' })
+    .add({ ru: 'Посмотреть в обозревателе', es: 'Ver en el explorador', en: 'View in explorer', alias: 't10' }),
 };
+
 const _metamask = {
   name: 'metamask',
-  languages: ['en'],
+  languages: ['en', 'ru', 'es'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'От', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'В адрес', alias: 'address2' })
     .add({
@@ -1143,40 +1167,41 @@ const _metamask = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Sent', alias: 't1out' })
-    .add({ en: 'Received', alias: 't1in' })
-    .add({ en: 'Status', alias: 't2' })
-    .add({ en: 'Date', alias: 't3' })
-    .add({ en: 'From', alias: 't4' })
-    .add({ en: 'To', alias: 't5' })
-    .add({ en: 'NONCE', alias: 't6' })
-    .add({ en: 'Amount', alias: 't7' })
-    .add({ en: 'Estimated gas fee', alias: 't8' })
-    .add({ en: 'Total amount', alias: 't9' })
-    .add({ en: 'View on Etherscan', alias: 't10erc20' })
-    .add({ en: 'View on Bscscan', alias: 't10bep20' })
-    .add({ en: 'View full history on Etherscan', alias: 't11erc20' })
-    .add({ en: 'View full history on Bscscan', alias: 't11bep20' })
-    .add({ en: 'Confirmed', alias: 't12' })
-    .add({ en: 'at', alias: 't13' }),
+    .add({ ru: 'Отправлен', es: 'Enviado', en: 'Sent', alias: 't1out' })
+    .add({ ru: 'Получен', es: 'Recibido', en: 'Received', alias: 't1in' })
+    .add({ ru: 'Статус', es: 'Estado', en: 'Status', alias: 't2' })
+    .add({ ru: 'Дата', es: 'Fecha', en: 'Date', alias: 't3' })
+    .add({ ru: 'От', es: 'De', en: 'From', alias: 't4' })
+    .add({ ru: 'В адрес', es: 'Para', en: 'To', alias: 't5' })
+    .add({ ru: 'ОДНОРАЗОВЫЙ КОД', es: 'MIENTRAS TANTO', en: 'NONCE', alias: 't6' })
+    .add({ ru: 'Сумма', es: 'Importe', en: 'Amount', alias: 't7' })
+    .add({ ru: 'Примерная плата за газ', es: 'Tarifas estimada de gas', en: 'Estimated gas fee', alias: 't8' })
+    .add({ ru: 'Общая сумма', es: 'Importe total', en: 'Total amount', alias: 't9' })
+    .add({ ru: 'Посмотреть на Etherscan', es: 'Ver en Etherscan', en: 'View on Etherscan', alias: 't10erc20' })
+    .add({ ru: 'Посмотреть на Bscscan', es: 'Ver en Bscscan', en: 'View on Bscscan', alias: 't10bep20' })
+    .add({ ru: 'Посмотреть полную историю на Etherscan', es: 'Vea el historial completo en Etherscan', en: 'View full history on Etherscan', alias: 't11erc20' })
+    .add({ ru: 'Посмотреть полную историю на Bscscan', es: 'Vea el historial completo en Bscscan', en: 'View full history on Bscscan', alias: 't11bep20' })
+    .add({ ru: 'Подтверждено', es: 'Confirmado', en: 'Confirmed', alias: 't12' })
+    .add({ ru: 'в', es: 'en', en: 'at', alias: 't13' }),
 };
+
 const _mexc = {
   name: 'mexc',
-  languages: ['en'],
+  languages: ['en', 'es', 'ru'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({
@@ -1188,42 +1213,53 @@ const _mexc = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Withdrawal details', alias: 't1out' })
-    .add({ en: 'Deposit Details', alias: 't1in' })
-    .add({ en: 'Amount', alias: 't2' })
-    .add({ en: 'Completed', alias: 't3' })
-    .add({ en: 'Your crypto is transferred out of MEXC. Please check whether it has arrived on the recipient platform.', alias: 't4out' })
-    .add({ en: 'Crypto has arrived in your MEXC account. View your spot account balance for more details.', alias: 't4in' })
-    .add({ en: 'Network', alias: 't5' })
-    .add({ en: 'Address', alias: 't6' })
-    .add({ en: 'TxID', alias: 't7' })
-    .add({ en: 'Fee', alias: 't8' })
-    .add({ en: 'Time', alias: 't9' })
-    .add({ en: 'Query Blockchain', alias: 't10' })
-    .add({ en: 'Blockchain explorer', alias: 't11' })
-    .add({ en: 'Need help? View FAQs', alias: 't12' })
-    .add({ en: 'Save Address', alias: 't13' })
-    .add({ en: 'Type', alias: 't14' })
-    .add({ en: 'Common deposit', alias: 't15' })
-    .add({ en: "Why hasn't my withdrawal arrived?", alias: 't16' }),
+    .add({ en: 'Withdrawal details', es: 'Detalles de retiro', ru: 'Детали вывода средств', alias: 't1out' })
+    .add({ en: 'Deposit Details', es: 'Detalles del Depósito', ru: 'Информация о депозите', alias: 't1in' })
+    .add({ en: 'Amount', es: 'Monto', ru: 'Сумма', alias: 't2' })
+    .add({ en: 'Completed', es: 'Completado', ru: 'Завершено', alias: 't3' })
+    .add({
+      en: 'Your crypto is transferred out of MEXC. Please check whether it has arrived on the recipient platform.',
+      es: 'Su cripto se transfiere fuera de MEXC. Compruebe si ha llegado a la plataforma del destinatario.',
+      ru: 'Криптовалюта переведена с МЕХС. Пожалуйста, свяжитесь с платформой получателя для получения подтверждения транзакции.',
+      alias: 't4out',
+    })
+    .add({
+      en: 'Crypto has arrived in your MEXC account. View your spot account balance for more details.',
+      es: 'Cripto ha llegado a su cuenta MEXC. Consulte el saldo de su cuenta de Spot para obtener más detalles.',
+      ru: 'Криптовалюта поступила на ваш счет МЕХС. Просмотрите баланс своего спотового счета для получения более подробной информации.',
+      alias: 't4in',
+    })
+    .add({ en: 'Network', es: 'Red', ru: 'Сеть', alias: 't5' })
+    .add({ en: 'Address', es: 'Dirección', ru: 'Адрес', alias: 't6' })
+    .add({ en: 'TxID', es: 'TxID', ru: 'TxID', alias: 't7' })
+    .add({ en: 'Fee', es: 'Comisión', ru: 'Комиссия', alias: 't8' })
+    .add({ en: 'Time', es: 'Tiempo', ru: 'Дата', alias: 't9' })
+    .add({ en: 'Query Blockchain', ru: 'Блокчейн запроса', es: 'Consulta blockchain', alias: 't10' })
+    .add({ en: 'Blockchain explorer', es: 'Explorador blockchain', ru: 'Обозреватель блокчейна', alias: 't11' })
+    .add({ en: 'Need help? View FAQs', ru: 'Нужна помощь? Просмотр FАQ', es: '¿Necesitas ayuda? Ver preguntas frecuentes', alias: 't12' })
+    .add({ en: 'Save Address', ru: 'Сохранить адрес', es: 'Guardar dirección', alias: 't13' })
+    .add({ en: 'Type', es: 'Tipo', ru: 'Тип', alias: 't14' })
+    .add({ en: 'Common deposit', ru: 'Обычный депозит', es: 'Depósito común', alias: 't15' })
+    .add({ en: "Why hasn't my withdrawal arrived?", es: '¿Por qué no ha llegado mi retiro?', ru: 'Почему мой вывод средств не поступил?', alias: 't16' }),
 };
+
 const _payeer = {
   name: 'payeer',
-  languages: ['en'],
+  languages: ['en', 'ru'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({
@@ -1235,39 +1271,40 @@ const _payeer = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Operation details', alias: 't1' })
-    .add({ en: 'Operation N°', alias: 't2' })
-    .add({ en: 'Payment system', alias: 't3' })
-    .add({ en: 'Status', alias: 't4' })
-    .add({ en: 'Amount with commission', alias: 't5' })
-    .add({ en: 'Transaction ID', alias: 't6' })
-    .add({ en: 'COPY', alias: 't7' })
-    .add({ en: 'Success', alias: 't8' })
-    .add({ en: 'REPEAT PAYMENT', alias: 't9' })
-    .add({ en: 'Balance', alias: 't10' })
-    .add({ en: 'Transfer', alias: 't11' })
-    .add({ en: 'Trade', alias: 't12' })
-    .add({ en: 'Exchange', alias: 't13' })
-    .add({ en: 'History', alias: 't14' })
-    .add({ en: 'Confirmations', alias: 't15' }),
+    .add({ ru: 'Детали операции', en: 'Operation details', alias: 't1' })
+    .add({ ru: 'Операция N°', en: 'Operation N°', alias: 't2' })
+    .add({ ru: 'Платежная система', en: 'Payment system', alias: 't3' })
+    .add({ ru: 'Статус', en: 'Status', alias: 't4' })
+    .add({ ru: 'Сумма с комиссией', en: 'Amount with commission', alias: 't5' })
+    .add({ ru: 'ID транзакции', en: 'Transaction ID', alias: 't6' })
+    .add({ ru: 'КОПИРОВАТЬ', en: 'COPY', alias: 't7' })
+    .add({ ru: 'Выполнено', en: 'Success', alias: 't8' })
+    .add({ ru: 'ПОВТОРИТЬ ПЕРЕВОД', en: 'REPEAT PAYMENT', alias: 't9' })
+    .add({ ru: 'Баланс', en: 'Balance', alias: 't10' })
+    .add({ ru: 'Перевести', en: 'Transfer', alias: 't11' })
+    .add({ ru: 'Биржа', en: 'Trade', alias: 't12' })
+    .add({ ru: 'Обменять', en: 'Exchange', alias: 't13' })
+    .add({ ru: 'История', en: 'History', alias: 't14' })
+    .add({ ru: 'Подтверждений', en: 'Confirmations', alias: 't15' }),
 };
+
 const _bitget = {
   name: 'bitget',
-  languages: ['en'],
+  languages: ['en', 'es', 'ru', 'ua'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true })
@@ -1282,31 +1319,32 @@ const _bitget = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Bill details', alias: 't1' })
-    .add({ en: 'Type', alias: 't2' })
-    .add({ en: 'Withdrawal', alias: 't3out' })
-    .add({ en: 'Deposit', alias: 't3in' })
-    .add({ en: 'Fee', alias: 't4' })
-    .add({ en: 'Account Balance', alias: 't5' })
-    .add({ en: 'Time', alias: 't6' }),
+    .add({ ru: 'История', ua: 'Інформація про рахунок', es: 'Detalles de la factura', en: 'Bill details', alias: 't1' })
+    .add({ ru: 'Тип', ua: 'Тип', es: 'Tipo', en: 'Type', alias: 't2' })
+    .add({ ru: 'Вывод', ua: 'Виведення коштів', es: 'Retirar', en: 'Withdrawal', alias: 't3out' })
+    .add({ ru: 'Депозит', ua: 'Депозит', es: 'Depositar', en: 'Deposit', alias: 't3in' })
+    .add({ ru: 'Комиссия', ua: 'Збір', es: 'Tarifa', en: 'Fee', alias: 't4' })
+    .add({ ru: 'Баланс', ua: 'Баланс рахунку', es: 'Saldo de la cuenta', en: 'Account Balance', alias: 't5' })
+    .add({ ru: 'Время', ua: 'Час', es: 'Hora', en: 'Time', alias: 't6' }),
 };
+
 const _kraken = {
   name: 'kraken',
-  languages: ['en'],
+  languages: ['en', 'es'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'ID', alias: 'krakenid', optional: true })
     .add({
       type: HtmlInputType.SELECT,
@@ -1317,33 +1355,34 @@ const _kraken = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Withdraw', alias: 't1out' })
-    .add({ en: 'Deposit', alias: 't1in' })
-    .add({ en: 'Tether', alias: 't2' })
-    .add({ en: 'Fee', alias: 't3' })
-    .add({ en: 'Amount', alias: 't4' })
-    .add({ en: 'You received', alias: 't5' })
-    .add({ en: 'Time', alias: 't6' })
-    .add({ en: 'ID', alias: 't7' })
-    .add({ en: 'Thank you for choosing Kraken', alias: 't8' }),
+    .add({ es: 'Retiro', en: 'Withdraw', alias: 't1out' })
+    .add({ es: 'Deposito', en: 'Deposit', alias: 't1in' })
+    .add({ es: 'Tether', en: 'Tether', alias: 't2' })
+    .add({ es: 'Tarifa', en: 'Fee', alias: 't3' })
+    .add({ es: 'Cantidad', en: 'Amount', alias: 't4' })
+    .add({ es: 'Has recibido', en: 'You received', alias: 't5' })
+    .add({ es: 'Tiempo', en: 'Time', alias: 't6' })
+    .add({ es: 'ID', en: 'ID', alias: 't7' })
+    .add({ es: 'Gracias por elegir Kraken', en: 'Thank you for choosing Kraken', alias: 't8' }),
 };
+
 const _coinbase = {
   name: 'coinbase',
-  languages: ['en'],
+  languages: ['en', 'es', 'ru'],
   statusbar: true,
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Thash', alias: 'thash' })
     .add({ type: HtmlInputType.NUMBER, name: 'Эквивалент $', alias: 'eqv', optional: true })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true })
@@ -1357,42 +1396,43 @@ const _coinbase = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Sent Tether', alias: 't1out' })
-    .add({ en: 'Received Tether', alias: 't1in' })
-    .add({ en: 'To', alias: 't2' })
-    .add({ en: 'Price per coin', alias: 't3' })
-    .add({ en: 'Network', alias: 't4' })
-    .add({ en: 'Ethereum', alias: 't5' })
-    .add({ en: 'Network fee', alias: 't6' })
-    .add({ en: 'Confirmations', alias: 't7' })
-    .add({ en: 'Transaction hash', alias: 't8' })
-    .add({ en: 'Date', alias: 't9' })
-    .add({ en: 'Status', alias: 't10' })
-    .add({ en: 'Completed ', alias: 't11' })
-    .add({ en: 'View on block explorer ', alias: 't12' })
-    .add({ en: 'Home', alias: 't13' })
-    .add({ en: 'My assets ', alias: 't14' })
-    .add({ en: 'Trade ', alias: 't15' })
-    .add({ en: 'Earn', alias: 't16' })
-    .add({ en: 'Web3', alias: 't17' }),
+    .add({ es: 'Ha enviado Tether', ru: 'Отправка Tether', en: 'Sent Tether', alias: 't1out' })
+    .add({ es: 'Ha recibido Tether', ru: 'Получение Tether', en: 'Received Tether', alias: 't1in' })
+    .add({ es: 'A', ru: 'В', en: 'To', alias: 't2' })
+    .add({ es: 'Precio por moneda', ru: 'Цена за коин', en: 'Price per coin', alias: 't3' })
+    .add({ es: 'Red', ru: 'Сеть', en: 'Network', alias: 't4' })
+    .add({ es: 'Ethereum', ru: 'Ethereum', en: 'Ethereum', alias: 't5' })
+    .add({ es: 'Comisión de red', ru: 'Комиссия сети', en: 'Network fee', alias: 't6' })
+    .add({ es: 'Confirmaciones', ru: 'Подтверждения', en: 'Confirmations', alias: 't7' })
+    .add({ es: 'Hash de la transacción', ru: 'Хэш транзакции', en: 'Transaction hash', alias: 't8' })
+    .add({ es: 'Fecha', ru: 'Дата', en: 'Date', alias: 't9' })
+    .add({ es: 'Estado', ru: 'Статус', en: 'Status', alias: 't10' })
+    .add({ es: 'Completada', ru: 'Завершено', en: 'Completed ', alias: 't11' })
+    .add({ es: 'Ver en explorador de bloques', ru: 'Посмотреть в обозревател...', en: 'View on block explorer ', alias: 't12' })
+    .add({ es: 'Inicio', ru: 'Домашнаяя страница', en: 'Home', alias: 't13' })
+    .add({ es: 'Mis activos', ru: 'Мои активы', en: 'My assets ', alias: 't14' })
+    .add({ es: 'Operar', ru: 'Торговля', en: 'Trade ', alias: 't15' })
+    .add({ es: 'Ganar', ru: 'Заработок', en: 'Earn', alias: 't16' })
+    .add({ es: 'Web3', ru: 'Web3', en: 'Web3', alias: 't17' }),
 };
+
 const _bitpapa = {
   name: 'bitpapa',
-  languages: ['en'],
+  languages: ['en', 'ru'],
   statusbar: false,
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', optional: true })
@@ -1405,30 +1445,31 @@ const _bitpapa = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Withdrawal transaction', alias: 't1out' })
-    .add({ en: 'Deposit transaction', alias: 't1in' })
-    .add({ en: 'txid:', alias: 't2' })
-    .add({ en: 'Network fee & handling:', alias: 't3' })
-    .add({ en: 'Address:', alias: 't4' })
-    .add({ en: 'AT', alias: 't5' }),
+    .add({ ru: 'Исходящая транзакция', en: 'Withdrawal transaction', alias: 't1out' })
+    .add({ ru: 'Входящая транзакция', en: 'Deposit transaction', alias: 't1in' })
+    .add({ ru: 'txid:', en: 'txid:', alias: 't2' })
+    .add({ ru: 'Комиссия сети и процессинга:', en: 'Network fee & handling:', alias: 't3' })
+    .add({ ru: 'Адрес:', en: 'Address:', alias: 't4' })
+    .add({ ru: 'В', en: 'AT', alias: 't5' }),
 };
+
 const _exmo = {
   name: 'exmo',
-  languages: ['en'],
+  languages: ['en', 'ru', 'ua'],
   statusbar: false,
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', optional: true })
     .add({
@@ -1440,29 +1481,30 @@ const _exmo = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Withdrawal', alias: 't1out' })
-    .add({ en: 'Deposit', alias: 't1in' })
-    .add({ en: 'Txid:', alias: 't2' })
-    .add({ en: 'Status', alias: 't3' })
-    .add({ en: 'Paid', alias: 't4out' })
-    .add({ en: 'Transferred', alias: 't4in' })
-    .add({ en: 'Payment System', alias: 't5' })
-    .add({ en: 'ID transaction', alias: 't6' })
-    .add({ en: 'Address:', alias: 't7' }),
+    .add({ ua: 'Виведення', ru: 'Вывод', en: 'Withdrawal', alias: 't1out' })
+    .add({ ua: 'Поповнити', ru: 'Пополнить', en: 'Deposit', alias: 't1in' })
+    .add({ ua: 'Txid:', ru: 'Txid:', en: 'Txid:', alias: 't2' })
+    .add({ ua: 'Статус', ru: 'Статус', en: 'Status', alias: 't3' })
+    .add({ ua: 'Виплачено', ru: 'Выплачено', en: 'Paid', alias: 't4out' })
+    .add({ ua: 'Переказано', ru: 'Переведено', en: 'Transferred', alias: 't4in' })
+    .add({ ua: 'Платіжний провайдер', ru: 'Платежная система', en: 'Payment System', alias: 't5' })
+    .add({ ua: 'ID transaction:', ru: 'Номер транзакции:', en: 'ID transaction', alias: 't6' })
+    .add({ ua: 'Адреса:', ru: 'Адрес:', en: 'Address:', alias: 't7' }),
 };
+
 const _garantex = {
   name: 'garantex',
-  languages: ['en'],
+  languages: ['en', 'ru'],
   statusbar: false,
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Mobile Light',
+      name: 'Смартфон, светлая',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true })
     .add({
@@ -1474,14 +1516,15 @@ const _garantex = {
       ],
       alias: 'direction',
     })
-    .add({ en: 'Withdrawal history', alias: 't1' })
-    .add({ en: 'Currency', alias: 't2' })
-    .add({ en: 'Amount', alias: 't3' })
-    .add({ en: 'Commision', alias: 't4' })
-    .add({ en: 'Status', alias: 't5' })
-    .add({ en: 'Succeed', alias: 't6out' })
-    .add({ en: 'Accepted', alias: 't6in' }),
+    .add({ ru: 'Withdrawal history', en: 'Withdrawal history', alias: 't1' })
+    .add({ ru: 'Валюта', en: 'Currency', alias: 't2' })
+    .add({ ru: 'Сумма', en: 'Amount', alias: 't3' })
+    .add({ ru: 'Комиссия', en: 'Commision', alias: 't4' })
+    .add({ ru: 'Статус', en: 'Status', alias: 't5' })
+    .add({ ru: 'Успешно', en: 'Succeed', alias: 't6out' })
+    .add({ ru: 'Принят', en: 'Accepted', alias: 't6in' }),
 };
+
 const _cexio = {
   name: 'cexio',
   languages: ['en'],
@@ -1489,12 +1532,12 @@ const _cexio = {
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Mobile Dark',
+      name: 'Смартфон, тёмная',
     },
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
     .add({ type: HtmlInputType.NUMBER, name: 'Баланс', alias: 'balance' })
     .add({
@@ -1662,16 +1705,18 @@ async function GenerateThemesForExchange(this: { em: EntityManager }, data: data
   const count = { input: 0, text: 0 };
   const inputs: Input[] = [];
   for await (const field of data.fields) {
-    const inputalias = await this.em.findOne(InputAlias, { name: field.name });
+    const inputalias = await this.em.findOne(InputAlias, { alias: field.alias });
     inputs.push(
       this.em.create(Input, {
-        alias: field.type ? field.alias || `input${++count.input}` : field.alias || `text${++count.text}`,
+        alias: field.alias,
+        optional: !!field.optional,
         ...(field.type
           ? {
               inputAlias: inputalias || {
                 type: field.type as HtmlInputType,
                 name: field.name,
-                optional: !!field.optional,
+                alias: field.alias,
+                hint: field.hint,
                 ...(field.values
                   ? {
                       aliasVariants: field.values as selectValue[],

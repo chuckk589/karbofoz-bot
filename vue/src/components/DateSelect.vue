@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-combobox :rules="rules" v-model="value" :items="items" density="compact" label="Дата транзакции" append-inner-icon="mdi-calendar">
+    <v-combobox :hint="hint" :rules="rules" v-model="value" :items="items" density="compact" label="Дата транзакции" append-inner-icon="mdi-calendar">
       <template #label>
         <slot name="label"></slot>
       </template>
@@ -14,6 +14,10 @@ export default {
   name: 'DateSelect',
   emits: ['update:modelValue'],
   props: {
+    hint: {
+      type: String,
+      default: '',
+    },
     rules: {
       type: Array,
       default: () => [],

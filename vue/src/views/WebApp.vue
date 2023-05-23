@@ -10,11 +10,13 @@
           <v-window-item :value="1">
             <v-card-text>
               <v-form ref="form1">
-                <v-select v-model="exchange" :items="table.exchanges" label="Биржа" density="compact" :rules="notEmpty"></v-select>
-                <v-select v-model="theme" :items="themeItems" label="Тема" density="compact" :rules="notEmpty"></v-select>
-                <v-select v-model="language" :items="themeLanguages" label="Язык" density="compact" :rules="notEmpty"></v-select>
-                <v-combobox v-model="network" :items="themeNetworks" label="Сеть" density="compact" :rules="notEmpty"></v-combobox>
-                <v-combobox v-model="currency" :items="themeCurrencies" label="Валюта" density="compact" :rules="notEmpty"></v-combobox>
+                <v-select v-model="exchange" :items="table.exchanges" label="Биржа" density="compact" @update:modelValue="update" :rules="notEmpty"></v-select>
+                <v-select v-model="theme" :items="themeItems" label="Тема" density="compact" @update:modelValue="update" :rules="notEmpty"></v-select>
+                <v-select v-model="language" label="Язык" :items="themeLanguages" density="compact" @update:modelValue="update" :rules="notEmpty"></v-select>
+                <!-- <v-combobox v-model="network" :items="themeNetworks" label="Сеть" density="compact" @update:modelValue="update" :rules="notEmpty"></v-combobox>
+                <v-combobox v-model="currency" :items="themeCurrencies" label="Валюта" density="compact" :rules="notEmpty"></v-combobox> -->
+                <v-select v-model="network" :items="themeNetworks" label="Сеть" density="compact" @update:modelValue="update" :rules="notEmpty"></v-select>
+                <v-select v-model="currency" :items="themeCurrencies" label="Валюта" density="compact" :rules="notEmpty"></v-select>
               </v-form>
             </v-card-text>
           </v-window-item>
@@ -29,6 +31,7 @@
                   :items="fieldItems(field)"
                   :type="field.type"
                   density="compact"
+                  :hint="field.hint"
                   :rules="!field.optional ? notEmpty : []"
                   v-model="form[field.alias]"
                   :append-inner-icon="appendInnerIcon(field.alias)"
@@ -52,7 +55,6 @@
                       :key="index"
                       v-show="field.dependsOn ? (field.dependsValue ? statusbar[field.dependsOn] == field.dependsValue : statusbar[field.dependsOn]) : true"
                       :label="field.name"
-                      :hint="field.hint"
                       :items="fieldItems(field)"
                       density="compact"
                       v-model="statusbar[field.alias]"
@@ -207,11 +209,7 @@ export default {
     this.$http({ method: 'GET', url: `/v1/config/` }).then((e) => {
       this.table = e.data;
       console.log(e.data);
-      this.exchange = '1';
-      this.theme = '1';
-      this.language = 'en';
-      this.currency = 'usdt';
-      this.network = 'trc20';
+
       // this.step = 2;
     });
     this.$http({ method: 'GET', url: `/v1/preset/` }).then((e) => {
@@ -235,8 +233,6 @@ export default {
     },
 
     next() {
-      console.log(this.exchange, this.theme, this.language, this.currency, this.network);
-
       this.errorMessage = '';
       this.$refs.form1.validate().then((res) => {
         if (res.valid) {
@@ -300,7 +296,7 @@ export default {
     getComponentName(field) {
       if (field.type == 'select') return 'v-select';
       else if (field.type == 'datetime-local') return 'date-select';
-      else if (field.alias == 'address') return 'v-combobox';
+      else if (field.alias.match(/address/)) return 'v-combobox';
       else if (field.type == 'textarea') return 'v-textarea';
       else return 'v-text-field';
     },
@@ -378,10 +374,10 @@ export default {
       }
     },
     fieldItems(field) {
-      if (field.alias == 'address') {
+      if (field.alias.match(/address/)) {
         return this.wallets.filter((item) => (item.type == 'trx' && this.network.value == 'trc20') || (item.type == 'nontrx' && this.network.value !== 'trc20'));
       } else {
-        return field.variants || null;
+        return field.variants || [];
       }
     },
     cleanUp() {
@@ -395,6 +391,12 @@ export default {
       this.preview = null;
       this.preset = null;
       this.fields = {};
+    },
+    update() {
+      if ((this.theme && !this.themeItems.find((theme) => theme.value == this.theme)) || !this.theme) this.theme = this.themeItems[0].value;
+      if ((this.language && !this.themeLanguages.find((language) => language.value == this.language)) || !this.language) this.language = this.themeLanguages[0].value;
+      if ((this.network && !this.themeNetworks.find((network) => network.value == this.network)) || !this.network) this.network = this.themeNetworks[0].value;
+      if ((this.currency && !this.themeCurrencies.find((currency) => currency.value == this.currency)) || !this.currency) this.currency = this.themeCurrencies[0].value;
     },
     filteredStatusBar() {
       if (!this.statusbar.device) return {};
@@ -424,6 +426,9 @@ export default {
     themeItems() {
       return this.table.exchanges?.find((item) => item.value == this.exchange)?.themes || [];
     },
+    themeBar() {
+      return this.table.exchanges?.find((item) => item.value == this.exchange)?.themes.find((item) => item.value == this.theme)?.statusbar;
+    },
     themeLanguages() {
       return this.table.exchanges?.find((item) => item.value == this.exchange)?.themes.find((item) => item.value == this.theme)?.languages || [];
     },
@@ -431,7 +436,7 @@ export default {
       return this.table.exchanges?.find((item) => item.value == this.exchange)?.networks || [];
     },
     themeCurrencies() {
-      return this.table.exchanges?.find((item) => item.value == this.exchange)?.networks.find((item) => item.value == this.network.value || this.network)?.currencies || [];
+      return this.table.exchanges?.find((item) => item.value == this.exchange)?.networks.find((item) => item.value == this.network)?.currencies || [];
     },
     themeFields() {
       return this.table.exchanges?.find((item) => item.value == this.exchange)?.themes.find((item) => item.value == this.theme)?.inputs || [];
