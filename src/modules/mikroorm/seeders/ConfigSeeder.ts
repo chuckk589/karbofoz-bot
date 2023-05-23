@@ -29,11 +29,11 @@ export class ConfigSeeder extends Seeder {
     em.create(Language, { alias: 'en', name: 'Английский' });
     em.create(Language, { alias: 'es', name: 'Испанский' });
     em.create(Language, { alias: 'ru', name: 'Русский' });
-    em.create(Language, { alias: 'ua', name: 'Украинский' });
+    em.create(Language, { alias: 'uk', name: 'Украинский' });
     //биржи
     em.create(Exchange, {
       alias: 'binance',
-      name: 'Binance FIXME',
+      name: 'Binance',
       exchangeNetworks: [
         {
           network: bsc,
@@ -63,7 +63,7 @@ export class ConfigSeeder extends Seeder {
     });
     em.create(Exchange, {
       alias: 'trust',
-      name: 'Trust FIXME',
+      name: 'Trust',
       exchangeNetworks: [
         {
           network: bsc,
@@ -84,7 +84,7 @@ export class ConfigSeeder extends Seeder {
     });
     em.create(Exchange, {
       alias: 'exodus',
-      name: 'Exodus FIXME',
+      name: 'Exodus',
       exchangeNetworks: [
         {
           network: bsc,
@@ -105,7 +105,7 @@ export class ConfigSeeder extends Seeder {
     });
     em.create(Exchange, {
       alias: 'safepal',
-      name: 'Safepal FIXME',
+      name: 'Safepal',
       exchangeNetworks: [
         {
           network: bsc,
@@ -565,7 +565,7 @@ export class ConfigSeeder extends Seeder {
 /////////////////////////////////////////
 const _binance = {
   name: 'binance',
-  languages: ['en', 'ru', 'es', 'ua'],
+  languages: ['en', 'ru', 'es', 'uk'],
   statusbar: true,
   themes: [
     {
@@ -579,7 +579,6 @@ const _binance = {
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.TEXT, name: 'Имя кошелька', alias: 'wallet' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
     .add({
@@ -610,44 +609,44 @@ const _binance = {
       ],
       alias: 'direction',
     })
-    .add({ ua: 'Деталі депозиту', ru: 'Подробнее', en: 'Deposit Details', es: 'Detalles de depósito', alias: 't1in' })
-    .add({ ua: 'Деталі зняття коштів', ru: 'Детали вывода средств', en: 'Withdrawal Details', alias: 't1out' })
-    .add({ ua: 'Сума', ru: 'Количество', en: 'Amount', es: 'Cantidad', alias: 't2' })
-    .add({ ua: 'Completed', ru: 'Completed', en: 'Completed', es: 'Completed', alias: 't3' })
+    .add({ uk: 'Деталі депозиту', ru: 'Подробнее', en: 'Deposit Details', es: 'Detalles de depósito', alias: 't1in' })
+    .add({ uk: 'Деталі зняття коштів', ru: 'Детали вывода средств', en: 'Withdrawal Details', alias: 't1out' })
+    .add({ uk: 'Сума', ru: 'Количество', en: 'Amount', es: 'Cantidad', alias: 't2' })
+    .add({ uk: 'Completed', ru: 'Completed', en: 'Completed', es: 'Completed', alias: 't3' })
     .add({
-      ua: 'Криптовалюта доставлена на ваш акаунт Binance. Для отримання більш докладної інформаціі перегляньте баланс свого спотового акаунта.',
+      uk: 'Криптовалюта доставлена на ваш акаунт Binance. Для отримання більш докладної інформаціі перегляньте баланс свого спотового акаунта.',
       ru: 'Криптовалюта поступила на ваш аккаунт Binance. Проверьте баланс на спотовом аккаунте.',
       en: 'Crypto has arrived in your Binance account. View your spot account balance for more details.',
       es: 'La criptomoneda ha llegado a tu cuenta de Binance. Comprueba el saldo de tu cuenta spot para obtener más información.',
       alias: 't4in',
     })
     .add({
-      ua: "Криптовалюта переказана із Binance. Будь ласка, зв'яжіться з платформою одержувача для отримання квитанції npo транзакцію.",
+      uk: "Криптовалюта переказана із Binance. Будь ласка, зв'яжіться з платформою одержувача для отримання квитанції npo транзакцію.",
       ru: 'Криптовалюта была отправлена с Binance. Свяжитесь с платформой получателя для получения квитанции о транзакции.',
       en: 'Crypto transferred out of Binance. Please contact the recipient platform for your transaction receipt.',
       alias: 't4out',
     })
-    .add({ ua: 'Підтвердження', ru: 'Подтверждения', en: 'Confirmations', es: 'Confirmaciones', alias: 't5' })
-    .add({ ua: 'Мережа', ru: 'Сеть', en: 'Network', es: 'Red', alias: 't6' })
-    .add({ ua: 'Гаманець депозиту', ru: 'Кошелек для ввода', en: 'Deposit Wallet', es: 'Billetera de depósito', alias: 't7in' })
-    .add({ ua: 'Гаманець зняття', ru: 'Кошелек для вывода', en: 'Withdrawal Wallet', alias: 't7out' })
-    .add({ ua: 'Адреса', ru: 'Адрес', en: 'Address', es: 'Dirección', alias: 't8' })
-    .add({ ua: 'Txid', ru: 'Txid', en: 'Txid', es: 'Txid', alias: 't9' })
-    .add({ ua: 'Дата', ru: 'Дата', en: 'Date', es: 'Fecha', alias: 't10' })
-    .add({ ua: 'Simple Earn', ru: 'Simple Earn', en: 'Receive', es: 'Simple Earn', alias: 't11' })
-    .add({ ua: 'APR до USDT 4.06%', ru: 'APR до USDT 4.06%', en: 'Receive Crypto With Zero Fee', es: 'USDT APR de hasta 4.06%', alias: 't12' })
-    .add({ ua: 'Спробувати зараз', ru: 'Начать', en: 'Discover Now', es: 'Descubrir ahora', alias: 't13' })
-    .add({ ua: 'Спотовий гаманець', ru: 'Спотовый кошелек', en: 'Spot Wallet', es: 'Billetera Spot', alias: 't14' })
-    .add({ ua: 'Чому мої зняті кошти не надійшли?', ru: 'Почему выведенные средства еще не поступили?', en: "Why hasn't my withdrawal arrived?", alias: 't15' })
-    .add({ ua: 'Зберегти адресу', ru: 'Сохранить адрес', en: 'Save address', alias: 't16' })
-    .add({ ua: 'Комісія мережі', ru: 'Комиссия сети', en: 'Network fee', alias: 't17' })
-    .add({ ua: 'Потрібна допомога? Перевірити FAQ', ru: 'Нужна помощь? Читать FAQ', en: 'Need help? Check FAQs', alias: 't18' })
-    .add({ ua: 'Звіт про шахрайство', ru: 'Отчет о мошенничестве', en: 'Scam Report', alias: 't19' }),
+    .add({ uk: 'Підтвердження', ru: 'Подтверждения', en: 'Confirmations', es: 'Confirmaciones', alias: 't5' })
+    .add({ uk: 'Мережа', ru: 'Сеть', en: 'Network', es: 'Red', alias: 't6' })
+    .add({ uk: 'Гаманець депозиту', ru: 'Кошелек для ввода', en: 'Deposit Wallet', es: 'Billetera de depósito', alias: 't7in' })
+    .add({ uk: 'Гаманець зняття', ru: 'Кошелек для вывода', en: 'Withdrawal Wallet', alias: 't7out' })
+    .add({ uk: 'Адреса', ru: 'Адрес', en: 'Address', es: 'Dirección', alias: 't8' })
+    .add({ uk: 'Txid', ru: 'Txid', en: 'Txid', es: 'Txid', alias: 't9' })
+    .add({ uk: 'Дата', ru: 'Дата', en: 'Date', es: 'Fecha', alias: 't10' })
+    .add({ uk: 'Simple Earn', ru: 'Simple Earn', en: 'Receive', es: 'Simple Earn', alias: 't11' })
+    .add({ uk: 'APR до USDT 4.06%', ru: 'APR до USDT 4.06%', en: 'Receive Crypto With Zero Fee', es: 'USDT APR de hasta 4.06%', alias: 't12' })
+    .add({ uk: 'Спробувати зараз', ru: 'Начать', en: 'Discover Now', es: 'Descubrir ahora', alias: 't13' })
+    .add({ uk: 'Спотовий гаманець', ru: 'Спотовый кошелек', en: 'Spot Wallet', es: 'Billetera Spot', alias: 't14' })
+    .add({ uk: 'Чому мої зняті кошти не надійшли?', ru: 'Почему выведенные средства еще не поступили?', en: "Why hasn't my withdrawal arrived?", alias: 't15' })
+    .add({ uk: 'Зберегти адресу', ru: 'Сохранить адрес', en: 'Save address', alias: 't16' })
+    .add({ uk: 'Комісія мережі', ru: 'Комиссия сети', en: 'Network fee', alias: 't17' })
+    .add({ uk: 'Потрібна допомога? Перевірити FAQ', ru: 'Нужна помощь? Читать FAQ', en: 'Need help? Check FAQs', alias: 't18' })
+    .add({ uk: 'Звіт про шахрайство', ru: 'Отчет о мошенничестве', en: 'Scam Report', alias: 't19' }),
 };
 
 const _trust = {
   name: 'trust',
-  languages: ['en', 'ru', 'ua', 'es'],
+  languages: ['en', 'ru', 'uk', 'es'],
   statusbar: true,
   themes: [
     {
@@ -673,15 +672,15 @@ const _trust = {
       ],
       alias: 'direction',
     })
-    .add({ es: 'Transferencia', ua: 'Переказ', ru: 'Перевод', en: 'Transfer', alias: 't1' })
-    .add({ es: 'Fecha', ua: 'Дата', ru: 'Дата', en: 'Date', alias: 't2' })
-    .add({ es: 'Estatus', ua: 'Статус', ru: 'Статус', en: 'Status', alias: 't3' })
-    .add({ es: 'Tarifa de red', ua: 'Комісія мережі', ru: 'Сетевой сбор', en: 'Network Fee', alias: 't4' })
-    .add({ es: 'MÁS DETALLES', ua: 'ДЕТАЛЬНІШЕ', ru: 'ПОДРОБНЕЕ', en: 'MORE DETAILS', alias: 't5' })
-    .add({ es: 'Nonce', ua: 'Nonce', ru: 'Nonce', en: 'Nonce', alias: 't6' })
-    .add({ es: 'Completado', ua: 'Завершено', ru: 'Завершено', en: 'Completed', alias: 't7' })
-    .add({ es: 'Remitente', ua: 'Відправник', ru: 'Отправитель', en: 'Sender', alias: 't8in' })
-    .add({ es: 'Destinatario', ua: 'Одержувач', ru: 'Получатель', en: 'Recipient', alias: 't8out' }),
+    .add({ es: 'Transferencia', uk: 'Переказ', ru: 'Перевод', en: 'Transfer', alias: 't1' })
+    .add({ es: 'Fecha', uk: 'Дата', ru: 'Дата', en: 'Date', alias: 't2' })
+    .add({ es: 'Estatus', uk: 'Статус', ru: 'Статус', en: 'Status', alias: 't3' })
+    .add({ es: 'Tarifa de red', uk: 'Комісія мережі', ru: 'Сетевой сбор', en: 'Network Fee', alias: 't4' })
+    .add({ es: 'MÁS DETALLES', uk: 'ДЕТАЛЬНІШЕ', ru: 'ПОДРОБНЕЕ', en: 'MORE DETAILS', alias: 't5' })
+    .add({ es: 'Nonce', uk: 'Nonce', ru: 'Nonce', en: 'Nonce', alias: 't6' })
+    .add({ es: 'Completado', uk: 'Завершено', ru: 'Завершено', en: 'Completed', alias: 't7' })
+    .add({ es: 'Remitente', uk: 'Відправник', ru: 'Отправитель', en: 'Sender', alias: 't8in' })
+    .add({ es: 'Destinatario', uk: 'Одержувач', ru: 'Получатель', en: 'Recipient', alias: 't8out' }),
 };
 
 const _exodus = {
@@ -773,7 +772,7 @@ const _safepal = {
 
 const _gate = {
   name: 'gate',
-  languages: ['en', 'ru', 'es', 'ua'],
+  languages: ['en', 'ru', 'es', 'uk'],
   statusbar: true,
   themes: [
     {
@@ -800,26 +799,26 @@ const _gate = {
       ],
       alias: 'direction',
     })
-    .add({ ru: 'Сведения о депозите', ua: 'Данi депозиту', es: 'Detalles del depósito', en: 'Deposit Details', alias: 't1in' })
-    .add({ ru: 'Сведения о выводе средств', ua: 'Данi виведення коштiв', es: 'Detalles de la retirada', en: 'Withdrawal Details', alias: 't1out' })
-    .add({ ru: 'Количество', ua: 'Кiлькiсть', es: 'Cantidad', en: 'Quantity', alias: 't2' })
-    .add({ ru: 'Success', ua: 'Success', es: 'Success', en: 'Success', alias: 't3' })
-    .add({ ru: 'Метод депозита', ua: 'Метод внесяння депозиту', es: 'Modo de depósito', en: 'Deposit Method', alias: 't4in' })
-    .add({ ru: 'Метод вывода средств', ua: 'Спосiб виведення коштiв', es: 'Modo de retirada', en: 'Withdrawal Method', alias: 't4out' })
-    .add({ ru: 'Депозит ончейн', ua: 'Депозит ончейн', es: 'Depósito onchain', en: 'Onchain Deposit', alias: 't5in' })
-    .add({ ru: 'Вывод средств ончейн', ua: 'Виведення коштiв ончейн', es: 'Retirada de onchain', en: 'Onchain Withdrawal', alias: 't5out' })
-    .add({ ru: 'Время', ua: 'Час', es: 'Hora', en: 'Time', alias: 't6' })
-    .add({ ru: 'Сеть', ua: 'Мережа', es: 'Red', en: 'Network', alias: 't7' })
-    .add({ ru: 'ID Ордера', ua: 'ID Ордера', es: 'ID de la orden', en: 'Order ID', alias: 't8' })
-    .add({ ru: 'Адрес депозита', ua: 'Адреса депозиту', es: 'Dirección de depósito', en: 'Deposit Address', alias: 't9in' })
-    .add({ ru: 'Адрес', ua: 'Адреса', es: 'Dirección', en: 'Address', alias: 't9out' })
-    .add({ ru: 'TXID', ua: 'TXID', es: 'TXID', en: 'TXID', alias: 't10' })
-    .add({ ru: 'Оплата', ua: 'Оплата', es: 'Tarifa', en: 'Fee', alias: 't11' }),
+    .add({ ru: 'Сведения о депозите', uk: 'Данi депозиту', es: 'Detalles del depósito', en: 'Deposit Details', alias: 't1in' })
+    .add({ ru: 'Сведения о выводе средств', uk: 'Данi виведення коштiв', es: 'Detalles de la retirada', en: 'Withdrawal Details', alias: 't1out' })
+    .add({ ru: 'Количество', uk: 'Кiлькiсть', es: 'Cantidad', en: 'Quantity', alias: 't2' })
+    .add({ ru: 'Success', uk: 'Success', es: 'Success', en: 'Success', alias: 't3' })
+    .add({ ru: 'Метод депозита', uk: 'Метод внесяння депозиту', es: 'Modo de depósito', en: 'Deposit Method', alias: 't4in' })
+    .add({ ru: 'Метод вывода средств', uk: 'Спосiб виведення коштiв', es: 'Modo de retirada', en: 'Withdrawal Method', alias: 't4out' })
+    .add({ ru: 'Депозит ончейн', uk: 'Депозит ончейн', es: 'Depósito onchain', en: 'Onchain Deposit', alias: 't5in' })
+    .add({ ru: 'Вывод средств ончейн', uk: 'Виведення коштiв ончейн', es: 'Retirada de onchain', en: 'Onchain Withdrawal', alias: 't5out' })
+    .add({ ru: 'Время', uk: 'Час', es: 'Hora', en: 'Time', alias: 't6' })
+    .add({ ru: 'Сеть', uk: 'Мережа', es: 'Red', en: 'Network', alias: 't7' })
+    .add({ ru: 'ID Ордера', uk: 'ID Ордера', es: 'ID de la orden', en: 'Order ID', alias: 't8' })
+    .add({ ru: 'Адрес депозита', uk: 'Адреса депозиту', es: 'Dirección de depósito', en: 'Deposit Address', alias: 't9in' })
+    .add({ ru: 'Адрес', uk: 'Адреса', es: 'Dirección', en: 'Address', alias: 't9out' })
+    .add({ ru: 'TXID', uk: 'TXID', es: 'TXID', en: 'TXID', alias: 't10' })
+    .add({ ru: 'Оплата', uk: 'Оплата', es: 'Tarifa', en: 'Fee', alias: 't11' }),
 };
 
 const _huobi = {
   name: 'huobi',
-  languages: ['en', 'ru', 'es', 'ua'],
+  languages: ['en', 'ru', 'es', 'uk'],
   statusbar: true,
   themes: [
     {
@@ -845,17 +844,17 @@ const _huobi = {
       ],
       alias: 'direction',
     })
-    .add({ ua: 'Тип', es: 'Tipo', ru: 'Тип', en: 'Type', alias: 't1' })
-    .add({ ua: 'Звичайние внесення коштів', es: 'Depósito Normal', ru: 'Обычный депозит', en: 'Ordinary Deposit', alias: 't2in' })
-    .add({ ua: 'Звичайние виведення', es: 'Retiro Normal', ru: 'Обычный вывод', en: 'General Withdrawal', alias: 't2out' })
-    .add({ ua: 'Статус', es: 'Estado', ru: 'Статус', en: 'Status', alias: 't3' })
-    .add({ ua: 'Завершено', es: 'Hecho', ru: 'Готово', en: 'Completed', alias: 't4' })
-    .add({ ua: 'Копіювати', es: 'Copiar', ru: 'Скопировать', en: 'Copy', alias: 't5' })
-    .add({ ua: 'Час', es: 'Fecha', ru: 'Время', en: 'Time', alias: 't6' })
-    .add({ ua: 'Адреса виведення', es: 'Dirección de retiro', ru: 'Адрес вывода', en: 'Withdrawal Address', alias: 't7' })
-    .add({ ua: 'Виберіть ланцюг', es: 'Red de retiro', ru: 'Выбрать цепочку', en: 'Withdrawal Network', alias: 't8' })
-    .add({ ua: 'Комісія', es: 'Comisión', ru: 'Комиссия', en: 'Fees', alias: 't9' })
-    .add({ ua: 'TxID', es: 'TxID', ru: 'TxID', en: 'TxID', alias: 't10' }),
+    .add({ uk: 'Тип', es: 'Tipo', ru: 'Тип', en: 'Type', alias: 't1' })
+    .add({ uk: 'Звичайние внесення коштів', es: 'Depósito Normal', ru: 'Обычный депозит', en: 'Ordinary Deposit', alias: 't2in' })
+    .add({ uk: 'Звичайние виведення', es: 'Retiro Normal', ru: 'Обычный вывод', en: 'General Withdrawal', alias: 't2out' })
+    .add({ uk: 'Статус', es: 'Estado', ru: 'Статус', en: 'Status', alias: 't3' })
+    .add({ uk: 'Завершено', es: 'Hecho', ru: 'Готово', en: 'Completed', alias: 't4' })
+    .add({ uk: 'Копіювати', es: 'Copiar', ru: 'Скопировать', en: 'Copy', alias: 't5' })
+    .add({ uk: 'Час', es: 'Fecha', ru: 'Время', en: 'Time', alias: 't6' })
+    .add({ uk: 'Адреса виведення', es: 'Dirección de retiro', ru: 'Адрес вывода', en: 'Withdrawal Address', alias: 't7' })
+    .add({ uk: 'Виберіть ланцюг', es: 'Red de retiro', ru: 'Выбрать цепочку', en: 'Withdrawal Network', alias: 't8' })
+    .add({ uk: 'Комісія', es: 'Comisión', ru: 'Комиссия', en: 'Fees', alias: 't9' })
+    .add({ uk: 'TxID', es: 'TxID', ru: 'TxID', en: 'TxID', alias: 't10' }),
 };
 
 const _kucoin = {
@@ -1058,7 +1057,7 @@ const _cryptocom = {
 
 const _okx = {
   name: 'okx',
-  languages: ['en', 'ru', 'es', 'ua'],
+  languages: ['en', 'ru', 'es', 'uk'],
   statusbar: true,
   themes: [
     {
@@ -1084,18 +1083,18 @@ const _okx = {
       ],
       alias: 'direction',
     })
-    .add({ es: 'Detalles de transacción', ua: 'Відомості про транзакцію', ru: 'Детали транзакции', en: 'Transaction details', alias: 't1' })
-    .add({ es: 'depositado', ua: 'внесено', ru: 'внесено', en: 'deposited', alias: 't2in' })
-    .add({ es: 'retiro', ua: 'виведено', ru: 'выведено', en: 'withdrawn', alias: 't2out' })
-    .add({ es: 'Estado', ua: 'Стан', ru: 'Статус', en: 'Status', alias: 't3' })
-    .add({ es: 'Completado', ua: 'Завершено', ru: 'Выполнено', en: 'Completed', alias: 't4' })
-    .add({ es: 'Fecha', ua: 'Дата', ru: 'Дата', en: 'Date', alias: 't5' })
-    .add({ es: 'De', ua: 'Звідки', ru: 'От', en: 'From', alias: 't6' })
-    .add({ es: 'Para', ua: 'На адресу', ru: 'Кому', en: 'To', alias: 't7' })
-    .add({ es: 'Red', ua: 'Мережа', ru: 'Сеть', en: 'Network', alias: 't8' })
-    .add({ es: 'ID de transacción', ua: 'ID транзакції', ru: 'ID транзакции', en: 'Transaction ID', alias: 't9' })
-    .add({ es: 'Comisión', ua: 'Комісія', ru: 'Комиссия', en: 'Fee', alias: 't10' })
-    .add({ es: 'Wallet del remitente ', ua: 'Гаманець відправника', ru: 'Кошелек отправителя ', en: "Sender's wallet", alias: 't11' }),
+    .add({ es: 'Detalles de transacción', uk: 'Відомості про транзакцію', ru: 'Детали транзакции', en: 'Transaction details', alias: 't1' })
+    .add({ es: 'depositado', uk: 'внесено', ru: 'внесено', en: 'deposited', alias: 't2in' })
+    .add({ es: 'retiro', uk: 'виведено', ru: 'выведено', en: 'withdrawn', alias: 't2out' })
+    .add({ es: 'Estado', uk: 'Стан', ru: 'Статус', en: 'Status', alias: 't3' })
+    .add({ es: 'Completado', uk: 'Завершено', ru: 'Выполнено', en: 'Completed', alias: 't4' })
+    .add({ es: 'Fecha', uk: 'Дата', ru: 'Дата', en: 'Date', alias: 't5' })
+    .add({ es: 'De', uk: 'Звідки', ru: 'От', en: 'From', alias: 't6' })
+    .add({ es: 'Para', uk: 'На адресу', ru: 'Кому', en: 'To', alias: 't7' })
+    .add({ es: 'Red', uk: 'Мережа', ru: 'Сеть', en: 'Network', alias: 't8' })
+    .add({ es: 'ID de transacción', uk: 'ID транзакції', ru: 'ID транзакции', en: 'Transaction ID', alias: 't9' })
+    .add({ es: 'Comisión', uk: 'Комісія', ru: 'Комиссия', en: 'Fee', alias: 't10' })
+    .add({ es: 'Wallet del remitente ', uk: 'Гаманець відправника', ru: 'Кошелек отправителя ', en: "Sender's wallet", alias: 't11' }),
 };
 
 const _ledger = {
@@ -1290,7 +1289,7 @@ const _payeer = {
 
 const _bitget = {
   name: 'bitget',
-  languages: ['en', 'es', 'ru', 'ua'],
+  languages: ['en', 'es', 'ru', 'uk'],
   statusbar: true,
   themes: [
     {
@@ -1319,13 +1318,13 @@ const _bitget = {
       ],
       alias: 'direction',
     })
-    .add({ ru: 'История', ua: 'Інформація про рахунок', es: 'Detalles de la factura', en: 'Bill details', alias: 't1' })
-    .add({ ru: 'Тип', ua: 'Тип', es: 'Tipo', en: 'Type', alias: 't2' })
-    .add({ ru: 'Вывод', ua: 'Виведення коштів', es: 'Retirar', en: 'Withdrawal', alias: 't3out' })
-    .add({ ru: 'Депозит', ua: 'Депозит', es: 'Depositar', en: 'Deposit', alias: 't3in' })
-    .add({ ru: 'Комиссия', ua: 'Збір', es: 'Tarifa', en: 'Fee', alias: 't4' })
-    .add({ ru: 'Баланс', ua: 'Баланс рахунку', es: 'Saldo de la cuenta', en: 'Account Balance', alias: 't5' })
-    .add({ ru: 'Время', ua: 'Час', es: 'Hora', en: 'Time', alias: 't6' }),
+    .add({ ru: 'История', uk: 'Інформація про рахунок', es: 'Detalles de la factura', en: 'Bill details', alias: 't1' })
+    .add({ ru: 'Тип', uk: 'Тип', es: 'Tipo', en: 'Type', alias: 't2' })
+    .add({ ru: 'Вывод', uk: 'Виведення коштів', es: 'Retirar', en: 'Withdrawal', alias: 't3out' })
+    .add({ ru: 'Депозит', uk: 'Депозит', es: 'Depositar', en: 'Deposit', alias: 't3in' })
+    .add({ ru: 'Комиссия', uk: 'Збір', es: 'Tarifa', en: 'Fee', alias: 't4' })
+    .add({ ru: 'Баланс', uk: 'Баланс рахунку', es: 'Saldo de la cuenta', en: 'Account Balance', alias: 't5' })
+    .add({ ru: 'Время', uk: 'Час', es: 'Hora', en: 'Time', alias: 't6' }),
 };
 
 const _kraken = {
@@ -1455,7 +1454,7 @@ const _bitpapa = {
 
 const _exmo = {
   name: 'exmo',
-  languages: ['en', 'ru', 'ua'],
+  languages: ['en', 'ru', 'uk'],
   statusbar: false,
   themes: [
     {
@@ -1481,15 +1480,15 @@ const _exmo = {
       ],
       alias: 'direction',
     })
-    .add({ ua: 'Виведення', ru: 'Вывод', en: 'Withdrawal', alias: 't1out' })
-    .add({ ua: 'Поповнити', ru: 'Пополнить', en: 'Deposit', alias: 't1in' })
-    .add({ ua: 'Txid:', ru: 'Txid:', en: 'Txid:', alias: 't2' })
-    .add({ ua: 'Статус', ru: 'Статус', en: 'Status', alias: 't3' })
-    .add({ ua: 'Виплачено', ru: 'Выплачено', en: 'Paid', alias: 't4out' })
-    .add({ ua: 'Переказано', ru: 'Переведено', en: 'Transferred', alias: 't4in' })
-    .add({ ua: 'Платіжний провайдер', ru: 'Платежная система', en: 'Payment System', alias: 't5' })
-    .add({ ua: 'ID transaction:', ru: 'Номер транзакции:', en: 'ID transaction', alias: 't6' })
-    .add({ ua: 'Адреса:', ru: 'Адрес:', en: 'Address:', alias: 't7' }),
+    .add({ uk: 'Виведення', ru: 'Вывод', en: 'Withdrawal', alias: 't1out' })
+    .add({ uk: 'Поповнити', ru: 'Пополнить', en: 'Deposit', alias: 't1in' })
+    .add({ uk: 'Txid:', ru: 'Txid:', en: 'Txid:', alias: 't2' })
+    .add({ uk: 'Статус', ru: 'Статус', en: 'Status', alias: 't3' })
+    .add({ uk: 'Виплачено', ru: 'Выплачено', en: 'Paid', alias: 't4out' })
+    .add({ uk: 'Переказано', ru: 'Переведено', en: 'Transferred', alias: 't4in' })
+    .add({ uk: 'Платіжний провайдер', ru: 'Платежная система', en: 'Payment System', alias: 't5' })
+    .add({ uk: 'ID transaction:', ru: 'Номер транзакции:', en: 'ID transaction', alias: 't6' })
+    .add({ uk: 'Адреса:', ru: 'Адрес:', en: 'Address:', alias: 't7' }),
 };
 
 const _garantex = {
@@ -1702,7 +1701,6 @@ const _realme = {
 async function GenerateThemesForExchange(this: { em: EntityManager }, data: data) {
   const languages = await this.em.find(Language, { alias: { $in: data.languages } });
   const exchange = await this.em.findOneOrFail(Exchange, { alias: data.name });
-  const count = { input: 0, text: 0 };
   const inputs: Input[] = [];
   for await (const field of data.fields) {
     const inputalias = await this.em.findOne(InputAlias, { alias: field.alias });

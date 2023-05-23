@@ -5,28 +5,28 @@
     <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch">
       <div style="font-size: 37px; margin-bottom: 80px; margin-top: 15px">
         <div style="background-image: url(exodus/images/1.png); width: 55px; height: 39px; margin-left: 64px"></div>
-        <div style="color: #9ca6c8; font-size: 37px; margin: auto">{{ getText('text1') }}</div>
+        <div style="color: #9ca6c8; font-size: 37px; margin: auto">{{ getConstant('t1') }}</div>
         <div style="background-image: url(exodus/images/2.png); width: 46px; height: 65px; margin-right: 71px"></div>
       </div>
 
       <div class="data-item">
-        <div>{{ getConstant(payload.query.direction + 'f') }}</div>
+        <div>{{ getConstant('t11' + payload.query.direction) }}</div>
         <div :style="payload.query.direction === 'in' ? 'color:#5fa697' : 'color:#9599a5'">{{ sumFormatter() }}</div>
       </div>
       <div class="data-item" v-if="payload.query.direction === 'out'">
-        <div>{{ getConstant('text9') }}</div>
+        <div>{{ getConstant('t9') }}</div>
         <div style="color: #9599a5">{{ feeFormatter() }} {{ payload.network.coin }}</div>
       </div>
       <div class="data-item">
-        <div>{{ getConstant('text2') }}</div>
-        <div style="color: #6c5dc3">{{ getConstant('text3') }}</div>
+        <div>{{ getConstant('t2') }}</div>
+        <div style="color: #6c5dc3">{{ getConstant('t3') }}</div>
       </div>
       <div class="data-item">
         <div>{{ timeStampHeader() }}</div>
         <div>{{ timeStampValue() }}</div>
       </div>
       <div class="data-item">
-        <div>{{ getConstant(payload.query.direction + 'd') }}</div>
+        <div>{{ getConstant('t10' + payload.query.direction) }}</div>
         <div
           style="
             line-height: 47px;
@@ -43,7 +43,7 @@
         </div>
       </div>
       <div class="data-item">
-        <div>{{ getConstant('text6') }}</div>
+        <div>{{ getConstant('t6') }}</div>
         <div
           style="
             line-height: 47px;
@@ -60,14 +60,14 @@
         </div>
       </div>
       <div class="data-item">
-        <div>{{ getConstant('text7') }}</div>
+        <div>{{ getConstant('t7') }}</div>
         <div>{{ usdFormatter() }}</div>
       </div>
       <div class="data-item" style="height: 488px; justify-content: space-evenly">
         <kek style="background-image: url(exodus/images/3.png); width: 91px; height: 92px; margin-top: 36px"></kek>
-        <div style="font-size: 42px">{{ getConstant('text8') }}</div>
+        <div style="font-size: 42px">{{ getConstant('t8') }}</div>
         <div style="margin-bottom: 36px; font-size: 53px; background: #907df0; background: linear-gradient(to left, #907df0 0%, #604ebf 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent">
-          {{ getConstant('text10') }}
+          {{ getConstant('t12') }}
         </div>
       </div>
     </div>
@@ -90,25 +90,19 @@ export default {
   },
   methods: {
     timeStampHeader() {
-      return this.$dayjs(this.payload.query.date).isToday() ? this.getConstant('text4') : this.getConstant('text5');
+      return this.$dayjs(this.payload.query.date).isToday() ? this.getConstant('t4') : this.getConstant('t5');
     },
     timeStampValue() {
       if (this.$dayjs().diff(this.payload.query.date, 'day')) {
-        return new Date(this.payload.query.date).toLocaleString(this.payload.query.language, {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric',
-          hour: 'numeric',
-          minute: 'numeric',
-        });
+        return this.$dayjs().locale(this.payload.query.language).format('DD MMM YYYY, LT');
       }
       return this.$dayjs().locale(this.payload.query.language).to(this.$dayjs(this.payload.query.date)) + '...';
     },
     usdFormatter() {
-      return '$' + (+this.payload.query.input1 + (Math.random() * (0.005 - 0.001) + 0.001) * +this.payload.query.input1).toFixed(2);
+      return '$' + (+this.payload.query.sum + (Math.random() * (0.005 - 0.001) + 0.001) * +this.payload.query.sum).toFixed(2);
     },
     sumFormatter() {
-      return `${this.payload.query.direction === 'in' ? '+' : ''} ${this.fixedFormatter('input1', 4)} ${this.payload.currency.name}`;
+      return `${this.payload.query.direction === 'in' ? '+' : ''} ${this.fixed(this.payload.query.sum, 4, true)} ${this.payload.currency.name}`;
     },
   },
 };

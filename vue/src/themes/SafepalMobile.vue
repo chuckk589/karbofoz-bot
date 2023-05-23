@@ -6,14 +6,14 @@
       <div2 style="margin: 25px 42px 0 42px">
         <div style="font-size: 48px; margin-bottom: 78px">
           <div style="background-image: url(safepal/images/1.png); width: 30px; height: 51px; margin-left: 18px; transform: rotate(180deg) scale(0.8); margin-bottom: 7px"></div>
-          <div :class="'text-' + theme" style="margin: 0 auto 0 auto; font-weight: 500">{{ getText('text1') }}</div>
+          <div :class="'text-' + theme" style="margin: 0 auto 0 auto; font-weight: 500">{{ getConstant('t1') }}</div>
           <div style="width: 30px; height: 51px; margin-right: 18px"></div>
         </div>
         <div style="font-size: 64px; font-weight: 500; margin-bottom: 53px">
           <div :style="'background-image: url(safepal/images/3.png); width: 65px; height: 65px; background-size: cover; margin-right: 15px;' + rotateStyle"></div>
           <div :class="'text-' + theme" style="position: relative">
             <div style="background-image: url(safepal/images/2.png); width: 26px; position: absolute; height: 26px; background-size: cover; top: 55px; left: -40px"></div>
-            {{ getConstant(payload.query.direction) }}
+            {{ getConstant('t9' + payload.query.direction) }}
           </div>
         </div>
         <div :class="'block-' + theme" style="height: 168px; margin-bottom: 40px; justify-content: flex-start; border-radius: 29px">
@@ -23,34 +23,59 @@
             </div>
           </div>
           <div style="flex-direction: column; margin-left: 27px; font-weight: 600; letter-spacing: 1px; line-height: 45px; align-items: flex-start">
-            <div :class="'text-' + theme" style="font-size: 40px">{{ sumFormatter(fixedFormatter('input1', 4)) }} {{ this.payload.currency.name }}</div>
-            <div style="font-size: 35px; color: #9e9dac">{{ this.payload.network.alias.toUpperCase() }} {{ lengthFormatter(this.payload.query.txid, 10) }}</div>
+            <div :class="'text-' + theme" style="font-size: 40px">{{ sumFormatter }} {{ payload.currency.name }}</div>
+            <div style="font-size: 35px; color: #9e9dac">{{ payload.network.alias.toUpperCase() }} {{ lengthFormatter(payload.query.txid, 10) }}</div>
           </div>
         </div>
         <div :class="'block-' + theme" style="flex-direction: column; margin-bottom: 39px; align-items: stretch; border-radius: 29px; padding: 25px 43px">
-          <div v-for="(block, index) in getBlocks('block1')" :key="index" :class="'data-item text-' + theme">
-            <div>{{ block.text }}</div>
-            <div :style="block.style">{{ block.value }}</div>
-            <div v-if="block.icon"></div>
+          <div :class="'data-item text-' + theme">
+            <div>{{ getConstant('t2') }}</div>
+            <div style="color: #31c786">{{ getConstant('t8') }}</div>
+          </div>
+          <div :class="'data-item text-' + theme" v-if="payload.query.direction == 'in'">
+            <div>{{ getConstant('t3') }}</div>
+            <div>{{ spFeeFormatter() }}</div>
+          </div>
+          <div :class="'data-item text-' + theme">
+            <div>{{ getConstant('t4') }}</div>
+            <div>{{ dateFormatter(payload.query.date) }}</div>
           </div>
         </div>
-        <div :class="'block-' + theme" style="flex-direction: column; margin-bottom: 41px; align-items: stretch; border-radius: 29px; padding: 25px 43px">
-          <div v-for="(block, index) in getBlocks('block2')" :key="index" :class="'data-item text-' + theme">
-            <div>{{ block.text }}</div>
-            <div>{{ block.value }}</div>
-            <div v-if="block.icon"></div>
+        <div :class="'block-' + theme" style="flex-direction: column; margin-bottom: 39px; align-items: stretch; border-radius: 29px; padding: 25px 43px">
+          <div :class="'data-item text-' + theme">
+            <div>{{ getConstant('t5') }}</div>
+            <div>{{ lengthFormatter(payload.query.from) }}</div>
+            <FakeImg :path="'/safepal/images/5.png'" />
+          </div>
+          <div :class="'data-item text-' + theme">
+            <div>{{ getConstant('t6') }}</div>
+            <div>{{ lengthFormatter(payload.query.to) }}</div>
+            <FakeImg :path="'/safepal/images/5.png'" />
           </div>
         </div>
         <div :class="'block-' + theme" style="flex-direction: column; margin-bottom: 34px; align-items: stretch; border-radius: 29px; padding: 25px 43px">
-          <div v-for="(block, index) in getBlocks('block3')" :key="index" :class="'data-item text-' + theme">
-            <div>{{ block.text }}</div>
-            <div>{{ block.value }}</div>
-            <div v-if="block.icon"></div>
+          <div :class="'data-item text-' + theme" v-if="payload.query.thash">
+            <div>{{ getConstant('t7') }}</div>
+            <div>{{ lengthFormatter(payload.query.thash) }}</div>
+            <FakeImg :path="'/safepal/images/5.png'" />
+          </div>
+          <div :class="'data-item text-' + theme">
+            <div>{{ getConstant('t10') }}</div>
+            <div>{{ getConstant('cs_nonce' + payload.query.direction) }}</div>
+          </div>
+          <div :class="'data-item text-' + theme">
+            <div>{{ getConstant('t12') }}</div>
+            <div>{{ heightFormatter }}</div>
+          </div>
+          <div :class="'data-item text-' + theme" v-if="payload.query.txid">
+            <div>{{ getConstant('t11') }}</div>
+            <div>{{ lengthFormatter(payload.query.txid) }}</div>
+            <FakeImg :path="'/safepal/images/5.png'" />
           </div>
         </div>
         <div :class="'block-' + theme" style="flex-direction: column; align-items: stretch; border-radius: 29px; padding: 25px 43px">
           <div :class="'data-item text-' + theme">
-            <div style="letter-spacing: -2px">{{ getText('text12') }}</div>
+            <div style="letter-spacing: -2px">{{ getConstant('t13') }}</div>
             <div style="background-image: url(safepal/images/1.png); width: 30px; height: 51px; transform: scale(0.6); margin-right: 10px"></div>
           </div>
         </div>
@@ -62,89 +87,33 @@
 <script>
 import themeMixin from '../mixins/mixin';
 import StatusBar from '../components/StatusBar.vue';
+import FakeImg from '../components/FakeImg.vue';
 export default {
   name: 'SafepalMobile',
   mixins: [themeMixin],
   components: {
     StatusBar,
+    FakeImg,
   },
   data() {
     return {
       theme: '',
-      block1: [
-        {
-          text: 'text2',
-          value: 'text8',
-          style: 'color: #31c786;',
-        },
-        {
-          text: 'text3',
-          value: '',
-          formatter: 'spFeeFormatter',
-        },
-        {
-          text: 'text4',
-          value: 'date',
-          formatter: 'dateFormatter',
-        },
-      ],
-      block2: [
-        {
-          text: 'text5',
-          value: 'input2',
-          icon: '5.png',
-          formatter: 'lengthFormatter',
-        },
-        {
-          text: 'text6',
-          value: 'input3',
-          icon: '5.png',
-          formatter: 'lengthFormatter',
-        },
-      ],
-      block3: [
-        {
-          text: 'text7',
-          value: 'input4',
-          icon: '5.png',
-          formatter: 'lengthFormatter',
-        },
-        {
-          text: 'text9',
-          value: 'input7',
-          formatter: 'nonceFormatter',
-        },
-        {
-          text: 'text11',
-          value: '',
-          formatter: 'heightFormatter',
-        },
-        {
-          text: 'text10',
-          value: 'txid',
-          formatter: 'lengthFormatter',
-          icon: '5.png',
-        },
-      ],
     };
   },
   computed: {
     rotateStyle() {
       return this.payload.query.direction == 'in' ? '' : 'transform: rotate(227deg);';
     },
-  },
-  methods: {
-    sumFormatter(value) {
-      return `${parseFloat(value) > 0 ? '+' : ''}${value}`;
-    },
-    nonceFormatter() {
-      return this.getConstant('cs_nonce' + this.payload.query.direction);
+    sumFormatter() {
+      return `${parseFloat(this.payload.query.sum) > 0 ? '+' : ''}${this.fixed(this.payload.query.sum, 4)}`;
     },
     heightFormatter() {
       const start = this.getConstant('cs_height');
       const minutes = this.$dayjs(this.payload.query.date).diff('2023-04-05 21:00:00', 'minutes');
       return +start + minutes;
     },
+  },
+  methods: {
     spFeeFormatter() {
       const value = this.feeFormatter() || this.feeFormatter('cs_com' + this.payload.query.direction);
       if (!value) return '';

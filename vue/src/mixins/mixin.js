@@ -22,22 +22,22 @@ const themeMixin = {
   },
   methods: {
     /* @deprecated */
-    fixedFormatter(key, fixed) {
-      return +parseFloat(this.getText(key)).toFixed(fixed);
-    },
+    // fixedFormatter(key, fixed) {
+    //   return +parseFloat(this.getText(key)).toFixed(fixed);
+    // },
     /* @deprecated */
-    getBlocks(block) {
-      return this[block]
-        .map((item) => {
-          return {
-            text: item.text ? this.getText(item.text) : this.getText(item.alias, item.key),
-            value: item.formatter ? this[item.formatter](this.getText(item.value)) : this.getText(item.value),
-            icon: item.icon,
-            style: item.style,
-          };
-        })
-        .filter((item) => item.value);
-    },
+    // getBlocks(block) {
+    //   return this[block]
+    //     .map((item) => {
+    //       return {
+    //         text: item.text ? this.getText(item.text) : this.getText(item.alias, item.key),
+    //         value: item.formatter ? this[item.formatter](this.getText(item.value)) : this.getText(item.value),
+    //         icon: item.icon,
+    //         style: item.style,
+    //       };
+    //     })
+    //     .filter((item) => item.value);
+    // },
     /* @deprecated */
     getText(fieldName, key = '') {
       const chunks = fieldName.split(/(\d.*)/);
