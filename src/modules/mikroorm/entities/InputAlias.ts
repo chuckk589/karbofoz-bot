@@ -27,6 +27,12 @@ export class InputAlias {
   @Enum({ default: HtmlInputType.TEXT, items: () => HtmlInputType })
   type: HtmlInputType;
 
+  @Property({ nullable: true })
+  dependsOn?: string;
+
+  @Property({ nullable: true })
+  dependsValue?: string;
+
   @OneToMany(() => AliasVariant, (aliasVariant) => aliasVariant.inputAlias, { nullable: true })
   aliasVariants = new Collection<AliasVariant>(this);
 }

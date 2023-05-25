@@ -13,7 +13,7 @@ import { BarInputVariant } from '../entities/BarInputVariant';
 import { DeviceBarInput } from '../entities/DeviceBarInput';
 
 type selectValue = { value: string; alias: string };
-type field = { [key: string]: string } | { type: HtmlInputType; name: string; optional?: boolean; hint?: string; values?: selectValue[]; alias?: string };
+type field = { type: HtmlInputType; name: string; optional?: boolean; hint?: string; values?: selectValue[]; alias: string; dependsOn?: string; dependsValue?: string };
 type data = { name: string; statusbar?: boolean; languages: string[]; themes: { alias: string; name: string }[]; fields: Set<field> };
 
 type deviceData = { name: string; fields: field[] };
@@ -40,7 +40,7 @@ export class ConfigSeeder extends Seeder {
           networkCurrencies: [{ currency: usdt }],
           constants: [
             { alias: 'cs_confirm', value: '20 / 15' },
-            { alias: 'cs_com', value: '0.21 0.29 1' },
+            { alias: 'cs_com', value: '0.21 0.29 8' },
           ],
         },
         {
@@ -48,7 +48,7 @@ export class ConfigSeeder extends Seeder {
           networkCurrencies: [{ currency: usdt }],
           constants: [
             { alias: 'cs_confirm', value: '65 / 64' },
-            { alias: 'cs_com', value: '4.5 5.9 1' },
+            { alias: 'cs_com', value: '4.5 5.9 8' },
           ],
         },
         {
@@ -56,7 +56,7 @@ export class ConfigSeeder extends Seeder {
           networkCurrencies: [{ currency: usdt }],
           constants: [
             { alias: 'cs_confirm', value: '50 / 1' },
-            { alias: 'cs_com', value: '1' },
+            { alias: 'cs_com', value: '1.00000000' },
           ],
         },
       ],

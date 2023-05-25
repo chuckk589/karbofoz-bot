@@ -74,12 +74,13 @@ const themeMixin = {
     dateFormatter(value) {
       return value.replace(/T/, ' ');
     },
-    feeFormatter(key = 'cs_com') {
+    feeFormatter(key = 'cs_com', cutExc = false) {
       let data = this.getConstant(key)?.split(' ');
       if (!data) return undefined;
       if (data.length == 1) return data[0];
       data = data.map((item) => +item);
-      return +(Math.random() * (data[1] - data[0]) + data[0]).toFixed(data[2]);
+      return this.fixed(+(Math.random() * (data[1] - data[0]) + data[0]), data[2], cutExc);
+      // return +(Math.random() * (data[1] - data[0]) + data[0]).toFixed(data[2]);
     },
 
     formatSum(max, min = 0) {

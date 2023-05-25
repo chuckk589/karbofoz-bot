@@ -228,7 +228,7 @@ export default {
     },
     appendInnerClick(alias) {
       if (alias == 'txid') {
-        this.form.txid = `${this.network.value == 'trc20' ? '' : '0x'}${sha256((Math.random() + 1).toString(36).substring(7))}`;
+        this.form.txid = `${this.network == 'trc20' ? '' : '0x'}${sha256((Math.random() + 1).toString(36).substring(7))}`;
       }
     },
 
