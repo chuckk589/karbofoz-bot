@@ -71,7 +71,7 @@
           <div :class="'text-' + theme" style="font-size: 47px; font-weight: 900; margin-top: -1px">
             {{ getConstant('t12').slice(0, -5) }}&nbsp; <span style="color: #2cb682ff">{{ getConstant('t12').slice(-5) }}</span>
           </div>
-          <div class="text-y" style="font-size: 37px; font-weight: 300; margin-top: 80px">{{ getConstant('t13') }}</div>
+          <div class="text-y" style="font-size: 37px; font-weight: 500; margin-top: 80px">{{ getConstant('t13') }}</div>
         </div>
         <FakeImg style="position: absolute; right: 29px; top: 80px" :path="'/binance/images/' + theme + '.png'" />
       </div>
