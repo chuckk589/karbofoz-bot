@@ -105,7 +105,7 @@ export default {
 <style scoped>
 @font-face {
   font-family: 'Binance PLEX';
-  src: url('binance/BinancePlex-SemiBold.ttf') format('truetype');
+  src: url('../binance/BinancePlex-SemiBold.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -113,7 +113,7 @@ export default {
 
 @font-face {
   font-family: 'Binance PLEX';
-  src: url('binance/BinancePlex-Medium.ttf') format('truetype');
+  src: url('../binance/BinancePlex-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -121,7 +121,7 @@ export default {
 
 @font-face {
   font-family: 'Binance PLEX';
-  src: url('binance/BinancePlexRegular.ttf') format('truetype');
+  src: url('../binance/BinancePlexRegular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
