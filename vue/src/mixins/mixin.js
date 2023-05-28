@@ -60,8 +60,16 @@ const themeMixin = {
     getConstant(fieldName) {
       return this.payload.theme.inputs.find((input) => input.alias === fieldName)?.value;
     },
-    fixed(value, fixed, cutExc = false) {
-      return cutExc ? +(+value).toFixed(fixed) : (+value).toFixed(fixed);
+    // fixed(value, fixed, cutExc = false) {
+    //   return cutExc ? +(+value).toFixed(fixed) : (+value).toFixed(fixed);
+    // },
+    fixed(value, fixed, localize = false, rest) {
+      return new Intl.NumberFormat(localize ? this.payload.query.language : 'en', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: +fixed,
+        useGrouping: localize,
+        ...rest,
+      }).format(value);
     },
     lengthFormatter(value, maxlength = 20, where = 'mid') {
       if (where == 'mid') {
@@ -82,7 +90,9 @@ const themeMixin = {
       return this.fixed(+(Math.random() * (data[1] - data[0]) + data[0]), data[2], cutExc);
       // return +(Math.random() * (data[1] - data[0]) + data[0]).toFixed(data[2]);
     },
-
+    // signFormatter() {
+    //   return `${this.payload.query.direction == 'in' ? '+' : '-'}`;
+    // },
     formatSum(max, min = 0) {
       const sum = +this.payload.query.sum;
       const withfee = sum + (sum * (Math.random() * (max - min) + min)) / 100;
@@ -90,8 +100,9 @@ const themeMixin = {
     },
     formatConf(key = 'cs_step') {
       const step = this.getConstant(key)?.split(' ');
+      const date = step[2] || this.payload.query.date;
       if (!step) return '';
-      const iterations = Math.round(this.$dayjs().diff(this.$dayjs(this.payload.query.date), 'minute') / step[1]);
+      const iterations = Math.round(this.$dayjs().diff(this.$dayjs(date), 'minute') / step[1]);
       return `${+step[0] + iterations}`;
     },
   },

@@ -1,4 +1,4 @@
-import { Collection, Entity, Enum, ManyToMany, ManyToOne, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Collection, Entity, Enum, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { AliasVariant } from './AliasVariant';
 
 export enum HtmlInputType {
@@ -21,17 +21,8 @@ export class InputAlias {
   @Property()
   alias: string;
 
-  @Property({ nullable: true })
-  hint?: string;
-
   @Enum({ default: HtmlInputType.TEXT, items: () => HtmlInputType })
   type: HtmlInputType;
-
-  @Property({ nullable: true })
-  dependsOn?: string;
-
-  @Property({ nullable: true })
-  dependsValue?: string;
 
   @OneToMany(() => AliasVariant, (aliasVariant) => aliasVariant.inputAlias, { nullable: true })
   aliasVariants = new Collection<AliasVariant>(this);

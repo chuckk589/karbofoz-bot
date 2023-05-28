@@ -3,7 +3,7 @@
     <!-- <div style="height: 103px; background-color: red"></div> -->
     <StatusBar :query="payload.query" :theme="theme"></StatusBar>
     <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch">
-      <div style="font-size: 37px; margin-bottom: 80px; margin-top: 15px">
+      <div style="font-size: 37px; margin-bottom: 80px; margin-top: 25px">
         <div style="background-image: url(exodus/images/1.png); width: 55px; height: 39px; margin-left: 64px"></div>
         <div style="color: #9ca6c8; font-size: 37px; margin: auto">{{ getConstant('t1') }}</div>
         <div style="background-image: url(exodus/images/2.png); width: 46px; height: 65px; margin-right: 71px"></div>
@@ -25,7 +25,7 @@
         <div>{{ timeStampHeader() }}</div>
         <div>{{ timeStampValue() }}</div>
       </div>
-      <div class="data-item">
+      <div class="data-item" v-if="payload.query.address">
         <div>{{ getConstant('t10' + payload.query.direction) }}</div>
         <div
           style="
@@ -99,10 +99,10 @@ export default {
       return this.$dayjs().locale(this.payload.query.language).to(this.$dayjs(this.payload.query.date)) + '...';
     },
     usdFormatter() {
-      return '$' + (+this.payload.query.sum + (Math.random() * (0.005 - 0.001) + 0.001) * +this.payload.query.sum).toFixed(2);
+      return this.fixed(this.payload.query.sum, 2, true, { style: 'currency', currency: 'USD' });
     },
     sumFormatter() {
-      return `${this.payload.query.direction === 'in' ? '+' : ''} ${this.fixed(this.payload.query.sum, 4, true)} ${this.payload.currency.name}`;
+      return `${this.payload.query.direction === 'in' ? '+' : ''}${this.fixed(this.payload.query.sum, 4, true)} ${this.payload.currency.name}`;
     },
   },
 };

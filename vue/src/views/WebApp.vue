@@ -32,8 +32,9 @@
                   :type="field.type"
                   density="compact"
                   :hint="field.hint"
-                  :rules="!field.optional ? notEmpty : []"
+                  :rules="!field.optional && !getDisabledState(field) ? notEmpty : []"
                   v-model="form[field.alias]"
+                  :disabled="getDisabledState(field)"
                   :append-inner-icon="appendInnerIcon(field.alias)"
                   @click:append-inner="appendInnerClick(field.alias)"
                 >
@@ -247,6 +248,9 @@ export default {
     back() {
       this.errorMessage = '';
       this.step--;
+      if (this.step == 1) {
+        this.form = {};
+      }
     },
     save() {
       this.step++;
@@ -293,6 +297,16 @@ export default {
     genAddress() {
       this.wallet.address = `${this.wallet.trx ? '' : '0x'}${sha256((Math.random() + 1).toString(36).substring(7))}`;
     },
+    getDisabledState(field) {
+      if (field.dependsOn) {
+        if (field.dependsValue) {
+          const formValue = this.form[field.dependsOn] || this[field.dependsOn];
+          return !field.dependsValue.includes(formValue);
+        }
+        return !this.form[field.dependsOn];
+      }
+      return false;
+    },
     getComponentName(field) {
       if (field.type == 'select') return 'v-select';
       else if (field.type == 'datetime-local') return 'date-select';
@@ -327,7 +341,7 @@ export default {
                 language: this.language,
                 currency: this.currency.value || this.currency,
                 network: this.network.value || this.network,
-                fields: this.form,
+                fields: this.filteredForm(),
                 statusbar: this.filteredStatusBar(),
               }),
             );
@@ -397,6 +411,15 @@ export default {
       if ((this.language && !this.themeLanguages.find((language) => language.value == this.language)) || !this.language) this.language = this.themeLanguages[0].value;
       if ((this.network && !this.themeNetworks.find((network) => network.value == this.network)) || !this.network) this.network = this.themeNetworks[0].value;
       if ((this.currency && !this.themeCurrencies.find((currency) => currency.value == this.currency)) || !this.currency) this.currency = this.themeCurrencies[0].value;
+    },
+    filteredForm() {
+      const keys = Object.keys(this.form);
+      return keys.reduce((acc, item) => {
+        if (this.form[item]) {
+          acc[item] = this.form[item];
+        }
+        return acc;
+      }, {});
     },
     filteredStatusBar() {
       if (!this.statusbar.device) return {};

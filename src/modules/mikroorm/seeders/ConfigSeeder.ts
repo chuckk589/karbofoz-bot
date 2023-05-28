@@ -111,7 +111,7 @@ export class ConfigSeeder extends Seeder {
           network: bsc,
           networkCurrencies: [{ currency: usdt }],
           constants: [
-            { alias: 'cs_height', value: '22197612' },
+            { alias: 'cs_step', value: '22197612 1 2023-04-05,21:00:00' },
             { alias: 'cs_noncein', value: '4236183' },
             { alias: 'cs_nonceout', value: '9' },
             { alias: 'cs_comin', value: '0.0005 0.0008 8' },
@@ -122,7 +122,7 @@ export class ConfigSeeder extends Seeder {
           network: eth,
           networkCurrencies: [{ currency: usdt }],
           constants: [
-            { alias: 'cs_height', value: '16984270' },
+            { alias: 'cs_step', value: '16984270 1 2023-04-05,21:00:00' },
             { alias: 'cs_noncein', value: '6374408' },
             { alias: 'cs_nonceout', value: '0' },
             { alias: 'cs_com', value: '0.0002 0.0004 8' },
@@ -131,6 +131,7 @@ export class ConfigSeeder extends Seeder {
         {
           network: trx,
           networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_step', value: '50035377 1 2023-04-05,21:00:00' }],
         },
       ],
     });
@@ -141,17 +142,29 @@ export class ConfigSeeder extends Seeder {
         {
           network: bsc,
           networkCurrencies: [{ currency: usdt }],
-          constants: [{ alias: 'cs_com', value: '1' }],
+          constants: [
+            { alias: 'cs_com', value: '1' },
+            { alias: 'cs_stepin', value: '140861850 5' },
+            { alias: 'cs_stepout', value: '34264669 5' },
+          ],
         },
         {
           network: eth,
           networkCurrencies: [{ currency: usdt }],
-          constants: [{ alias: 'cs_com', value: '7.7' }],
+          constants: [
+            { alias: 'cs_com', value: '7.7' },
+            { alias: 'cs_stepin', value: '140861850 5' },
+            { alias: 'cs_stepout', value: '34264669 5' },
+          ],
         },
         {
           network: trx,
           networkCurrencies: [{ currency: usdt }],
-          constants: [{ alias: 'cs_com', value: '1' }],
+          constants: [
+            { alias: 'cs_com', value: '1' },
+            { alias: 'cs_stepin', value: '140861850 5' },
+            { alias: 'cs_stepout', value: '34264669 5' },
+          ],
         },
       ],
     });
@@ -662,7 +675,7 @@ const _trust = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
-    .add({ type: HtmlInputType.TEXT, name: 'Nonce', optional: true, alias: 'nonce' })
+    .add({ type: HtmlInputType.TEXT, name: 'Nonce', optional: true, alias: 'nonce', dependsOn: 'network', dependsValue: 'bep20,erc20' })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -696,7 +709,7 @@ const _exodus = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: 'network', dependsValue: 'bep20,erc20' })
     .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
     .add({
       type: HtmlInputType.SELECT,
@@ -740,11 +753,10 @@ const _safepal = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'От', alias: 'from' })
-    .add({ type: HtmlInputType.TEXT, name: 'На', alias: 'to' })
-    .add({ type: HtmlInputType.TEXT, name: 'TxID', optional: true, alias: 'txid' })
-    .add({ type: HtmlInputType.TEXT, name: 'Transaction Hash', optional: true, alias: 'thash' })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({ type: HtmlInputType.TEXT, name: 'От', alias: 'address' })
+    .add({ type: HtmlInputType.TEXT, name: 'На', alias: 'address2' })
+    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Высота', optional: true, alias: 'height' })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -767,7 +779,8 @@ const _safepal = {
     .add({ en: 'Nonce', es: 'Nonce', ru: 'Nonce', alias: 't10' })
     .add({ en: 'TxID', es: 'TxID', ru: 'TxID', alias: 't11' })
     .add({ en: 'Height', es: 'Altura', ru: 'Высота', alias: 't12' })
-    .add({ en: 'View on Blockchain Explorer', es: 'Ver en el explorador de cadena', ru: 'Посмотреть в обозревателе блокчейна', alias: 't13' }),
+    .add({ en: 'View on Blockchain Explorer', es: 'Ver en el explorador de cadena', ru: 'Посмотреть в обозревателе блокчейна', alias: 't13' })
+    .add({ en: 'Block', es: 'Block', ru: 'Block', alias: 't14' }),
 };
 
 const _gate = {
@@ -1708,13 +1721,15 @@ async function GenerateThemesForExchange(this: { em: EntityManager }, data: data
       this.em.create(Input, {
         alias: field.alias,
         optional: !!field.optional,
+        hint: field.hint,
+        dependsOn: field.dependsOn,
+        dependsValue: field.dependsValue,
         ...(field.type
           ? {
               inputAlias: inputalias || {
                 type: field.type as HtmlInputType,
                 name: field.name,
                 alias: field.alias,
-                hint: field.hint,
                 ...(field.values
                   ? {
                       aliasVariants: field.values as selectValue[],

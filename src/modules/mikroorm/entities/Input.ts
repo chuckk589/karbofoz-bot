@@ -13,6 +13,15 @@ export class Input {
   @Property({ default: false })
   optional: boolean;
 
+  @Property({ nullable: true })
+  hint?: string;
+
+  @Property({ nullable: true })
+  dependsOn?: string;
+
+  @Property({ nullable: true })
+  dependsValue?: string;
+
   @ManyToOne({ entity: () => InputAlias, nullable: true })
   inputAlias: InputAlias;
 

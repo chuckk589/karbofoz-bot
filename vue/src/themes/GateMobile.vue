@@ -1,16 +1,16 @@
 <template>
-  <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px; height: 2274px">
+  <div :class="theme" id="main" style="margin-top: 96px; width: 1080px; height: 2274px">
     <StatusBar :query="payload.query" :theme="theme"></StatusBar>
     <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch; margin: 0 42px">
       <div class="gate" style="height: 113px; margin-bottom: 54px; justify-content: space-between">
         <FakeImg :path="'/gate/images/1.png'" style="margin-left: 16px" />
-        <div style="font-size: 47px; font-weight: 900">{{ getConstant('t1' + payload.query.direction) }}</div>
+        <div style="font-size: 45px; font-weight: 600">{{ getConstant('t1' + payload.query.direction) }}</div>
         <FakeImg :path="'/gate/images/2.png'" />
       </div>
-      <div style="height: 55px; margin-bottom: 35px; font-size: 39px" class="gray">{{ getConstant('t2') }}</div>
+      <div style="height: 55px; margin-bottom: 35px; font-size: 40px" class="gray3">{{ getConstant('t2') }}</div>
       <div style="height: 89px; margin-bottom: 42px">
-        <div class="gate" style="font-size: 90px">{{ formatSum }}</div>
-        <div class="gray" style="align-self: end; font-size: 38px; margin-left: 25px">
+        <div class="gate" style="font-size: 92px">{{ formatSum }}</div>
+        <div class="gray1" style="align-self: end; font-size: 37px; line-height: 44px; margin-left: 25px">
           {{ this.payload.currency.name }}
         </div>
       </div>
@@ -34,24 +34,24 @@
         <div class="data-item">
           <div>{{ getConstant('t8') }}</div>
           <div>{{ formatOrder }}</div>
-          <FakeImg :path="'/gate/images/4.png'" />
+          <FakeImg class="gray2" :path="'/gate/images/4.png'" />
         </div>
         <div class="data-item" v-if="payload.query.direction == 'out'">
           <div>{{ getConstant('t11') }}</div>
           <div>{{ getConstant('cs_com') }} {{ payload.currency.name }}</div>
         </div>
         <div class="data-item" style="flex-wrap: wrap">
-          <div>{{ getConstant('t9' + payload.query.direction) }}</div>
+          <div style="margin-bottom: 32px">{{ getConstant('t9' + payload.query.direction) }}</div>
           <div>
-            <div>{{ payload.query.direction == 'in' ? '-' : formatLength(payload.query.address) }}</div>
-            <FakeImg class="gray" v-if="payload.query.direction == 'out'" :path="'/gate/images/4.png'" style="margin-left: auto" />
+            <div style="line-height: 52px; max-width: 93%">{{ payload.query.direction == 'in' ? '-' : formatLength(payload.query.address) }}</div>
+            <FakeImg class="gray2" v-if="payload.query.direction == 'out'" :path="'/gate/images/4.png'" style="margin-left: auto" />
           </div>
         </div>
         <div class="data-item" style="flex-wrap: wrap">
-          <div style="min-width: 100%">{{ getConstant('t10') }}</div>
+          <div style="min-width: 100%; margin-bottom: 32px">{{ getConstant('t10') }}</div>
           <div style="overflow-wrap: anywhere">
-            <div>{{ payload.query.txid }}</div>
-            <FakeImg class="gray" :path="'/gate/images/4.png'" style="margin-left: auto" />
+            <div style="line-height: 52px; max-width: 93%">{{ payload.query.txid }}</div>
+            <FakeImg class="gray2" :path="'/gate/images/4.png'" style="margin-left: auto" />
           </div>
         </div>
       </div>
@@ -77,11 +77,15 @@ export default {
   },
   computed: {
     formatSum() {
-      return `${this.payload.query.sum > 0 ? '+' : ''} ${this.fixed(this.payload.query.sum, 4)} `;
+      return `${this.payload.direction == 'in' ? '+' : '-'}${this.fixed(this.payload.query.sum, 6)} `;
     },
     formatOrder() {
-      const iterations = Math.round(this.$dayjs().diff(this.$dayjs(this.payload.query.date), 'minute') / 5);
-      return this.payload.query.order || this.payload.query.direction == 'in' ? 140861850 + iterations : 34264669 + iterations;
+      if (this.payload.query.order) {
+        return this.payload.query.order;
+      }
+      return this.formatConf('cs_step' + this.payload.query.direction);
+      // const iterations = Math.round(this.$dayjs().diff(this.$dayjs(this.payload.query.date), 'minute') / 5);
+      // return this.payload.query.order || this.payload.query.direction == 'in' ? 140861850 + iterations : 34264669 + iterations;
     },
   },
   methods: {
@@ -93,14 +97,26 @@ export default {
 </script>
 <style scoped>
 @font-face {
-  font-family: 'font';
-  src: url('../gate/gate.ttf');
+  font-family: 'Gate Product Sans';
+  src: url('../gate/GateProductSans-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
 }
+
+@font-face {
+  font-family: 'Gate Product Sans';
+  src: url('../gate/GateProductSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 #main {
-  font-family: 'font';
+  font-family: 'Gate Product Sans';
 }
 .data-item {
-  margin-bottom: 40px;
+  margin-bottom: 41px;
 }
 .data-item > div {
   flex-grow: 1;
@@ -138,8 +154,29 @@ export default {
 .mobile-light .data-item div > div:first-child {
   filter: brightness(0) saturate(100%) invert(0%) sepia(100%) saturate(7460%) hue-rotate(81deg) brightness(91%) contrast(108%);
 }
-.gray,
-.data-item > div:nth-child(1) {
-  filter: brightness(0) saturate(100%) invert(59%) sepia(7%) saturate(618%) hue-rotate(185deg) brightness(96%) contrast(93%);
+.mobile-dark .gray2 {
+  filter: brightness(0) saturate(100%) invert(38%) sepia(21%) saturate(396%) hue-rotate(184deg) brightness(101%) contrast(92%);
+}
+.mobile-light .gray2 {
+  filter: brightness(0) saturate(100%) invert(38%) sepia(21%) saturate(396%) hue-rotate(184deg) brightness(101%) contrast(92%);
+}
+.mobile-light .data-item > div:nth-child(1) {
+  color: #8e92a3;
+}
+.mobile-dark .data-item > div:nth-child(1) {
+  color: #5f6880;
+}
+.mobile-dark .gray1 {
+  color: #989fb0;
+}
+.mobile-light .gray1 {
+  color: #585d6d;
+}
+
+.mobile-dark .gray3 {
+  color: #494e63;
+}
+.mobile-light .gray3 {
+  color: #b8bec6;
 }
 </style>

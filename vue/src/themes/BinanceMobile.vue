@@ -1,8 +1,11 @@
 <template>
-  <div :class="theme" id="main" style="margin-top: 90px; width: 1080px; height: 2184px">
+  <div :class="theme" id="main" style="width: 1080px; height: 2184px">
     <StatusBar :query="payload.query" :theme="theme"></StatusBar>
     <div id="wobar">
-      <div :class="'text-' + theme" style="height: 120px; margin-bottom: 75px; font-size: 48px; justify-content: space-between; font-weight: 500; padding: 0px 40px; letter-spacing: -0.5px; padding: 0 40px">
+      <div
+        :class="'text-' + theme"
+        style="height: 120px; margin-bottom: 75px; font-size: 48px; justify-content: space-between; margin-top: 111px; font-weight: 500; padding: 0px 40px; letter-spacing: -0.5px; padding: 0 40px"
+      >
         <FakeImg class="text-gray" path="/binance/images/3.png" style="margin-right: 79px" />
         <div v-if="payload.query.direction == 'in'" style="width: 41px"></div>
         <div style="margin: 0 auto">{{ getConstant('t1' + payload.query.direction) }}</div>
@@ -11,7 +14,7 @@
       </div>
       <div class="text-gray" style="font-size: 37px; margin-bottom: 15px; font-weight: 500">{{ getConstant('t2') }}</div>
       <div :class="'text-' + theme" style="margin-bottom: 4px">
-        <div style="font-size: 75px; font-weight: bold; letter-spacing: -1px; margin-left: 3px; margin-top: -4px">{{ fixed(payload.query.sum, 8, true) }}</div>
+        <div style="font-size: 75px; font-weight: bold; letter-spacing: -1px; margin-left: 3px; margin-top: -4px">{{ fixed(payload.query.sum, 8) }}</div>
         <div style="font-size: 42px; font-weight: 500; padding: 19px 0px 0px; margin-left: 12px">{{ payload.currency.name }}</div>
       </div>
       <div style="margin-bottom: 28px">
