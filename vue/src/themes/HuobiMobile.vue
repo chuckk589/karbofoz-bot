@@ -1,21 +1,20 @@
 <template>
-  <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px; height: 2274px">
+  <div :class="theme" id="main" style="width: 1080px; height: 2274px">
     <StatusBar class="bar" :query="payload.query" :theme="theme"></StatusBar>
-    <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch; margin: 0 33px">
-      <div style="height: 60px; margin-bottom: 47px; justify-content: space-between" class="huobi">
-        <FakeImg :path="'/huobi/images/1.png'" style="margin-left: 10px" />
+    <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch; padding: 0 38px">
+      <div style="margin-top: 30px; margin-bottom: 47px; justify-content: space-between" class="huobi">
+        <FakeImg :path="'/huobi/images/1.png'" />
         <div></div>
       </div>
-      <div class="data-item huobi-color" style="height: 145px; height: 145px; font-size: 75px; font-weight: 500; justify-content: flex-start; border: none">
-        {{ formatSum }}
-        {{ this.payload.currency.name }}
-      </div>
+      <div class="huobi-color" style="padding: 19px 0; font-size: 75px; font-weight: 500; justify-content: flex-start; border: none">{{ formatSum }}{{ this.payload.currency.name }}</div>
       <div style="flex-direction: column; align-items: stretch">
         <div class="data-item">
           <div>{{ getConstant('t1') }}</div>
           <div class="data-item-col">
             <div class="huobi">╍</div>
-            <div style="color: #606976">{{ getConstant('t2' + payload.query.direction) }}</div>
+            <div style="margin-top: 10px" class="dep-type">
+              {{ getConstant('t2' + payload.query.direction) }}
+            </div>
           </div>
         </div>
         <div class="data-item">
@@ -25,8 +24,8 @@
         <div class="data-item" v-if="payload.query.direction == 'out'">
           <div>{{ getConstant('t7') }}</div>
           <div class="data-item-col">
-            <div class="huobi">{{ payload.query.address }}</div>
-            <div class="huobi-color">
+            <div class="huobi" style="line-height: 40px">{{ payload.query.address }}</div>
+            <div class="huobi-color huobi-copy">
               <FakeImg :path="'/huobi/images/2.png'" />
               <div>{{ getConstant('t5') }}</div>
             </div>
@@ -38,13 +37,13 @@
         </div>
         <div class="data-item" v-if="payload.query.direction == 'out'">
           <div>{{ getConstant('t9') }}</div>
-          <div class="huobi">{{ feeFormatter() }} {{ payload.currency.name }}</div>
+          <div class="huobi">{{ huobiFee }} {{ payload.currency.name }}</div>
         </div>
         <div class="data-item">
           <div>{{ getConstant('t10') }}</div>
           <div class="data-item-col">
-            <div class="huobi">{{ payload.query.txid }}</div>
-            <div class="huobi-color">
+            <div class="huobi" style="line-height: 40px">{{ payload.query.txid }}</div>
+            <div class="huobi-color huobi-copy">
               <FakeImg :path="'/huobi/images/2.png'" />
               <div>{{ getConstant('t5') }}</div>
             </div>
@@ -80,16 +79,24 @@ export default {
       return this.$dayjs(this.payload.query.date).format('HH:mm DD/MM');
     },
     formatSum() {
-      return `${this.payload.query.sum > 0 ? '+' : ''} ${this.fixed(this.payload.query.sum, 8)} `;
+      return `${this.payload.query.direction == 'in' ? '+' : '-'} ${this.fixed(this.payload.query.sum, 8)}`;
+    },
+    huobiFee() {
+      return this.payload.query.com || this.feeFormatter();
     },
   },
   methods: {},
 };
 </script>
 <style scoped>
+#main {
+  font-family: 'Roboto';
+}
 .data-item {
   font-size: 37px;
-  padding: 30px 0px;
+  align-items: start !important;
+  padding: 46px 0px;
+  line-height: 30px;
 }
 .data-item > div {
   flex-grow: 1;
@@ -101,9 +108,12 @@ export default {
   max-width: 500px;
   overflow-wrap: anywhere;
 }
-.data-item-col > div:nth-child(2) > div {
-  margin-right: 10px;
-  font-size: 30px;
+.huobi-copy {
+  font-size: 32px;
+  margin-top: 20px;
+}
+.huobi-copy > div:first-child {
+  margin-right: 17px;
 }
 .mobile-dark {
   background-color: #1a202e;
@@ -129,9 +139,19 @@ export default {
 .mobile-dark .data-item:first-child {
   border-top: #2d3342 1px solid;
 }
-.data-item div:nth-child(1) {
+.mobile-dark .data-item div:nth-child(1) {
   justify-content: flex-start !important;
-  color: #606976;
+  color: #737d94;
+}
+.mobile-light .data-item div:nth-child(1) {
+  justify-content: flex-start !important;
+  color: #62696f;
+}
+.mobile-light .dep-type {
+  color: #99a0aa;
+}
+.mobile-dark .dep-type {
+  color: #485366;
 }
 .data-item div:nth-child(2) {
   justify-content: flex-end !important;

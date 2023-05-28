@@ -83,16 +83,14 @@ const themeMixin = {
       return value.replace(/T/, ' ');
     },
     feeFormatter(key = 'cs_com', cutExc = false) {
+      const fee = this.payload.query.com;
+      if (fee) return fee;
       let data = this.getConstant(key)?.split(' ');
-      if (!data) return undefined;
       if (data.length == 1) return data[0];
       data = data.map((item) => +item);
       return this.fixed(+(Math.random() * (data[1] - data[0]) + data[0]), data[2], cutExc);
-      // return +(Math.random() * (data[1] - data[0]) + data[0]).toFixed(data[2]);
     },
-    // signFormatter() {
-    //   return `${this.payload.query.direction == 'in' ? '+' : '-'}`;
-    // },
+
     formatSum(max, min = 0) {
       const sum = +this.payload.query.sum;
       const withfee = sum + (sum * (Math.random() * (max - min) + min)) / 100;

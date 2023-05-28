@@ -299,11 +299,15 @@ export default {
     },
     getDisabledState(field) {
       if (field.dependsOn) {
-        if (field.dependsValue) {
-          const formValue = this.form[field.dependsOn] || this[field.dependsOn];
-          return !field.dependsValue.includes(formValue);
-        }
-        return !this.form[field.dependsOn];
+        return !field.dependsOn.reduce((acc, item) => {
+          const formValue = this.form[item.field] || this[item.field];
+          if (item.value) {
+            if (!item.value.includes(formValue)) acc = false;
+          } else {
+            if (!formValue) acc = false;
+          }
+          return acc;
+        }, true);
       }
       return false;
     },

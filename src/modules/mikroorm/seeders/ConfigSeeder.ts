@@ -13,10 +13,12 @@ import { BarInputVariant } from '../entities/BarInputVariant';
 import { DeviceBarInput } from '../entities/DeviceBarInput';
 
 type selectValue = { value: string; alias: string };
-type field = { type: HtmlInputType; name: string; optional?: boolean; hint?: string; values?: selectValue[]; alias: string; dependsOn?: string; dependsValue?: string };
+type field = { type: HtmlInputType; name: string; optional?: boolean; hint?: string; values?: selectValue[]; alias: string; dependsOn?: dependsOnField[] };
 type data = { name: string; statusbar?: boolean; languages: string[]; themes: { alias: string; name: string }[]; fields: Set<field> };
 
 type deviceData = { name: string; fields: field[] };
+
+export type dependsOnField = { field: string; value?: string[] };
 export class ConfigSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
     // сети
@@ -675,7 +677,7 @@ const _trust = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
-    .add({ type: HtmlInputType.TEXT, name: 'Nonce', optional: true, alias: 'nonce', dependsOn: 'network', dependsValue: 'bep20,erc20' })
+    .add({ type: HtmlInputType.TEXT, name: 'Nonce', optional: true, alias: 'nonce', dependsOn: [{ field: 'network', value: ['bep20', 'erc20'] }] })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -709,7 +711,7 @@ const _exodus = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: 'network', dependsValue: 'bep20,erc20' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: [{ field: 'network', value: ['bep20', 'erc20'] }] })
     .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
     .add({
       type: HtmlInputType.SELECT,
@@ -849,6 +851,16 @@ const _huobi = {
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({
+      type: HtmlInputType.TEXT,
+      name: 'Комиссия',
+      alias: 'com',
+      optional: true,
+      dependsOn: [
+        { field: 'network', value: ['erc20', 'bep20'] },
+        { field: 'direction', value: ['out'] },
+      ],
+    })
+    .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
       values: [
@@ -887,10 +899,12 @@ const _kucoin = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
-    .add({ type: HtmlInputType.TEXT, name: 'TxHash', alias: 'thash' })
+    .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
     .add({ type: HtmlInputType.TEXTAREA, name: 'Сообщение', alias: 'msg', optional: true })
+    .add({ type: HtmlInputType.TEXT, name: 'Block(s)', alias: 'block', optional: true, dependsOn: [{ field: 'direction', value: ['in'] }] })
+    .add({ type: HtmlInputType.NUMBER, name: 'Сообщение', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
+
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -1722,8 +1736,7 @@ async function GenerateThemesForExchange(this: { em: EntityManager }, data: data
         alias: field.alias,
         optional: !!field.optional,
         hint: field.hint,
-        dependsOn: field.dependsOn,
-        dependsValue: field.dependsValue,
+        dependsOn: JSON.stringify(field.dependsOn),
         ...(field.type
           ? {
               inputAlias: inputalias || {

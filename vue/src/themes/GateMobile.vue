@@ -1,7 +1,7 @@
 <template>
-  <div :class="theme" id="main" style="margin-top: 96px; width: 1080px; height: 2274px">
+  <div :class="theme" id="main" style="width: 1080px; height: 2274px">
     <StatusBar :query="payload.query" :theme="theme"></StatusBar>
-    <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch; margin: 0 42px">
+    <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch; padding: 0 42px">
       <div class="gate" style="height: 113px; margin-bottom: 54px; justify-content: space-between">
         <FakeImg :path="'/gate/images/1.png'" style="margin-left: 16px" />
         <div style="font-size: 45px; font-weight: 600">{{ getConstant('t1' + payload.query.direction) }}</div>

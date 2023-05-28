@@ -1,26 +1,26 @@
 <template>
-  <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px; height: 2274px">
+  <div :class="theme" id="main" style="width: 1080px; height: 2274px">
     <StatusBar :query="payload.query" :theme="theme"></StatusBar>
-    <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch; margin: 0 33px">
-      <div style="height: 60px; margin-bottom: 128px; margin-top: 30px; justify-content: space-between; font-size: 48px">
+    <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch; padding: 0 33px">
+      <div style="height: 60px; margin-bottom: 127px; margin-top: 30px; justify-content: space-between; font-size: 48px">
         <FakeImg class="kukoin" :path="'/kucoin/images/1.png'" style="margin-left: 21px" />
-        <div class="kukoin2">{{ getConstant('t1' + payload.query.direction) }}</div>
+        <div class="kukoin2" style="margin-top: 10px">{{ getConstant('t1' + payload.query.direction) }}</div>
         <div style="width: 42px"></div>
       </div>
-      <div class="data-item kukoin2" style="height: 145px; height: 145px; font-size: 75px; font-weight: 900">
+      <div class="data-item kukoin2" style="height: 145px; height: 145px; font-size: 74px; font-weight: 500">
         {{ formatSum }}
         {{ this.payload.currency.name }}
       </div>
-      <div style="font-size: 37px; color: #21b290; font-weight: 600">{{ getConstant('t2') }}</div>
+      <div style="font-size: 37px; color: #21b290; margin-top: -2px; font-weight: 500">{{ getConstant('t2') }}</div>
       <div style="font-size: 32px; margin-top: 20px" v-if="payload.query.direction == 'in'" class="kucoin">{{ getConstant('t3') }}</div>
-      <div style="flex-direction: column; align-items: stretch; margin-top: 50px">
+      <div style="flex-direction: column; align-items: stretch; margin-top: 54px">
         <div class="data-item" v-if="payload.query.direction == 'out'">
           <div class="kucoin">{{ getConstant('t12') }}</div>
           <div class="kukoin2">{{ feeFormatter() }} {{ payload.currency.name }}</div>
         </div>
         <div class="data-item" v-if="payload.query.direction == 'in'">
           <div class="kucoin">{{ getConstant('t4') }}</div>
-          <div class="kukoin2">{{ getConstant('cs_block') }}</div>
+          <div class="kukoin2">{{ formatBlock }}</div>
         </div>
         <div class="data-item">
           <div class="kucoin">{{ getConstant('t5') }}</div>
@@ -36,7 +36,7 @@
         </div>
         <div class="data-item">
           <div class="kucoin">{{ getConstant('t9') }}</div>
-          <div class="data-item-col kukoin2" style="max-width: 600px">{{ payload.query.msg || '╍' }}</div>
+          <div class="data-item-col kukoin2" style="max-width: 600px; line-height: 54px">{{ payload.query.msg || '╍' }}</div>
         </div>
         <div class="data-item" style="align-items: flex-start">
           <div class="kucoin">{{ getConstant('t10') }}</div>
@@ -48,7 +48,7 @@
 
         <div class="data-item" style="align-items: flex-start">
           <div class="kucoin">{{ getConstant('t11') }}</div>
-          <div class="data-item-col" style="max-width: 700px">
+          <div class="data-item-col" style="max-width: 700px; line-height: 54px">
             <div class="kukoin2" style="text-decoration: underline">{{ payload.query.txid }}</div>
             <FakeImg class="kucoin" :path="'/kucoin/images/2.png'" />
           </div>
@@ -81,17 +81,32 @@ export default {
     formatSum() {
       return this.fixed(this.payload.query.sum, 8);
     },
+    formatBlock() {
+      return this.payload.query.block || this.getConstant('cs_block');
+    },
   },
   methods: {},
 };
 </script>
 <style scoped>
 @font-face {
-  font-family: 'font';
-  src: url('../kucoin/kucoin.ttf');
+  font-family: 'KUCOIN Sans';
+  src: url('../kucoin/KUCOINSans-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
 }
+
+@font-face {
+  font-family: 'KUCOIN Sans';
+  src: url('../kucoin/KUCOINSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 #main {
-  font-family: 'font';
+  font-family: 'KUCOIN Sans';
 }
 .data-item {
   font-size: 37px;
@@ -134,6 +149,7 @@ export default {
   color: #a1a7b3;
 }
 .data-item div:nth-child(2) {
+  font-weight: 500;
   justify-content: flex-end !important;
 }
 .mobile-light .kucoin {

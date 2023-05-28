@@ -1,5 +1,5 @@
 <template>
-  <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px; height: 2274px; margin-top: 109px">
+  <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px; height: 2274px">
     <!-- <div style="height: 109px; background-color: red"></div> -->
     <StatusBar :query="payload.query" :theme="theme"></StatusBar>
     <div id="wobar">
