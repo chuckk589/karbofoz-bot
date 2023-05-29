@@ -35,7 +35,7 @@
               <FakeImg class="trust" :path="'/trust/images/1.png'" style="margin: 1px auto 0 27px; height: 33px; width: 33px" />
               <div style="line-height: 55px">{{ feeTrustFormatter() }}</div>
             </div>
-            <div class="data-item">
+            <div class="data-item" v-if="payload.query.nonce">
               <div>{{ getConstant('t6') }}</div>
               <div>{{ payload.query.nonce }}</div>
             </div>

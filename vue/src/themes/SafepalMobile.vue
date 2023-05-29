@@ -17,13 +17,15 @@
         </div>
         <div :class="'block-' + theme" style="height: 168px; margin-bottom: 40px; justify-content: flex-start; border-radius: 20px; padding: 27px 0px; align-items: flex-start">
           <div style="font-size: 64px; font-weight: 500">
-            <div :style="'background-image: url(safepal/images/coins/' + payload.currency.name + '.png); width: 108px; height: 108px; background-size: cover; margin-left: 41px'">
-              <div :style="'background-image: url(safepal/images/coins/' + payload.network.name + '.png); width: 40px; position: absolute; height: 40px; background-size: cover; margin: 65px 0 0 65px'"></div>
+            <div :style="'background-image: url(safepal/images/coins/' + payload.currency.name.toLowerCase() + '.png); width: 108px; height: 108px; background-size: cover; margin-left: 41px'">
+              <div
+                :style="'background-image: url(safepal/images/coins/' + payload.network.name.toLowerCase() + '.png); width: 40px; position: absolute; height: 40px; background-size: cover; margin: 65px 0 0 65px'"
+              ></div>
             </div>
           </div>
           <div style="flex-direction: column; margin-left: 27px; letter-spacing: 1px; font-weight: 500; align-items: flex-start">
             <div :class="'text-' + theme" style="font-size: 41px; line-height: 58px; font-weight: 500">{{ sumFormatter }} {{ payload.currency.name }}</div>
-            <div style="font-size: 36px; line-height: 36px; color: #9e9dac">{{ payload.network.alias.toUpperCase() }}&nbsp; {{ lengthFormatter(payload.query.txid, 10) }}</div>
+            <div style="font-size: 36px; line-height: 36px; color: #9e9dac">{{ payload.network.alias.toUpperCase() }}&nbsp; {{ getConstant('cs_network') }}</div>
           </div>
         </div>
         <div :class="'block-' + theme" style="flex-direction: column; margin-bottom: 39px; align-items: stretch; border-radius: 20px; padding: 25px 43px">
@@ -60,7 +62,7 @@
           </div>
           <div :class="'data-item text-' + theme">
             <div>{{ payload.network.alias == 'trc20' ? getConstant('t12') : getConstant('t14') }}</div>
-            <div>{{ formatConf() }}</div>
+            <div>{{ payload.query.height || formatConf() }}</div>
           </div>
           <div :class="'data-item text-' + theme" v-if="['bep20', 'erc20'].includes(payload.network.alias)">
             <div>{{ getConstant('t10') }}</div>

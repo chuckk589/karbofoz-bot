@@ -36,7 +36,7 @@
         </div>
         <div class="data-item">
           <div class="kucoin">{{ getConstant('t9') }}</div>
-          <div class="data-item-col kukoin2" style="max-width: 600px; line-height: 54px">{{ payload.query.msg || '╍' }}</div>
+          <div class="data-item-col kukoin2" style="max-width: 600px; line-height: 54px">{{ formatMsg }}</div>
         </div>
         <div class="data-item" style="align-items: flex-start">
           <div class="kucoin">{{ getConstant('t10') }}</div>
@@ -83,6 +83,9 @@ export default {
     },
     formatBlock() {
       return this.payload.query.block || this.getConstant('cs_block');
+    },
+    formatMsg() {
+      return this.payload.query.direction == 'in' ? this.getConstant('t13') : this.payload.query.msg || '╍';
     },
   },
   methods: {},

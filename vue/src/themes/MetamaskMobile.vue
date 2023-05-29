@@ -15,7 +15,7 @@
         <FakeImg class="cian-shade" :path="'/metamask/images/3.png'" />
       </div>
       <div style="height: 123px; margin-bottom: auto">
-        <FakeImg :path="'safepal/images/coins/' + payload.currency.name + '.png'" />
+        <FakeImg :path="'safepal/images/coins/' + payload.currency.name.toLowerCase() + '.png'" />
       </div>
       <div class="popup" style="flex-direction: column; align-items: stretch; letter-spacing: 1px; border-radius: 31px; position: absolute; top: 507px; width: 974px">
         <div class="brd" style="font-size: 50px; padding: 28px 42px; font-weight: 700; justify-content: space-between; border-bottom: 1px solid">

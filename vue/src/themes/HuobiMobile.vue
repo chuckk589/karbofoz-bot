@@ -6,12 +6,14 @@
         <FakeImg :path="'/huobi/images/1.png'" />
         <div></div>
       </div>
-      <div class="huobi-color" style="padding: 19px 0; font-size: 75px; font-weight: 500; justify-content: flex-start; border: none">{{ formatSum }}{{ this.payload.currency.name }}</div>
+      <div class="huobi-color" style="font-family: Roboto-Regular; letter-spacing: 2.2px; padding: 19px 0px; font-size: 70px; font-weight: 600; justify-content: flex-start">
+        {{ formatSum }}{{ this.payload.currency.name }}
+      </div>
       <div style="flex-direction: column; align-items: stretch">
         <div class="data-item">
           <div>{{ getConstant('t1') }}</div>
           <div class="data-item-col">
-            <div class="huobi">╍</div>
+            <div class="huobi">--</div>
             <div style="margin-top: 10px" class="dep-type">
               {{ getConstant('t2' + payload.query.direction) }}
             </div>
@@ -163,6 +165,7 @@ export default {
 }
 .data-item div:nth-child(2) {
   justify-content: flex-end !important;
+  font-family: 'Roboto-Regular';
 }
 .mobile-light .huobi {
   filter: brightness(0) saturate(100%) invert(8%) sepia(14%) saturate(412%) hue-rotate(214deg) brightness(96%) contrast(94%);
@@ -171,7 +174,12 @@ export default {
   filter: brightness(0) saturate(100%) invert(91%) sepia(15%) saturate(192%) hue-rotate(181deg) brightness(97%) contrast(91%);
 }
 
-.huobi-color {
-  filter: brightness(0) saturate(100%) invert(43%) sepia(21%) saturate(4670%) hue-rotate(181deg) brightness(98%) contrast(100%);
+.mobile-dark .huobi-color {
+  filter: brightness(0) saturate(100%) invert(48%) sepia(69%) saturate(3059%) hue-rotate(182deg) brightness(95%) contrast(107%);
+}
+.mobile-light .huobi-color {
+  /* color: #0372e4; */
+  /* text-shadow: 1px 0px 4px #d1fdff; */
+  filter: brightness(0) saturate(100%) invert(27%) sepia(74%) saturate(4228%) hue-rotate(198deg) brightness(99%) contrast(98%);
 }
 </style>

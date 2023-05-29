@@ -118,6 +118,7 @@ export class ConfigSeeder extends Seeder {
             { alias: 'cs_nonceout', value: '9' },
             { alias: 'cs_comin', value: '0.0005 0.0008 8' },
             { alias: 'cs_comout', value: '0.0002 0.0004 8' },
+            { alias: 'cs_network', value: '0x55d...97955' },
           ],
         },
         {
@@ -128,12 +129,16 @@ export class ConfigSeeder extends Seeder {
             { alias: 'cs_noncein', value: '6374408' },
             { alias: 'cs_nonceout', value: '0' },
             { alias: 'cs_com', value: '0.0002 0.0004 8' },
+            { alias: 'cs_network', value: '0xdac...31ec7' },
           ],
         },
         {
           network: trx,
           networkCurrencies: [{ currency: usdt }],
-          constants: [{ alias: 'cs_step', value: '50035377 1 2023-04-05,21:00:00' }],
+          constants: [
+            { alias: 'cs_step', value: '50035377 1 2023-04-05,21:00:00' },
+            { alias: 'cs_network', value: 'TR7NH...jLj6t' },
+          ],
         },
       ],
     });
@@ -271,7 +276,7 @@ export class ConfigSeeder extends Seeder {
     });
     em.create(Exchange, {
       alias: 'cryptocom',
-      name: 'Cryptocom',
+      name: 'Crypto.com',
       exchangeNetworks: [
         {
           network: eth,
@@ -902,10 +907,9 @@ const _kucoin = {
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
-    .add({ type: HtmlInputType.TEXTAREA, name: 'Сообщение', alias: 'msg', optional: true })
+    .add({ type: HtmlInputType.TEXTAREA, name: 'Сообщение', alias: 'msg', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({ type: HtmlInputType.TEXT, name: 'Block(s)', alias: 'block', optional: true, dependsOn: [{ field: 'direction', value: ['in'] }] })
-    .add({ type: HtmlInputType.NUMBER, name: 'Сообщение', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
-
+    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -928,7 +932,8 @@ const _kucoin = {
     .add({ es: 'Observaciones', ru: 'Сообщение:', en: 'Remarks', alias: 't9' })
     .add({ es: 'Dirección/cuenta', ru: 'Адрес/Аккаунт', en: 'Address/Account', alias: 't10' })
     .add({ es: 'TxHash', ru: 'TxHash', en: 'TxHash', alias: 't11' })
-    .add({ es: 'Comisión', ru: 'Комиссия', en: 'Fee', alias: 't12' }),
+    .add({ es: 'Comisión', ru: 'Комиссия', en: 'Fee', alias: 't12' })
+    .add({ es: 'Deposit', ru: 'Deposit', en: 'Deposit', alias: 't13' }),
 };
 
 const _bitfinex = {

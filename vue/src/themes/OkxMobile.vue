@@ -177,7 +177,7 @@ export default {
 }
 .mobile-dark .black,
 .mobile-dark .data-item > div:nth-child(2) {
-  color: #ffffff;
+  color: #f2f2f2;
 }
 
 .mobile-light .black,

@@ -43,8 +43,8 @@
         <div class="data-item" style="flex-wrap: wrap">
           <div style="margin-bottom: 32px">{{ getConstant('t9' + payload.query.direction) }}</div>
           <div>
-            <div style="line-height: 52px; max-width: 93%">{{ payload.query.direction == 'in' ? '-' : formatLength(payload.query.address) }}</div>
-            <FakeImg class="gray2" v-if="payload.query.direction == 'out'" :path="'/gate/images/4.png'" style="margin-left: auto" />
+            <div style="line-height: 52px; max-width: 93%">{{ formatLength(payload.query.address) }}</div>
+            <FakeImg class="gray2" :path="'/gate/images/4.png'" style="margin-left: auto" />
           </div>
         </div>
         <div class="data-item" style="flex-wrap: wrap">

@@ -47,7 +47,7 @@
           <div>{{ getConstant('t9') }}</div>
           <div class="text">{{ finishedFormat }}</div>
         </div>
-        <div class="data-item" style="align-items: flex-start" v-if="payload.query.direction == 'out'">
+        <div class="data-item" style="align-items: flex-start" v-if="payload.query.address">
           <div>{{ getConstant('t15') }}</div>
           <div class="text" style="max-width: 554px; overflow-wrap: anywhere; text-align: end; line-height: 50px">{{ payload.query.address }}</div>
         </div>

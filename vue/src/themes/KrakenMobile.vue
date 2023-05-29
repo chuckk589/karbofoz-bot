@@ -8,7 +8,7 @@
           <FakeImg :path="'/kraken/images/2.png'" />
         </div>
         <div style="margin-bottom: 58px; position: relative">
-          <FakeImg :path="'safepal/images/coins/' + payload.currency.name + '.png'" style="transform: scale(0.9)" />
+          <FakeImg :path="'safepal/images/coins/' + payload.currency.name.toLowerCase() + '.png'" style="transform: scale(0.9)" />
           <div :style="'width: 104px;  position: absolute; flex-direction: column;' + (payload.query.direction == 'out' ? 'top:-8px;' : 'bottom: -8px;transform: rotate(180deg);')">
             <div :class="theme" style="height: 20px; width: 100%"></div>
             <div class="kraken-bd" style="width: 100%; border-radius: 7px; height: 7px"></div>

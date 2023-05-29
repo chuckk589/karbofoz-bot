@@ -9,7 +9,7 @@
       </div>
       <div style="flex-direction: column; align-items: stretch; padding: 0px 37px">
         <div style="margin-bottom: -6px; justify-content: flex-start">
-          <FakeImg :path="'safepal/images/coins/' + payload.currency.name + '.png'" style="margin-right: -17px; margin-left: -25px; transform: scale(0.5)" />
+          <FakeImg :path="'safepal/images/coins/' + payload.currency.name.toLowerCase() + '.png'" style="margin-right: -17px; margin-left: -25px; transform: scale(0.5)" />
           <div style="font-size: 40px" class="text">{{ payload.currency.name }}</div>
         </div>
         <div class="text" style="font-size: 55px; margin-bottom: 29px; justify-content: flex-start">{{ sumFormatter }}</div>

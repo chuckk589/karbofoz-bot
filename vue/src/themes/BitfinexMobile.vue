@@ -2,10 +2,10 @@
   <div :class="theme" id="main" style="width: 1080px; height: 2274px">
     <StatusBar class="bar" :query="payload.query" :theme="theme"></StatusBar>
     <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch">
-      <div style="font-size: 59px; font-weight: 600; padding: 6px 25px 29px; justify-content: space-between" class="bitfinex">
-        <FakeImg style="margin-left: 20px" :path="'/bitfinex/images/3.png'" />
-        <div style="transform: scale(1.1, 0.95); margin-left: -13px">{{ formatCurrency }} {{ getConstant('t1' + payload.query.direction) }}</div>
-        <FakeImg :path="'/bitfinex/images/2.png'" />
+      <div style="font-size: 59px; font-weight: 600; padding: 6px 25px 29px; justify-content: space-between" class="data-block">
+        <FakeImg class="bitfinex" style="margin-left: 20px" :path="'/bitfinex/images/3.png'" />
+        <div class="bitfinex" style="transform: scaleX(1.1); margin-left: -13px">{{ formatCurrency }} {{ getConstant('t1' + payload.query.direction) }}</div>
+        <FakeImg class="bitfinex" :path="'/bitfinex/images/2.png'" />
       </div>
 
       <div class="data-block" style="flex-direction: column; align-items: stretch; background: linear-gradient(180deg, rgba(255, 255, 255, 0.06486344537815125) 0%, rgba(255, 255, 255, 0) 1%)">
@@ -116,12 +116,12 @@ export default {
   font-display: swap;
 }
 #main {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto';
 }
 .data-item {
   font-size: 38px;
   padding: 18px 0px;
-  border-bottom: 3px solid black;
+  border-bottom: 3px solid;
 }
 .data-item > div {
   flex-grow: 1;
@@ -155,9 +155,11 @@ export default {
 }
 .mobile-dark .data-item {
   color: white;
+  border-color: #0e1f29;
 }
 .mobile-light .data-item {
   color: #313434;
+  border-color: black;
 }
 .mobile-dark .data-block {
   background-color: #102331 !important;
@@ -182,7 +184,7 @@ export default {
   filter: brightness(0) saturate(100%) invert(14%) sepia(6%) saturate(146%) hue-rotate(131deg) brightness(103%) contrast(84%);
 }
 .mobile-dark .bitfinex {
-  filter: brightness(0) saturate(100%) invert(91%) sepia(15%) saturate(192%) hue-rotate(181deg) brightness(97%) contrast(91%);
+  filter: brightness(0) saturate(100%) invert(100%) sepia(1%) saturate(665%) hue-rotate(191deg) brightness(106%) contrast(100%);
 }
 
 .bitfinex-color {

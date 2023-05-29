@@ -65,7 +65,16 @@ export default {
   },
   computed: {
     formatDate() {
-      return this.$dayjs(this.payload.query.date).locale(this.payload.query.language).format('lll');
+      const date = this.$dayjs(this.payload.query.date);
+      if (this.payload.query.language == 'ru') {
+        const month = date.format('MMM')[0];
+        return date.format(`DD [${month}]MM YYYY LT`);
+      } else if (this.payload.query.language == 'es') {
+        const month = date.locale(this.payload.query.language).format('MMM');
+        return date.format(`DD [${month}], YYYY HH:mm`);
+      } else {
+        return this.$dayjs(this.payload.query.date).locale(this.payload.query.language).format('lll');
+      }
     },
     usdFormatter() {
       let value = 0;

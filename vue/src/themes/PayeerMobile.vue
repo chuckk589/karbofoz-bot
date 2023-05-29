@@ -10,7 +10,7 @@
           <div style="width: 49px"></div>
         </div>
         <div style="margin-bottom: 42px; align-items: stretch">
-          <FakeImg :path="'safepal/images/coins/' + payload.currency.name + '.png'" style="margin-right: 20px" />
+          <FakeImg :path="'safepal/images/coins/' + payload.currency.name.toLowerCase() + '.png'" style="margin-right: 20px" />
           <div class="text" style="line-height: 50px; padding-top: 20px">
             <div style="font-size: 140px">{{ fixed(payload.query.sum, 0) }}</div>
             <div style="font-size: 65px; align-self: flex-start">.{{ fixed(payload.query.sum, 2).split('.').pop() }}</div>
