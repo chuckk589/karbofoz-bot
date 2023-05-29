@@ -221,16 +221,16 @@ export class ConfigSeeder extends Seeder {
           network: eth,
           networkCurrencies: [{ currency: usdt }],
           constants: [
-            { alias: 'cs_idin', value: '20210896' },
-            { alias: 'cs_idout', value: '20279138' },
+            { alias: 'cs_stepin', value: '20210896 5 2023-04-23,11:30:00' },
+            { alias: 'cs_stepout', value: '20279138 5 2023-04-23,11:30:00' },
           ],
         },
         {
           network: trx,
           networkCurrencies: [{ currency: usdt }],
           constants: [
-            { alias: 'cs_idin', value: '20210896' },
-            { alias: 'cs_idout', value: '20279138' },
+            { alias: 'cs_stepin', value: '20210896 5 2023-04-23,11:30:00' },
+            { alias: 'cs_stepout', value: '20279138 5 2023-04-23,11:30:00' },
           ],
         },
       ],
@@ -245,7 +245,8 @@ export class ConfigSeeder extends Seeder {
           constants: [
             { alias: 'cs_proc', value: '25/25' },
             { alias: 'cs_com', value: '1' },
-            { alias: 'cs_id', value: '16953075' },
+            { alias: 'cs_step', value: '16953075 5 2023-04-07,18:00:00' },
+            { alias: 'cs_pair', value: 'BSC' },
           ],
         },
         {
@@ -254,7 +255,7 @@ export class ConfigSeeder extends Seeder {
           constants: [
             { alias: 'cs_proc', value: '25/25' },
             { alias: 'cs_com', value: '11' },
-            { alias: 'cs_id', value: '16953075' },
+            { alias: 'cs_step', value: '16953075 5 2023-04-07,18:00:00' },
           ],
         },
         {
@@ -263,7 +264,7 @@ export class ConfigSeeder extends Seeder {
           constants: [
             { alias: 'cs_proc', value: '50/50' },
             { alias: 'cs_com', value: '1' },
-            { alias: 'cs_id', value: '16953075' },
+            { alias: 'cs_step', value: '16953075 5 2023-04-07,18:00:00' },
           ],
         },
       ],
@@ -948,6 +949,7 @@ const _bitfinex = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
+    .add({ type: HtmlInputType.NUMBER, name: 'ID', alias: 'id', optional: true })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({
       type: HtmlInputType.DATETIME_LOCAL,
@@ -995,7 +997,7 @@ const _bitfinex = {
     .add({
       ru: 'Если вы не выводили средства, то возможно ваш аккаунт был взломан. Чтобы предотвратить дальнейшие действия с аккаунтом,',
       es: 'Si no realizaste este retiro y crees que tu cuenta pudo haber sido comprometida. Para evitar acciones adicionales en tu cuenta,',
-      en: "If you didn't make this withdrawal then its possible your Account has been compromised. To prevent further account actions, ",
+      en: "If you didn't make this withdrawal then it's possible your account has been compromised. To prevent further account actions, ",
       alias: 't14',
     })
     .add({ ru: 'заблокируйте аккаунт.', es: 'congela tu cuenta.', en: 'freeze your account.', alias: 't15' }),
@@ -1019,7 +1021,8 @@ const _bitmart = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', optional: true })
+    .add({ type: HtmlInputType.NUMBER, name: 'ID транзакции', alias: 'id', optional: true })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -1060,6 +1063,8 @@ const _cryptocom = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Эквивалент $', alias: 'eqv', optional: true })
+    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',

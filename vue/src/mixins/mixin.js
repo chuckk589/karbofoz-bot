@@ -63,8 +63,8 @@ const themeMixin = {
     // fixed(value, fixed, cutExc = false) {
     //   return cutExc ? +(+value).toFixed(fixed) : (+value).toFixed(fixed);
     // },
-    fixed(value, fixed, localize = false, rest) {
-      return new Intl.NumberFormat(localize ? this.payload.query.language : 'en', {
+    fixed(value, fixed, localize = false, rest, locale = 'en') {
+      return new Intl.NumberFormat(localize ? this.payload.query.language : locale, {
         minimumFractionDigits: 0,
         maximumFractionDigits: +fixed,
         useGrouping: localize,
@@ -91,9 +91,9 @@ const themeMixin = {
       return this.fixed(+(Math.random() * (data[1] - data[0]) + data[0]), data[2], cutExc);
     },
 
-    formatSum(max, min = 0) {
+    formatSum(max, min = 0, sign = 1) {
       const sum = +this.payload.query.sum;
-      const withfee = sum + (sum * (Math.random() * (max - min) + min)) / 100;
+      const withfee = sum + sign * ((sum * (Math.random() * (max - min) + min)) / 100);
       return withfee;
     },
     formatConf(key = 'cs_step') {

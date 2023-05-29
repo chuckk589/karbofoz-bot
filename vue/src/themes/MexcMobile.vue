@@ -87,10 +87,10 @@ export default {
   mounted() {},
   computed: {
     formatCurName() {
-      return this.payload.direction == 'out' ? this.payload.currency.name : `${this.payload.currency.name}-${this.payload.network.coin}`;
+      return this.payload.query.direction == 'out' ? this.payload.currency.name : `${this.payload.currency.name}-${this.payload.network.coin}`;
     },
     formatNetwork() {
-      return this.payload.direction == 'out' ? this.payload.network.alias.toUpperCase() : `${this.payload.currency.name}-${this.payload.network.coin}`;
+      return this.payload.query.direction == 'out' ? this.payload.network.alias.toUpperCase() : `${this.payload.currency.name}-${this.payload.network.coin}`;
     },
   },
   methods: {},

@@ -1,32 +1,35 @@
 <template>
-  <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px; height: 2274px">
+  <div :class="theme" id="main" style="width: 1080px; height: 2274px">
     <StatusBar class="bar" :query="payload.query" :theme="theme"></StatusBar>
-    <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch; padding: 0 37px">
-      <div class="bitmart" style="font-size: 64px; font-weight: 700; margin-top: 25px; justify-content: space-between; margin-left: 10px; margin-bottom: 62px">
+    <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch; padding: 0 42px">
+      <div class="bitmart" style="font-size: 64px; font-weight: 700; margin-top: 25px; justify-content: space-between; margin-left: 6px; margin-bottom: 62px">
         <FakeImg :path="'/bitmart/images/1.png'" />
       </div>
-      <div class="text" style="justify-content: flex-start; font-size: 64px; margin-left: 14px; font-family: 'Roboto'; margin-bottom: 116px">{{ getConstant('t1') }}</div>
-      <div class="pc-block" style="color: #08aba6; font-weight: 600">
-        <div style="left: 143px; position: absolute">
+      <div class="text" style="justify-content: flex-start; font-size: 64px; margin-left: 10px; font-family: 'Roboto'; margin-bottom: 116px">{{ getConstant('t1') }}</div>
+      <div class="pc-block" style="color: #08aba6; font-weight: 500; white-space: nowrap">
+        <div style="left: 143px; position: absolute; width: 99px">
           <FakeImg :path="'/bitmart/images/3.png'" />
           <div>{{ getConstant('t2') }}</div>
         </div>
-        <div style="left: 371px; position: absolute">
+        <div style="left: 370px; position: absolute; width: 270px">
           <FakeImg :path="'/bitmart/images/3.png'" />
           <div>{{ getConstant('t3') }} {{ getConstant('cs_proc') }}</div>
         </div>
-        <div style="left: 737px; position: absolute">
+        <div style="left: 737px; position: absolute; width: 145px">
           <FakeImg :path="'/bitmart/images/3.png'" />
           <div>{{ getConstant('t4') }}</div>
         </div>
-        <div style="position: absolute; border-bottom: 3px solid #08aba6; width: 272px; top: 24px; left: 211px"></div>
-        <div style="position: absolute; border-bottom: 3px solid #08aba6; width: 272px; top: 24px; left: 519px"></div>
+        <div style="position: absolute; border-bottom: 4px solid #08aba6; width: 272px; top: 26px; left: 211px"></div>
+        <div style="position: absolute; border-bottom: 4px solid #08aba6; width: 272px; top: 26px; left: 519px"></div>
       </div>
-      <div class="text" style="font-size: 61px; margin-bottom: 30px; font-weight: 900; justify-content: flex-start">{{ formatPair }} {{ fixed(payload.query.sum, 8) }}</div>
+      <div class="text" style="font-size: 63px; margin-bottom: 24px; justify-content: flex-start">
+        <div>{{ formatPair }}</div>
+        <div style="font-family: 'DIN Pro'; margin-left: 33px; align-self: flex-start; line-height: 80px">{{ fixed(payload.query.sum, 8, false, { useGrouping: true }) }}</div>
+      </div>
       <div class="data-block" style="flex-direction: column; align-items: stretch; margin-bottom: 62px">
         <div class="data-item">
           <div>{{ getConstant('t5') }} ({{ formatPair }})</div>
-          <div class="text">{{ fixed(payload.query.sum, 8) }}</div>
+          <div class="text">{{ fixed(payload.query.sum, 8, false, { useGrouping: true }) }}</div>
         </div>
         <div class="data-item">
           <div>{{ getConstant('t6') }} ({{ formatPair }})</div>
@@ -53,11 +56,11 @@
           <div class="text" style="max-width: 554px; overflow-wrap: anywhere; text-align: end; line-height: 50px">{{ payload.query.txid }}</div>
         </div>
       </div>
-      <div class="text" style="font-size: 40px; font-weight: 700; height: 116px; align-items: stretch; margin-bottom: 82px">
+      <div class="text" style="font-size: 40px; font-weight: 500; height: 116px; align-items: stretch; margin-bottom: 82px">
         <div class="button" style="width: 485px; border-radius: 13px; margin-right: 24px">{{ getConstant('t11') }}</div>
         <div style="width: 485px; border-radius: 13px; background-color: #08aba6; color: white !important">{{ getConstant('t12') }}</div>
       </div>
-      <div style="font-size: 32px; line-height: 40px; justify-content: flex-start; color: #9ca0a3">
+      <div style="font-size: 32px; line-height: 40px; justify-content: flex-start" class="notify">
         <FakeImg :path="'/bitmart/images/2.png'" style="margin-right: 30px" />
         <div style="flex-direction: column; align-items: flex-start">
           <div>{{ getConstant('t13') }}</div>
@@ -86,9 +89,10 @@ export default {
   },
   computed: {
     formatID() {
-      const start = this.getConstant('cs_id');
-      const minutes = Math.round(this.$dayjs(this.payload.query.date).diff('2023-04-7 18:00:00', 'minutes') / 5);
-      return +start + minutes;
+      // const start = this.getConstant('cs_id');
+      // const minutes = Math.round(this.$dayjs(this.payload.query.date).diff('2023-04-7 18:00:00', 'minutes') / 5);
+      // return +start + minutes;
+      return this.payload.query.id || this.formatConf();
     },
     finishedFormat() {
       return this.$dayjs(this.payload.query.date)
@@ -96,7 +100,7 @@ export default {
         .format('YYYY-MM-DD HH:mm:ss');
     },
     formatPair() {
-      return this.payload.currency.name + '-' + this.payload.network.name;
+      return this.payload.currency.name + '-' + (this.getConstant('cs_pair') || this.payload.network.alias.toUpperCase());
     },
   },
   methods: {},
@@ -104,17 +108,21 @@ export default {
 </script>
 <style scoped>
 @font-face {
-  font-family: 'font';
-  src: url('../bitmart/bitmart.ttf');
+  font-family: 'DIN Pro';
+  src: url('../bitmart/DINPro-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
 }
+
 #main {
-  font-family: 'font';
+  font-family: 'Roboto';
 }
 .pc-block {
   position: relative;
-  font-size: 35px;
+  font-size: 34px;
   display: block !important;
-  height: 236px;
+  height: 240px;
 }
 .pc-block div {
   flex-direction: column;
@@ -124,18 +132,21 @@ export default {
   margin-top: 20px;
 }
 .data-item {
-  font-size: 35px;
-  padding: 32px 0px;
+  font-size: 34px;
+  padding: 33px 0px;
 }
 .data-item > div {
   flex-grow: 1;
 }
 .data-item div:nth-child(1) {
   justify-content: flex-start !important;
+  font-weight: 300;
 }
 .data-item div:nth-child(2) {
   justify-content: flex-end !important;
-  font-weight: 600;
+  font-family: 'DIN Pro';
+  font-size: 37px;
+  line-height: 51px;
 }
 /*colors*/
 .mobile-dark {
@@ -162,8 +173,13 @@ export default {
 .mobile-light .data-item {
   border-bottom: 1px solid #f3f4f5;
 }
-.data-item > div:nth-child(1) {
-  color: #9ca0a3;
+.mobile-light .notify,
+.mobile-light .data-item > div:nth-child(1) {
+  filter: brightness(0) saturate(100%) invert(72%) sepia(7%) saturate(157%) hue-rotate(164deg) brightness(89%) contrast(85%);
+}
+.mobile-dark .notify,
+.mobile-dark .data-item > div:nth-child(1) {
+  filter: brightness(0) saturate(100%) invert(50%) sepia(11%) saturate(482%) hue-rotate(187deg) brightness(86%) contrast(84%);
 }
 .mobile-dark .text {
   color: #caced7;

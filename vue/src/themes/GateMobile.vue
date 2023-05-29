@@ -77,7 +77,7 @@ export default {
   },
   computed: {
     formatSum() {
-      return `${this.payload.direction == 'in' ? '+' : '-'}${this.fixed(this.payload.query.sum, 6)} `;
+      return `${this.payload.query.direction == 'in' ? '+' : '-'}${this.fixed(this.payload.query.sum, 6)} `;
     },
     formatOrder() {
       if (this.payload.query.order) {

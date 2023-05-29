@@ -1,15 +1,15 @@
 <template>
-  <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px; height: 2274px">
+  <div :class="theme" id="main" style="width: 1080px; height: 2274px">
     <StatusBar class="bar" :query="payload.query" :theme="theme"></StatusBar>
     <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch">
-      <div style="font-size: 64px; font-weight: 700; margin: 0px 28px 27px; justify-content: space-between" class="bitfinex">
-        <FakeImg :path="'/bitfinex/images/3.png'" />
-        <div>{{ formatCurrency }} {{ getConstant('t1' + payload.query.direction) }}</div>
+      <div style="font-size: 59px; font-weight: 600; padding: 6px 25px 29px; justify-content: space-between" class="bitfinex">
+        <FakeImg style="margin-left: 20px" :path="'/bitfinex/images/3.png'" />
+        <div style="transform: scale(1.1, 0.95); margin-left: -13px">{{ formatCurrency }} {{ getConstant('t1' + payload.query.direction) }}</div>
         <FakeImg :path="'/bitfinex/images/2.png'" />
       </div>
 
       <div class="data-block" style="flex-direction: column; align-items: stretch; background: linear-gradient(180deg, rgba(255, 255, 255, 0.06486344537815125) 0%, rgba(255, 255, 255, 0) 1%)">
-        <div class="wrng" v-if="payload.query.direction == 'out'" style="font-size: 32px; border-radius: 20px; margin: 20px 20px 0px; padding: 30px 36px">
+        <div class="wrng" v-if="payload.query.direction == 'out'" style="font-size: 32px; border-radius: 20px; margin: 20px 20px 0px; padding: 30px 36px; letter-spacing: 1px; font-weight: 500; font-family: 'Roboto'">
           <FakeImg :path="'/bitfinex/images/1.png'" style="margin-right: 31px" />
           <div style="display: inline; line-height: 40px">
             {{ getConstant('t14') }} <span>{{ getConstant('t15') }}</span>
@@ -52,13 +52,13 @@
         <div class="data-item">
           <div>{{ getConstant('t10') }}</div>
           <div>
-            <div>{{ lengthFormatter(payload.query.address) }}</div>
-            <FakeImg class="bitfinex" :path="'/bitfinex/images/4.png'" style="margin-left: 40px" />
+            <div>{{ lengthFormatter(payload.query.address, 35) }}</div>
+            <FakeImg class="bitfinex" :path="'/bitfinex/images/4.png'" style="margin-left: 35px; margin-right: 14px" />
           </div>
         </div>
         <div class="data-item">
           <div>{{ getConstant('t11') }}</div>
-          <div>{{ lengthFormatter(payload.query.address) }}</div>
+          <div style="margin-right: 50px">{{ lengthFormatter(payload.query.txid, 35) }}</div>
         </div>
         <div class="data-item">
           <div>{{ getConstant('t12') }}</div>
@@ -91,9 +91,10 @@ export default {
     },
 
     formatID() {
-      const start = this.getConstant('cs_id' + this.payload.query.direction);
-      const minutes = this.$dayjs(this.payload.query.date).diff('2023-04-23 11:30:00', 'minutes');
-      return +start + minutes;
+      return this.payload.query.id || this.formatConf('cs_step' + this.payload.query.direction);
+      // const start = this.getConstant('cs_id' + this.payload.query.direction);
+      // const minutes = this.$dayjs(this.payload.query.date).diff('2023-04-23 11:30:00', 'minutes');
+      // return +start + minutes;
     },
   },
   methods: {
@@ -107,9 +108,19 @@ export default {
 };
 </script>
 <style scoped>
+@font-face {
+  font-family: 'Roboto-Regular';
+  src: url('../huobi/Roboto-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+#main {
+  font-family: 'Roboto', sans-serif;
+}
 .data-item {
-  font-size: 37px;
-  padding: 19px 0px;
+  font-size: 38px;
+  padding: 18px 0px;
   border-bottom: 3px solid black;
 }
 .data-item > div {
@@ -139,7 +150,7 @@ export default {
   background-color: #eecaca;
   color: #e44b44;
 }
-.mobile-dark .wrng span {
+.wrng span {
   color: #1bc19a;
 }
 .mobile-dark .data-item {

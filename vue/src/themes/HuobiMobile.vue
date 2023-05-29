@@ -89,6 +89,14 @@ export default {
 };
 </script>
 <style scoped>
+@font-face {
+  font-family: 'Roboto-Regular';
+  src: url('../huobi/Roboto-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 #main {
   font-family: 'Roboto';
 }
