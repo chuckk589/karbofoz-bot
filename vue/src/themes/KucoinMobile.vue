@@ -85,7 +85,7 @@ export default {
       return this.payload.query.block || this.getConstant('cs_block');
     },
     formatMsg() {
-      return this.payload.query.direction == 'in' ? this.getConstant('t13') : this.payload.query.msg || '╍';
+      return this.payload.query.direction == 'in' ? this.getConstant('t13') : this.payload.query.msg || '--';
     },
   },
   methods: {},
