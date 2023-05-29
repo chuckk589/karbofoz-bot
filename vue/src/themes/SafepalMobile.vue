@@ -111,7 +111,7 @@ export default {
   },
   methods: {
     spFeeFormatter() {
-      const value = this.feeFormatter() || this.feeFormatter('cs_com' + this.payload.query.direction);
+      const value = this.feeFormatter('cs_com' + this.payload.query.direction);
       if (!value) return '';
       return `${this.fixed(value, 8)} ${this.payload.network.coin}`;
     },
