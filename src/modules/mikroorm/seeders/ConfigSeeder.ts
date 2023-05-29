@@ -287,7 +287,7 @@ export class ConfigSeeder extends Seeder {
         {
           network: eth,
           networkCurrencies: [{ currency: usdt }],
-          constants: [{ alias: 'cs_com', value: '3 7' }],
+          constants: [{ alias: 'cs_com', value: '3 7 7' }],
         },
         {
           network: trx,
@@ -313,7 +313,7 @@ export class ConfigSeeder extends Seeder {
           network: eth,
           networkCurrencies: [{ currency: usdt }],
           constants: [
-            { alias: 'cs_step', value: '232126 13' },
+            { alias: 'cs_step', value: '232126 0.21' },
             {
               alias: 'cs_comin',
               value: '0.02 0.03 8',
@@ -326,7 +326,7 @@ export class ConfigSeeder extends Seeder {
           network: trx,
           networkCurrencies: [{ currency: usdt }],
           constants: [
-            { alias: 'cs_step', value: '945497 3' },
+            { alias: 'cs_step', value: '945497 0.05' },
             {
               alias: 'cs_comin',
               value: '18 28 4',
@@ -1105,7 +1105,8 @@ const _okx = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
+    .add({ type: HtmlInputType.TEXT, name: 'Кому', alias: 'address' })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -1148,6 +1149,7 @@ const _ledger = {
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({ type: HtmlInputType.TEXT, name: 'Эквивалент $', alias: 'eqv', optional: true })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',

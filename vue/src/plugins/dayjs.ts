@@ -14,12 +14,11 @@ Object.defineProperty(String.prototype, 'capitalize', {
   },
   enumerable: false,
 });
-
+dayjs.extend(localizedFormat);
 dayjs.extend(isToday);
 dayjs.extend(relativeTime);
 dayjs.extend(calendar);
 dayjs.extend(updateLocale);
-dayjs.extend(localizedFormat);
 
 dayjs.updateLocale('ru', {
   calendar: {
