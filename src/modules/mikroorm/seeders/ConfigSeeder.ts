@@ -1196,6 +1196,8 @@ const _metamask = {
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'От', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'В адрес', alias: 'address2' })
+    .add({ type: HtmlInputType.NUMBER, name: 'Эквивалент $', alias: 'eqv', optional: true })
+    .add({ type: HtmlInputType.NUMBER, name: 'Примерная плата за газ', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -1242,6 +1244,7 @@ const _mexc = {
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({ type: HtmlInputType.TEXT, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
