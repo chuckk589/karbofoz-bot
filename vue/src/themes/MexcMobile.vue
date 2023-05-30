@@ -2,19 +2,19 @@
   <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px; height: 2274px">
     <StatusBar class="bar" :query="payload.query" :theme="theme"></StatusBar>
     <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch; padding: 0px 38px">
-      <div style="margin-bottom: 45px; margin-top: 10px; justify-content: space-between">
+      <div style="margin-bottom: 37px; margin-top: 10px; justify-content: space-between">
         <FakeImg class="mexc" :path="'/mexc/images/1.png'" />
-        <div style="font-size: 45px; font-family: 'font1'" class="text1">
+        <div style="font-size: 45px; font-family: 'Noto Sans'; font-weight: 400" class="text1">
           {{ getConstant('t1' + payload.query.direction) }}
         </div>
         <div style="width: 51px"></div>
       </div>
       <div style="margin-bottom: 48px; flex-direction: column">
         <div>
-          <div style="font-size: 77px; font-family: 'font2'" class="text2">{{ fixed(payload.query.sum, 8) }}</div>
-          <div style="font-size: 50px; align-self: flex-end; margin-left: 30px" class="text1">{{ formatCurName }}</div>
+          <div style="font-size: 84px; font-family: 'Hacker Argot'" class="text2">{{ fixed(payload.query.sum, 8) }}</div>
+          <div style="font-size: 52px; align-self: flex-end; margin-left: 30px; font-family: 'Noto Sans'; margin-bottom: 8px" class="text1">{{ formatCurName }}</div>
         </div>
-        <div style="font-size: 38px; margin-top: 9px" class="gray">{{ getConstant('t2') }}</div>
+        <div style="font-size: 34px; margin-top: 6px; letter-spacing: 0.8px" class="gray">{{ getConstant('t2') }}</div>
       </div>
       <div class="gray2" style="align-items: stretch; flex-direction: column; padding: 0px 33px 39px 33px; font-size: 31px; letter-spacing: 1px">
         <div style="border-bottom: 1px solid; padding: 30px 0px; margin-top: 20ox; margin-top: 7px; justify-content: flex-start">
@@ -63,7 +63,7 @@
         </div>
       </div>
       <div class="mexc2" style="font-size: 33px; margin-top: 29px" v-if="payload.query.direction == 'out'">{{ getConstant('t12') }}</div>
-      <div class="button" style="height: 121px; margin-top: auto; font-size: 42px; font-family: 'font1'; margin-bottom: 77px" v-if="payload.query.direction == 'out'">{{ getConstant('t13') }}</div>
+      <div class="button" style="height: 121px; margin-top: auto; font-size: 42px; margin-bottom: 77px" v-if="payload.query.direction == 'out'">{{ getConstant('t13') }}</div>
     </div>
   </div>
 </template>
@@ -99,15 +99,70 @@ export default {
 .sumFormatter
 <style scoped>
 @font-face {
-  font-family: 'font1';
-  src: url('../mexc/mxc1.ttf');
+  font-family: 'Arialm';
+  src: url('../mexc/Arial-BoldMT.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
 }
 @font-face {
-  font-family: 'font2';
-  src: url('../mexc/mxc2.ttf');
+  font-family: 'Noto Sans';
+  src: url('../mexc/NotoSans-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
 }
+
+@font-face {
+  font-family: 'Noto Sans';
+  src: url('../mexc/NotoSans-ExtraBold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans';
+  src: url('../mexc/NotoSans-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans';
+  src: url('../mexc/NotoSans-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans';
+  src: url('../mexc/NotoSans-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Regular';
+  src: url('../mexc/NotoSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hacker Argot';
+  src: url('../mexc/HackerArgot.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 #main {
-  font-family: 'font1';
+  font-family: 'Noto Sans', sans-serif;
 }
 .data-item {
   font-size: 36px;
@@ -122,7 +177,6 @@ export default {
 }
 .data-item > div:nth-child(2) {
   justify-content: flex-end !important;
-  font-family: 'font1';
 }
 /*colors*/
 

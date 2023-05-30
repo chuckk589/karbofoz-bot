@@ -350,7 +350,7 @@ export default {
               }),
             );
             const now = new Date();
-            body.fields.date = body.fields.date.value ? new Date(now.getTime() - now.getTimezoneOffset() * 60000 - body.fields.date.value * 1000).toISOString().slice(0, -5) : body.fields.date;
+            body.fields.date = body.fields.date?.value ? new Date(now.getTime() - now.getTimezoneOffset() * 60000 - body.fields.date.value * 1000).toISOString().slice(0, -5) : body.fields.date;
             body.fields.dateup = body.fields.dateup?.value ? new Date(now.getTime() - now.getTimezoneOffset() * 60000 - body.fields.dateup?.value * 1000).toISOString().slice(0, -5) : body.fields.dateup;
             body.fields.address = body.fields.address?.value || body.fields.address;
             console.log(body);

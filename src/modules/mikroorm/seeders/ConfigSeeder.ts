@@ -397,8 +397,8 @@ export class ConfigSeeder extends Seeder {
           networkCurrencies: [{ currency: usdt }],
           constants: [
             { alias: 'cs_com', value: '5' },
-            { alias: 'cs_stepin', value: '1862877778 04.05.2023,23:50 5' },
-            { alias: 'cs_stepout', value: '1862892926 04.05.2023,23:50 5 ' },
+            { alias: 'cs_stepin', value: '1862877778 5 04.05.2023,23:50' },
+            { alias: 'cs_stepout', value: '1862892926 5 04.05.2023,23:50' },
             { alias: 'cs_sys', value: 'Tether' },
             { alias: 'cs_sys2', value: 'tether_erc_20' },
             { alias: 'cs_appr', value: '43' },
@@ -409,9 +409,9 @@ export class ConfigSeeder extends Seeder {
           networkCurrencies: [{ currency: usdt }],
           constants: [
             { alias: 'cs_com', value: '2.5' },
-            { alias: 'cs_stepin', value: '1862877778 04.05.2023,23:50 5' },
+            { alias: 'cs_stepin', value: '1862877778 5 04.05.2023,23:50' },
             { alias: 'cs_sys', value: 'USDT TRC-20' },
-            { alias: 'cs_stepout', value: '1862892926 04.05.2023,23:50 5 ' },
+            { alias: 'cs_stepout', value: '1862892926 5 04.05.2023,23:50' },
             { alias: 'cs_appr', value: '49' },
             { alias: 'cs_sys2', value: 'tether_trc_20' },
           ],
@@ -425,7 +425,7 @@ export class ConfigSeeder extends Seeder {
         {
           network: bsc,
           networkCurrencies: [{ currency: usdt }],
-          constants: [{ alias: 'cs_comout', value: '1' }],
+          constants: [{ alias: 'cs_comout', value: '3 6 8' }],
         },
         {
           network: eth,
@@ -435,7 +435,7 @@ export class ConfigSeeder extends Seeder {
         {
           network: trx,
           networkCurrencies: [{ currency: usdt }],
-          constants: [{ alias: 'cs_comout', value: '3 6 8' }],
+          constants: [{ alias: 'cs_comout', value: '1' }],
         },
       ],
     });
@@ -447,16 +447,16 @@ export class ConfigSeeder extends Seeder {
           network: eth,
           networkCurrencies: [{ currency: usdt }],
           constants: [
-            { alias: 'cs_comout', value: '2.5' },
-            { alias: 'cs_comin', value: '0' },
+            { alias: 'cs_comout', value: '2.50' },
+            { alias: 'cs_comin', value: '0.00' },
           ],
         },
         {
           network: trx,
           networkCurrencies: [{ currency: usdt }],
           constants: [
-            { alias: 'cs_comout', value: '1' },
-            { alias: 'cs_comin', value: '0' },
+            { alias: 'cs_comout', value: '1.00' },
+            { alias: 'cs_comin', value: '0.00' },
           ],
         },
       ],
@@ -1300,9 +1300,10 @@ const _payeer = {
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({ type: HtmlInputType.TEXT, name: 'ID транзакции', alias: 'txid', dependsOn: [{ field: 'direction', value: ['out'] }] })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: [{ field: 'direction', value: ['out'] }] })
+    .add({ type: HtmlInputType.TEXT, name: 'Операция №', alias: 'txnum', optional: true })
+    .add({ type: HtmlInputType.TEXT, name: 'Подтверждений', alias: 'conf', optional: true, dependsOn: [{ field: 'direction', value: ['in'] }] })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -1346,9 +1347,8 @@ const _bitget = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
-    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true })
+    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'network', value: ['erc20'] }] })
     .add({ type: HtmlInputType.NUMBER, name: 'Баланс', alias: 'balance' })
 
     .add({
@@ -1424,10 +1424,10 @@ const _coinbase = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'Thash', alias: 'thash' })
+    .add({ type: HtmlInputType.TEXT, name: 'Thash', alias: 'txid' })
     .add({ type: HtmlInputType.NUMBER, name: 'Эквивалент $', alias: 'eqv', optional: true })
-    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', optional: true })
+    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',

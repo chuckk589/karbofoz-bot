@@ -12,7 +12,7 @@
         <div style="margin-bottom: 42px; align-items: stretch">
           <FakeImg :path="'safepal/images/coins/' + payload.currency.name.toLowerCase() + '.png'" style="margin-right: 20px" />
           <div class="text" style="line-height: 50px; padding-top: 20px">
-            <div style="font-size: 140px">{{ fixed(payload.query.sum, 0) }}</div>
+            <div style="font-size: 140px">{{ payload.query.sum.split('.')[0] }}</div>
             <div style="font-size: 65px; align-self: flex-start">.{{ fixed(payload.query.sum, 2).split('.').pop() }}</div>
           </div>
         </div>
@@ -50,7 +50,7 @@
             </div>
             <div class="data-item" v-if="payload.query.direction == 'in'">
               <div>{{ getConstant('t15') }}</div>
-              <div>{{ getConstant('cs_appr') }}</div>
+              <div>{{ payload.query.conf || getConstant('cs_appr') }}</div>
             </div>
           </div>
         </div>
@@ -109,9 +109,10 @@ export default {
   mounted() {},
   computed: {
     formatOp() {
-      const step = this.getConstant('cs_step' + this.payload.query.direction)?.split(' ');
-      const iterations = Math.round(this.$dayjs(step[1]).diff(this.$dayjs(this.payload.query.date), 'minute') / step[2]);
-      return `#${+step[0] + iterations}`;
+      // const step = this.getConstant('cs_step' + this.payload.query.direction)?.split(' ');
+      // const iterations = Math.round(this.$dayjs(step[1]).diff(this.$dayjs(this.payload.query.date), 'minute') / step[2]);
+      // return `#${+step[0] + iterations}`;
+      return `#${this.payload.query.txnum || this.formatConf('cs_step' + this.payload.query.direction)}`;
     },
     formatCom() {
       return `Ŧ${(+this.payload.query.sum + +this.getConstant('cs_com')).toFixed(2)}`;
@@ -123,12 +124,39 @@ export default {
 .sumFormatter
 <style scoped>
 @font-face {
-  font-family: 'font';
-  src: url('../payeer/payeer.ttf');
+  font-family: 'Proxima Nova';
+  src: url('../payeer/ProximaNova-Semibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('../payeer/ProximaNova-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('../payeer/ProximaNova-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('../payeer/ProximaNova-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 #main {
-  font-family: 'font';
+  font-family: 'Proxima Nova';
 }
 .data-item {
   font-size: 39px;
@@ -146,6 +174,7 @@ export default {
 .data-item > div:nth-child(1) {
   max-width: 435px;
   color: #7b8aa7;
+  line-height: 50px;
   min-width: 435px;
 }
 .footer > div {

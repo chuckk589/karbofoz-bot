@@ -21,21 +21,17 @@
           <div>{{ getConstant('t1' + payload.query.direction) }}</div>
           <div>{{ getConstant('t2') }}</div>
         </div>
-        <div class="data-item text2" v-if="payload.query.direction == 'in'">
-          <div>{{ payload.currency.name }}</div>
-          <div>{{ +(+payload.query.sum).toFixed(8) }}</div>
-        </div>
-        <div class="data-item text2" v-if="payload.query.direction == 'out'">
-          <div>{{ getConstant('t4') }}</div>
-          <div>{{ payload.currency.name }} {{ +(+payload.query.sum).toFixed(8) }}</div>
+        <div class="data-item text2">
+          <div>{{ payload.query.direction == 'in' ? payload.currency.name : getConstant('t4') }}</div>
+          <div>{{ formatSum }}</div>
         </div>
         <div class="data-item text2">
           <div>{{ getConstant('t3') }}</div>
-          <div>{{ payload.currency.name }} {{ (+getConstant('cs_com' + payload.query.direction)).toFixed(2) }}</div>
+          <div>{{ formatFee }}</div>
         </div>
         <div class="data-item text1" v-if="payload.query.direction == 'out'" style="border-top: 3px solid">
           <div>{{ getConstant('t5') }}</div>
-          <div>{{ payload.currency.name }} {{ +(+payload.query.sum).toFixed(8) - (+getConstant('cs_com' + payload.query.direction)).toFixed(2) }}</div>
+          <div>{{ formatTotal }}</div>
         </div>
         <div class="data-item text2" style="margin-top: 132px; font-size: 30px; padding: 15px 0px; border-bottom: 4px solid; border-top: 0">
           <div>{{ getConstant('t6') }}</div>
@@ -46,7 +42,7 @@
           <div style="color: #9b7fe5">{{ genID }}</div>
         </div>
       </div>
-      <div class="text2 block" style="margin-top: auto; height: 350px; font-size: 37px; padding-top: 90px">
+      <div class="text2 block" style="margin-top: auto; height: 452px; font-size: 37px; align-items: flex-start; padding-top: 90px">
         {{ getConstant('t8') }}
       </div>
     </div>
@@ -75,7 +71,20 @@ export default {
       return this.$dayjs(this.payload.query.date).locale(this.payload.query.language).format('ll HH:mm');
     },
     genID() {
-      return `${this.randomStr(6)}-${this.randomStr(5)}-${this.randomStr(6)}`;
+      return this.payload.query.krakenid || `${this.randomStr(6)}-${this.randomStr(5)}-${this.randomStr(6)}`;
+    },
+    formatTotal() {
+      const sum = this.fixed(this.payload.query.sum - this.getConstant('cs_com' + this.payload.query.direction), 4, true);
+      return this.payload.query.language == 'en' ? this.payload.currency.name + ' ' + sum : sum + ' ' + this.payload.currency.name;
+    },
+    formatFee() {
+      const sum = this.fixed(this.getConstant('cs_com' + this.payload.query.direction), 2, true, { minimumFractionDigits: 2 });
+      return this.payload.query.language == 'en' ? this.payload.currency.name + ' ' + sum : sum + ' ' + this.payload.currency.name;
+    },
+    formatSum() {
+      const sum = this.fixed(this.payload.query.sum, 8, true);
+      const add = this.payload.query.direction == 'in' ? '' : this.payload.currency.name;
+      return this.payload.query.language == 'en' ? add + ' ' + sum : sum + ' ' + add;
     },
   },
   methods: {
@@ -96,7 +105,7 @@ export default {
   font-size: 42px;
   letter-spacing: 1px;
   padding: 14px 0;
-  border-top: 2px solid;
+  border-top: 3px solid;
 }
 .data-item:last-child {
   border-bottom: none;
@@ -128,7 +137,7 @@ export default {
   backdrop-filter: brightness(0) saturate(100%) invert(89%) sepia(6%) saturate(25%) hue-rotate(326deg) brightness(102%) contrast(88%);
 }
 .mobile-light .kraken-bd {
-  filter: brightness(0) saturate(100%) invert(9%) sepia(1%) saturate(987%) hue-rotate(314deg) brightness(104%) contrast(86%);
+  backdrop-filter: brightness(0) saturate(100%) invert(9%) sepia(1%) saturate(987%) hue-rotate(314deg) brightness(104%) contrast(86%);
 }
 
 .mobile-light .text1 {
@@ -139,9 +148,11 @@ export default {
 }
 .mobile-light .text2 {
   color: #707070;
+  border-color: #ebebeb;
 }
 .mobile-dark .text2 {
   color: #979797;
+  border-color: #434343;
 }
 .mobile-light .block {
   background-color: #ebebeb;
