@@ -15,7 +15,6 @@ import { DeviceBarInput } from '../entities/DeviceBarInput';
 type selectValue = { value: string; alias: string };
 type field = { type: HtmlInputType; name: string; optional?: boolean; hint?: string; values?: selectValue[]; alias: string; dependsOn?: dependsOnField[] };
 type data = { name: string; statusbar?: boolean; languages: string[]; themes: { alias: string; name: string }[]; fields: Set<field> };
-
 type deviceData = { name: string; fields: field[] };
 
 export type dependsOnField = { field: string; value?: string[] };
@@ -1474,9 +1473,9 @@ const _bitpapa = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
-    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', optional: true })
+    .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid', dependsOn: [{ field: 'direction', value: ['out'] }] })
+    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -1512,7 +1511,8 @@ const _exmo = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', optional: true })
+    .add({ type: HtmlInputType.TEXT, name: 'Номер транзакции', alias: 'txnum', optional: true })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -1529,7 +1529,7 @@ const _exmo = {
     .add({ uk: 'Виплачено', ru: 'Выплачено', en: 'Paid', alias: 't4out' })
     .add({ uk: 'Переказано', ru: 'Переведено', en: 'Transferred', alias: 't4in' })
     .add({ uk: 'Платіжний провайдер', ru: 'Платежная система', en: 'Payment System', alias: 't5' })
-    .add({ uk: 'ID transaction:', ru: 'Номер транзакции:', en: 'ID transaction', alias: 't6' })
+    .add({ uk: 'ID transaction:', ru: 'Номер транзакции:', en: 'ID transaction:', alias: 't6' })
     .add({ uk: 'Адреса:', ru: 'Адрес:', en: 'Address:', alias: 't7' }),
 };
 
@@ -1547,7 +1547,7 @@ const _garantex = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
-    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true })
+    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({
       type: HtmlInputType.SELECT,
       name: 'Направление',
@@ -1666,8 +1666,8 @@ const _samsung = {
         { value: 'Dual SIM', alias: 'sim2' },
       ],
     },
-    { alias: 'wifiS1', name: 'Wi-Fi 1 signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4' },
-    { alias: 'wifiS2', name: 'Wi-Fi 2 signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4', dependsOn: 'simnum', dependsValue: 'sim2' },
+    { alias: 'wifiS1', name: 'Sim 1 signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4' },
+    { alias: 'wifiS2', name: 'Sim 2 signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4', dependsOn: [{ field: 'simnum', value: ['sim2'] }] },
     {
       alias: 'sound',
       name: 'Sound',
@@ -1696,8 +1696,8 @@ const _samsung = {
         { value: 'Прием', alias: 'in' },
       ],
     },
-    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4', dependsOn: 'wifiShare', dependsValue: 'in' },
-    { alias: 'volte', name: 'voLTE', dependsOn: 'wifiShare', dependsValue: 'in' },
+    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4', dependsOn: [{ field: 'wifiShare', value: ['in'] }] },
+    { alias: 'volte', name: 'voLTE', dependsOn: [{ field: 'wifiShare', value: ['in'] }] },
     {
       alias: 'wifiMode',
       name: 'H+ / Volte',
@@ -1706,8 +1706,7 @@ const _samsung = {
         { value: 'H+', alias: 'h' },
         { value: 'Volte', alias: 'volte' },
       ],
-      dependsOn: 'wifiShare',
-      dependsValue: 'out',
+      dependsOn: [{ field: 'wifiShare', value: ['out'] }],
     },
     { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER },
     { alias: 'geoloc', name: 'Geolocation' },
@@ -1734,9 +1733,9 @@ const _realme = {
       ],
     },
     { alias: 'bar1', name: 'Sim 1 signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4' },
-    { alias: 'bar2', name: 'Sim2 signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4', dependsOn: 'simnum', dependsValue: 'sim2' },
+    { alias: 'bar2', name: 'Sim 2 signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4', dependsOn: [{ field: 'simnum', value: ['sim2'] }] },
     { alias: 'wifiAP', name: 'Wi-Fi access point' },
-    { alias: 'wifiAPS', name: 'Wi-Fi AP signal', type: HtmlInputType.NUMBER, dependsOn: 'wifiAP' },
+    { alias: 'wifiAPS', name: 'Wi-Fi AP signal', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiAP' }] },
     { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER },
   ],
 };
@@ -1799,8 +1798,7 @@ async function GenerateDeviceInputs(this: { em: EntityManager }, data: deviceDat
       device,
       input: existing,
       hint: field.hint,
-      dependsOn: field.dependsOn,
-      dependsValue: field.dependsValue,
+      dependsOn: JSON.stringify(field.dependsOn),
     });
   });
   await this.em.flush();

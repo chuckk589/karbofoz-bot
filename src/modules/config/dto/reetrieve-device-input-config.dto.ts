@@ -8,14 +8,12 @@ export class ReetrieveDeviceInputConfigDto {
     this.hint = deviceBarInput.hint || undefined;
     this.variants = deviceBarInput.input.variants.getItems().map((variant) => new RetrieveConfigDto({ title: variant.name, value: variant.alias }));
     this.type = deviceBarInput.input.type || undefined;
-    this.dependsOn = deviceBarInput.dependsOn || undefined;
-    this.dependsValue = deviceBarInput.dependsValue || undefined;
+    this.dependsOn = JSON.parse(deviceBarInput.dependsOn);
   }
   name: string;
   alias: string;
   hint?: string;
   dependsOn?: string;
-  dependsValue?: string;
   type: string;
   variants?: RetrieveConfigDto[];
 }

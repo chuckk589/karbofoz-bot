@@ -19,7 +19,7 @@ export class ConfigService {
     );
     const devices = await this.em.find(Device, {}, { populate: ['deviceBarInputs.input.variants'] });
     return {
-      exchanges: exchanges.map((exchange) => new RetrieveExchangeConfigDto(exchange)),
+      exchanges: exchanges.map((exchange) => new RetrieveExchangeConfigDto(exchange)).sort((a, b) => a.title.localeCompare(b.title)),
       devices: devices.map((device) => new RetrieveDeviceConfigDto(device)),
     };
   }

@@ -1,15 +1,15 @@
 <template>
   <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px">
     <StatusBar class="bar" :query="payload.query" :theme="theme"></StatusBar>
-    <div id="wobar" style="flex-direction: column; align-items: stretch; margin: 0px 50px">
-      <div style="justify-content: flex-start; padding: 14px 0 0 11px">
-        <FakeImg style="margin-right: 20px" :path="'/cexio/images/' + (payload.query.direction == 'out' ? '1.png' : '2.png')" />
+    <div id="wobar" style="flex-direction: column; align-items: stretch; padding: 0px 50px">
+      <div style="justify-content: flex-start; padding: 14px 0 10px 11px">
+        <FakeImg style="margin-right: 26px" :path="'/cexio/images/' + (payload.query.direction == 'out' ? '1.png' : '2.png')" />
         <div style="flex-direction: column; align-items: flex-start; width: 100%">
-          <div style="font-size: 40px; width: 100%; justify-content: space-between">
-            <div style="letter-spacing: 3px; font-weight: 600">{{ getConstant('t1' + payload.query.direction) }}</div>
-            <div>{{ fixed(payload.query.sum, 6, true) }}</div>
+          <div style="font-family: Noto Sans Medium; font-size: 39px; width: 100%; justify-content: space-between">
+            <div style="letter-spacing: 1.8px; font-weight: 600">{{ getConstant('t1' + payload.query.direction) }}</div>
+            <div style="font-family: Noto Sans Regular; font-size: 40px">{{ formatSum }}</div>
           </div>
-          <div style="width: 100%; justify-content: space-between; font-size: 30px; color: #7f93ab">
+          <div style="width: 100%; justify-content: space-between; line-height: 34px; font-size: 29px; color: rgb(127, 147, 171); font-family: 'Noto Sans Regular'">
             <div>{{ getConstant('t2') }}</div>
             <div>{{ $dayjs(payload.query.date).format('DD MMM YY HH:mm:ss') }}</div>
           </div>
@@ -44,17 +44,97 @@ export default {
     };
   },
   mounted() {},
-  computed: {},
+  computed: {
+    formatSum() {
+      return `${this.payload.query.direction == 'out' ? '-' : ''}${this.fixed(this.payload.query.sum, 8)}`;
+    },
+  },
 };
 </script>
 <style scoped>
+/* @font-face {
+  font-family: 'Open Sans';
+  src: url('OpenSans.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('OpenSans-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
 #main {
   font-family: 'Open Sans', sans-serif;
+} */
+
+@font-face {
+  font-family: 'Noto Sans';
+  src: url('../mexc/NotoSans-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans';
+  src: url('../mexc/NotoSans-ExtraBold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans';
+  src: url('../mexc/NotoSans-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Medium';
+  src: url('../mexc/NotoSans-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans';
+  src: url('../mexc/NotoSans-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Regular';
+  src: url('../mexc/NotoSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hacker Argot';
+  src: url('../mexc/HackerArgot.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+#main {
+  font-family: 'Noto Sans Regular', sans-serif;
 }
 .data-item {
-  font-size: 30px;
+  font-size: 29px;
   padding: 12px 0;
-  margin-bottom: 10px;
+  margin-bottom: 11px;
 }
 
 .data-item > div {
@@ -66,6 +146,8 @@ export default {
 
 .data-item > div:nth-child(2) {
   justify-content: flex-end !important;
+  font-family: Noto Sans;
+  font-weight: 600;
 }
 .mobile-dark {
   background-color: #10141f;

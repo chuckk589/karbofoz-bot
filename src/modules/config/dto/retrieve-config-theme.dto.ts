@@ -9,10 +9,12 @@ export class RetrieveConfigThemeDto {
     this.inputs = theme.themeInputs.getItems().map((themeInput) => new RetrieveConfigInputDto(themeInput.input));
     this.languages = theme.themeLanguages.getItems().map((themeLanguage) => new RetrieveConfigDto({ title: themeLanguage.language.name, value: themeLanguage.language.alias }));
     this.statusbar = theme.statusbar;
+    this.alias = theme.alias;
   }
   title: string;
   value: string;
   statusbar: boolean;
+  alias: string;
   inputs: RetrieveConfigInputDto[];
   languages: RetrieveConfigDto[];
 }

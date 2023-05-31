@@ -1,12 +1,12 @@
 <template>
   <v-app style="background-color: #d3d3d326" class="h-auto">
-    <v-container class="ma-auto">
+    <v-container>
       <v-card>
         <v-card-title class="text-h6 font-weight-regular justify-space-between">
           <span>{{ currentTitle }}</span>
         </v-card-title>
 
-        <v-window v-model="step">
+        <v-window v-model="step" :touch="{ left: null, right: null }">
           <v-window-item :value="1">
             <v-card-text>
               <v-form ref="form1">
@@ -44,7 +44,7 @@
                 </component>
                 <div class="d-flex align-center justify-space-between">
                   <div class="text-grey">Статус бар</div>
-                  <v-checkbox-btn style="flex: 0" v-model="statusbar.show"></v-checkbox-btn>
+                  <v-checkbox-btn style="flex: 0" v-model="statusbar.show" :disabled="!themeBar"></v-checkbox-btn>
                 </div>
                 <v-expand-transition>
                   <div v-show="statusbar.show">
@@ -54,7 +54,7 @@
                       :is="getComponentDeviceName(field)"
                       :type="field.type"
                       :key="index"
-                      v-show="field.dependsOn ? (field.dependsValue ? statusbar[field.dependsOn] == field.dependsValue : statusbar[field.dependsOn]) : true"
+                      :disabled="getDisabledBarState(field)"
                       :label="field.name"
                       :items="fieldItems(field)"
                       density="compact"
@@ -66,7 +66,8 @@
             </v-card-text>
           </v-window-item>
           <v-window-item :value="3">
-            <a download="preview.png" target="_blank" :href="preview"><v-img class="mb-5" :aspect-ratio="1" :src="preview" /></a>
+            <v-img class="mb-5" :aspect-ratio="1" :src="preview" />
+            <!-- <a download="preview.png" target="_blank" :href="preview"><v-img class="mb-5" :aspect-ratio="1" :src="preview" /></a> -->
           </v-window-item>
           <v-window-item :value="4">
             <v-card-text>
@@ -107,7 +108,7 @@
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
               </v-toolbar>
-              <v-window v-model="tab">
+              <v-window v-model="tab" :touch="{ left: null, right: null }">
                 <v-window-item :value="1">
                   <v-card-text style="padding: 0; height: calc(100vh - 100px); overflow-y: scroll">
                     <v-list density="compact" @click:select="(item) => (selectedRow = item.id)" lines="two">
@@ -194,6 +195,7 @@ export default {
       loading: false,
       language: '',
       currency: null,
+      direction: null,
       network: null,
       statusbar: { show: false },
       presets: [],
@@ -311,6 +313,20 @@ export default {
       }
       return false;
     },
+    getDisabledBarState(field) {
+      if (field.dependsOn) {
+        return !field.dependsOn.reduce((acc, item) => {
+          const formValue = this.statusbar[item.field];
+          if (item.value) {
+            if (!item.value.includes(formValue)) acc = false;
+          } else {
+            if (!formValue) acc = false;
+          }
+          return acc;
+        }, true);
+      }
+      return false;
+    },
     getComponentName(field) {
       if (field.type == 'select') return 'v-select';
       else if (field.type == 'datetime-local') return 'date-select';
@@ -404,6 +420,7 @@ export default {
       this.currency = null;
       this.network = null;
       this.form = {};
+      this.direction = null;
       this.step = 1;
       this.errorMessage = '';
       this.preview = null;
@@ -411,42 +428,41 @@ export default {
       this.fields = {};
     },
     update() {
-      if ((this.theme && !this.themeItems.find((theme) => theme.value == this.theme)) || !this.theme) this.theme = this.themeItems[0].value;
-      if ((this.language && !this.themeLanguages.find((language) => language.value == this.language)) || !this.language) this.language = this.themeLanguages[0].value;
-      if ((this.network && !this.themeNetworks.find((network) => network.value == this.network)) || !this.network) this.network = this.themeNetworks[0].value;
+      if ((this.theme && !this.themeItems.find((theme) => theme.value == this.theme)) || !this.theme) {
+        //find dark theme
+        this.theme = this.themeItems.find((theme) => theme.alias == 'mobile-dark')?.value || this.themeItems[0].value;
+      }
+      if ((this.language && !this.themeLanguages.find((language) => language.value == this.language)) || !this.language) {
+        //find ru lan
+        this.language = this.themeLanguages.find((language) => language.value == 'ru')?.value || this.themeLanguages[0].value;
+      }
+      if ((this.network && !this.themeNetworks.find((network) => network.value == this.network)) || !this.network) {
+        //find trx network
+        this.network = this.themeNetworks.find((network) => network.value == 'trc20')?.value || this.themeNetworks[0].value;
+      }
       if ((this.currency && !this.themeCurrencies.find((currency) => currency.value == this.currency)) || !this.currency) this.currency = this.themeCurrencies[0].value;
     },
     filteredForm() {
-      const keys = Object.keys(this.form);
-      return keys.reduce((acc, item) => {
-        if (this.form[item]) {
-          acc[item] = this.form[item];
+      const fields = this.themeFields;
+      return fields.reduce((acc, item) => {
+        if (this.form[item.alias] && !this.getDisabledState(item)) {
+          acc[item.alias] = this.form[item.alias];
         }
         return acc;
       }, {});
     },
     filteredStatusBar() {
-      if (!this.statusbar.device) return {};
-      const fields = this.table.devices.find((item) => item.value == this.statusbar.device)?.inputs;
-      const keys = Object.keys(this.statusbar);
-      return keys.reduce((acc, item) => {
-        const dependsOn = fields.find((field) => field.alias == item)?.dependsOn;
-        const dependsValue = fields.find((field) => field.alias == item)?.dependsValue;
-        if (dependsOn) {
-          if (dependsValue) {
-            if (this.statusbar[dependsOn] == dependsValue) {
-              acc[item] = this.statusbar[item];
-            }
-          } else {
-            if (this.statusbar[dependsOn] === true) {
-              acc[item] = this.statusbar[item];
-            }
+      if (!this.statusbar.show) return {};
+      const fields = this.deviceFields;
+      return fields.reduce(
+        (acc, item) => {
+          if (this.statusbar[item.alias] && !this.getDisabledBarState(item)) {
+            acc[item.alias] = this.statusbar[item.alias];
           }
-        } else {
-          acc[item] = this.statusbar[item];
-        }
-        return acc;
-      }, {});
+          return acc;
+        },
+        { show: true, device: this.statusbar.device },
+      );
     },
   },
   computed: {

@@ -7,9 +7,9 @@
         <div class="text1" style="font-weight: 500">{{ getConstant('t1' + payload.query.direction) }}</div>
         <div style="width: 36px"></div>
       </div>
-      <div style="font-size: 50px" class="text2">{{ fixed(payload.query.sum, 8, true) }} {{ payload.currency.name }}</div>
-      <div style="font-size: 82px; padding-bottom: 96px; line-height: 75px" class="text1">${{ payload.query.eqv || fixed(formatSum(0.1, 0.5), 2) }}</div>
-      <div style="flex-direction: column; align-items: stretch; padding: 44px 64px 0px; border-bottom: 2px solid; border-top: 2px solid">
+      <div style="font-size: 50px" class="text2">{{ formatRawSum }} {{ payload.currency.name }}</div>
+      <div style="font-size: 82px; padding-bottom: 96px; line-height: 75px" class="text1">{{ formatApproxSum }}</div>
+      <div style="flex-direction: column; align-items: stretch; padding: 44px 64px 0px; border-bottom: 3px solid; border-top: 3px solid">
         <div class="data-item" v-if="payload.query.direction == 'out'">
           <div style="align-self: flex-start">{{ getConstant('t2') }}</div>
           <div style="overflow-wrap: anywhere; text-align: end; max-width: 670px; line-height: 65px">{{ payload.query.address }}</div>
@@ -27,15 +27,15 @@
         </div>
         <div class="data-item" v-if="payload.query.direction == 'out'">
           <div>{{ getConstant('t6') }}</div>
-          <div>{{ payload.query.com || feeFormatter() }} {{ payload.currency.name }}</div>
+          <div>{{ feeFormatter() }} {{ payload.currency.name }}</div>
         </div>
         <div class="data-item" v-if="payload.query.direction == 'out'">
           <div>{{ getConstant('t7') }}</div>
-          <div>{{ formatConf }}</div>
+          <div>{{ formatConf() }}</div>
         </div>
         <div class="data-item">
           <div>{{ getConstant('t8') }}</div>
-          <div>{{ lengthFormatter(payload.query.thash, 12) }}</div>
+          <div>{{ lengthFormatter(payload.query.txid, 12) }}</div>
         </div>
         <div class="data-item">
           <div>{{ getConstant('t9') }}</div>
@@ -54,7 +54,7 @@
         </div>
         <div>{{ getConstant('t11') }}</div>
       </div>
-      <div style="padding: 36px 0px; font-size: 52px; margin: 0 60px; border-radius: 99px" class="text1 block">{{ getConstant('t12') }}</div>
+      <div style="padding: 36px 0px; font-size: 52px; margin: 0 60px; font-weight: 500; border-radius: 99px" class="text1 block">{{ getConstant('t12') }}</div>
       <div class="footer" style="padding: 22px 24px; margin-top: auto; font-size: 30px; border-top: 2px solid; justify-content: space-around">
         <div>
           <FakeImg :path="'/coinbase/images/4.png'" />
@@ -99,14 +99,25 @@ export default {
   },
   mounted() {},
   computed: {
-    formatDate() {
-      return this.$dayjs(this.payload.query.date).locale(this.payload.query.language).format('LT [-] ll');
+    formatRawSum() {
+      const sum = this.fixed(this.payload.query.sum, 8, true, this.payload.query.language == 'en' ? {} : { useGrouping: false });
+      return `${this.payload.query.direction == 'in' ? '' : '-'}${sum}`;
     },
-    formatConf() {
-      const step = this.getConstant('cs_step')?.split(' ');
-      if (!step) return '';
-      const iterations = Math.round(this.$dayjs().diff(this.$dayjs(this.payload.query.date), 'minute') / step[1]);
-      return `${+step[0] + iterations}`;
+    formatApproxSum() {
+      const options = {
+        style: 'currency',
+        currency: 'USD',
+        localeMatcher: 'lookup',
+        minimumFractionDigits: 2,
+        ...(this.payload.query.language == 'en' ? {} : { useGrouping: false }),
+      };
+      const sum = this.fixed(this.payload.query.eqv || this.formatSum(0.01, 0.05), 2, true, options);
+      return `${this.payload.query.direction == 'in' ? '' : '-'}${sum}`;
+    },
+    formatDate() {
+      const dayjs = this.$dayjs(this.payload.query.date).locale(this.payload.query.language);
+      const dateFormat = this.payload.query.language == 'es' ? dayjs.format(`DD MMM YYYY`) : dayjs.format(`ll`);
+      return dayjs.format(`LT [-] [${dateFormat}]`);
     },
   },
 };
@@ -152,11 +163,10 @@ export default {
   font-display: swap;
 }
 #main {
-  font-family: 'Coinbase Display';
+  font-family: 'Coinbase Display', Roboto;
 }
 .data-item {
   font-size: 46px;
-  letter-spacing: 3px;
   padding: 39px 0;
 }
 .data-item:last-child {

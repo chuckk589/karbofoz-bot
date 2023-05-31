@@ -36,7 +36,6 @@ export class PresetService {
           }, {})
         : {}),
     };
-    console.log(_show);
     const queryString = new URLSearchParams(bodyFlat).toString();
     const browser = await puppeteer.launch(puppeteerOptions);
     const page = await browser.newPage();
@@ -46,7 +45,7 @@ export class PresetService {
       height: 1440,
       deviceScaleFactor: 1,
     });
-    const img = await page.$(_show === 1 ? '#main' : '#wobar');
+    const img = await page.$(_show ? '#main' : '#wobar');
     const screen = await img.screenshot({ path: 'example.png', encoding: 'base64' });
     await browser.close();
     return { screen };

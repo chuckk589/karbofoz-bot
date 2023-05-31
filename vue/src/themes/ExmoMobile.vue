@@ -1,19 +1,19 @@
 <template>
-  <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px">
+  <div :class="theme" id="main" style="width: 1080px">
     <StatusBar class="bar" :query="payload.query" :theme="theme"></StatusBar>
     <div id="wobar" style="flex-direction: row">
-      <div style="flex-direction: column; align-items: stretch; margin-left: 40px">
-        <div style="font-size: 47px; padding: 20px 0 0 0; justify-content: space-between">
+      <div style="flex-direction: column; padding-top: 45px; justify-content: flex-start; align-items: stretch; margin-left: 40px">
+        <div style="font-size: 45px; padding: 20px 0px 0px; justify-content: space-between">
           <div>
-            <FakeImg style="margin-right: 8px" :path="'/exmo/images/1.png'" />
-            <div class="text1">{{ payload.currency.name }}</div>
+            <FakeImg style="margin-right: 11px; margin-bottom: 9px" :path="'/exmo/images/1.png'" />
+            <div style="font-weight: 500" class="text1">{{ payload.currency.name }}</div>
           </div>
-          <div style="margin-right: 15px" class="text1">{{ fixed(payload.query.sum, 0, true).toLocaleString('en') }}</div>
+          <div class="text1">{{ fixed(payload.query.sum, 2, false, { useGrouping: true }, 'en') }}</div>
         </div>
         <div class="data-item">
           <div>{{ formatDate }}</div>
           <div :class="payload.query.direction">
-            <FakeImg :style="'margin-right: 10px; transform: ' + (payload.query.direction == 'in' ? '' : 'rotate(180deg)')" :path="'/exmo/images/3.png'" />
+            <FakeImg :style="'margin: 0 10px 10px 0; transform: ' + (payload.query.direction == 'in' ? '' : 'rotate(180deg)')" :path="'/exmo/images/3.png'" />
             <div>{{ getConstant('t1' + payload.query.direction) }}</div>
           </div>
         </div>
@@ -35,10 +35,10 @@
         </div>
         <div class="data-item">
           <div>{{ getConstant('t6') }}</div>
-          <div style="font-size: 38px">{{ formatConf('cs_step' + payload.query.direction) }}</div>
+          <div style="font-size: 38px">{{ payload.query.txnum || formatConf('cs_step' + payload.query.direction) }}</div>
         </div>
       </div>
-      <div style="width: 166px; align-items: flex-start; margin-top: 77px">
+      <div style="width: 210px; align-items: flex-start; margin-top: 118px">
         <FakeImg :path="'/exmo/images/2.png'" />
       </div>
     </div>
@@ -77,9 +77,9 @@ export default {
   font-family: 'Roboto', sans-serif;
 }
 .data-item {
-  font-size: 33px;
-  padding: 8px 0;
-  margin-bottom: 25px;
+  font-size: 34px;
+  padding: 13px 0;
+  margin-bottom: 8px;
   align-items: flex-start !important;
 }
 
@@ -93,7 +93,6 @@ export default {
 
 .data-item > div:nth-child(2) {
   justify-content: flex-end !important;
-  margin-right: 15px;
 }
 
 .footer > div {

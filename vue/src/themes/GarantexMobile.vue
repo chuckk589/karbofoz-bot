@@ -5,12 +5,12 @@
       <div
         v-if="payload.query.direction == 'out'"
         class="text1"
-        style="font-weight: 600; font-size: 64px; padding: 22px 36px 32px 36px; justify-content: flex-start; border-bottom: 3px solid #f4f4f4; letter-spacing: -2px"
+        style="font-weight: 600; font-size: 60px; padding: 25px 36px 32px; justify-content: flex-start; border-bottom: 5px solid rgb(244, 244, 244); letter-spacing: 1px"
       >
         {{ getConstant('t1') }}
       </div>
-      <div class="data-item" style="margin-top: 14px">
-        <div style="font-weight: 600">{{ formatDate }}</div>
+      <div class="data-item" style="margin-top: 14px; line-height: 78px">
+        <div style="font-weight: 600; font-size: 57px; letter-spacing: 2px">{{ formatDate }}</div>
         <div>
           <FakeImg style="margin-right: 20px" :path="'/garantex/images/2.png'" />
           <div class="text2">{{ formatTime }}</div>
@@ -77,7 +77,7 @@ export default {
 </script>
 <style scoped>
 @font-face {
-  font-family: 'Gilroy';
+  font-family: 'Gilroy-Regular';
   src: url('../garantex/Gilroy-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
@@ -85,7 +85,7 @@ export default {
 }
 
 @font-face {
-  font-family: 'Gilroy';
+  font-family: 'Gilroy-Bold';
   src: url('../garantex/Gilroy-Bold.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
@@ -93,7 +93,7 @@ export default {
 }
 
 #main {
-  font-family: 'Gilroy';
+  font-family: 'Gilroy-Regular';
 }
 .data-item {
   font-size: 53px;
@@ -118,11 +118,11 @@ export default {
 .footer > div {
   align-items: flex-start !important;
   flex-direction: column;
-  margin-right: 30px;
+  margin-right: 26px;
 }
 .footer > div > div:nth-child(1) {
   padding: 4px 0;
-  font-size: 36px;
+  font-size: 37px;
 }
 
 .footer > div > div:nth-child(2) {
