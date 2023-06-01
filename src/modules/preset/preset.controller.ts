@@ -1,6 +1,7 @@
+import { PreviewQueryDto } from './dto/preview-query.dto';
 import { UpdatePresetsDto } from './dto/update-presets.dto';
 import { CreatePresetDto } from './dto/create-preset.dto';
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { PresetService } from './preset.service';
 
 @Controller({
@@ -18,7 +19,10 @@ export class PresetController {
   getPreview(@Body() body: UpdatePresetsDto) {
     return this.presetService.generatePreview(body);
   }
-
+  @Get('preview')
+  getPreviewImage(@Query() previewQuery: PreviewQueryDto) {
+    return this.presetService.getPreviewImage(previewQuery);
+  }
   @Post()
   managePreset(@Body() body: CreatePresetDto) {
     return this.presetService.managePreset(body);

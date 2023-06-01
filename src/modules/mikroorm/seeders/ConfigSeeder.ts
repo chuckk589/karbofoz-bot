@@ -1421,11 +1421,11 @@ const _cexio = {
 const _xiaomi = {
   name: 'xiaomi',
   fields: [
-    { alias: 'wifiAPS', name: 'Wi-Fi AP signal', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiAP' }] },
-    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-5' },
-    { alias: '4g', name: '4g signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-5' },
+    { alias: 'wifiAPS', name: 'Wi-Fi AP signal', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiAP' }], range: [1, 5] },
+    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, range: [1, 5] },
+    { alias: '4g', name: '4g signal', type: HtmlInputType.NUMBER, range: [1, 5] },
     { alias: 'bluetooth', name: 'Bluetooth' },
-    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER },
+    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER, range: [1, 100] },
     { alias: 'time', name: 'Время', type: HtmlInputType.TIME },
     { alias: 'moon', name: 'moon' },
     { alias: 'vibro', name: 'vibro' },
@@ -1458,7 +1458,7 @@ const _iphone = {
       ],
     },
 
-    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-3' },
+    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, range: [1, 3] },
     {
       alias: 'simnum',
       name: 'SIM',
@@ -1468,8 +1468,8 @@ const _iphone = {
         { value: 'Dual SIM', alias: 'sim2' },
       ],
     },
-    { alias: '4g', name: '4g signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4' },
-    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER },
+    { alias: '4g', name: '4g signal', type: HtmlInputType.NUMBER, range: [1, 4] },
+    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER, range: [1, 100] },
     { alias: 'time', name: 'Время', type: HtmlInputType.TIME },
   ],
 };
@@ -1487,8 +1487,8 @@ const _samsung = {
         { value: 'Dual SIM', alias: 'sim2' },
       ],
     },
-    { alias: 'wifiS1', name: 'Sim 1 signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4' },
-    { alias: 'wifiS2', name: 'Sim 2 signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4', dependsOn: [{ field: 'simnum', value: ['sim2'] }] },
+    { alias: 'wifiS1', name: 'Sim 1 signal', type: HtmlInputType.NUMBER, range: [1, 4] },
+    { alias: 'wifiS2', name: 'Sim 2 signal', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'simnum', value: ['sim2'] }], range: [1, 4] },
     {
       alias: 'sound',
       name: 'Sound',
@@ -1517,7 +1517,7 @@ const _samsung = {
         { value: 'Прием', alias: 'in' },
       ],
     },
-    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4', dependsOn: [{ field: 'wifiShare', value: ['in'] }] },
+    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiShare', value: ['in'] }], range: [1, 4] },
     { alias: 'volte', name: 'voLTE', dependsOn: [{ field: 'wifiShare', value: ['in'] }] },
     {
       alias: 'wifiMode',
@@ -1529,7 +1529,7 @@ const _samsung = {
       ],
       dependsOn: [{ field: 'wifiShare', value: ['out'] }],
     },
-    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER },
+    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER, range: [1, 100] },
     { alias: 'geoloc', name: 'Geolocation' },
     { alias: 'geoloc2', name: 'Geolocation2' },
     { alias: 'vpn', name: 'VPN' },
@@ -1542,7 +1542,7 @@ const _realme = {
     { alias: 'nfc', name: 'NFC' },
     { alias: 'alarm', name: 'alarm' },
     { alias: 'bluetooth', name: 'Bluetooth' },
-    { alias: 'speed', name: 'Speed', type: HtmlInputType.NUMBER },
+    { alias: 'speed', name: 'Speed', type: HtmlInputType.NUMBER, range: [50, 99] },
     { alias: 'volte', name: 'voLTE' },
     {
       alias: 'simnum',
@@ -1553,11 +1553,11 @@ const _realme = {
         { value: 'Dual SIM', alias: 'sim2' },
       ],
     },
-    { alias: 'bar1', name: 'Sim 1 signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4' },
-    { alias: 'bar2', name: 'Sim 2 signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-4', dependsOn: [{ field: 'simnum', value: ['sim2'] }] },
+    { alias: 'bar1', name: 'Sim 1 signal', type: HtmlInputType.NUMBER, range: [1, 4] },
+    { alias: 'bar2', name: 'Sim 2 signal', type: HtmlInputType.NUMBER, range: [1, 4], dependsOn: [{ field: 'simnum', value: ['sim2'] }] },
     { alias: 'wifiAP', name: 'Wi-Fi access point' },
-    { alias: 'wifiAPS', name: 'Wi-Fi AP signal', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiAP' }] },
-    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER },
+    { alias: 'wifiAPS', name: 'Wi-Fi AP signal', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiAP' }], range: [1, 4] },
+    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER, range: [1, 100] },
   ],
 };
 async function GenerateThemesForExchange(this: { em: EntityManager }, data: data) {
@@ -1605,7 +1605,7 @@ async function GenerateThemesForExchange(this: { em: EntityManager }, data: data
 async function GenerateDeviceInputs(this: { em: EntityManager }, data: deviceData) {
   const device = await this.em.findOneOrFail(Device, { alias: data.name });
   const barinputs = await this.em.find(BarInput, { alias: { $in: data.fields.map((field) => field.alias) } });
-  data.fields.map((field: field & { hint?: string; dependsOn?: string; dependsValue?: string }) => {
+  data.fields.map((field: field & { hint?: string; dependsOn?: string; range?: [number, number] }) => {
     let existing = barinputs.find((barinput) => barinput.alias == field.alias);
     if (!existing) {
       existing = this.em.create(BarInput, {
@@ -1618,6 +1618,7 @@ async function GenerateDeviceInputs(this: { em: EntityManager }, data: deviceDat
     return this.em.create(DeviceBarInput, {
       device,
       input: existing,
+      range: field.range,
       hint: field.hint,
       dependsOn: JSON.stringify(field.dependsOn),
     });

@@ -40,7 +40,7 @@
                   :type="field.type"
                   density="compact"
                   :hint="field.hint"
-                  :rules="!field.optional && !getDisabledState(field) ? notEmpty : []"
+                  :rules="fieldRules(field)"
                   v-model="form[field.alias]"
                   :disabled="getDisabledState(field)"
                   :append-inner-icon="appendInnerIcon(field.alias)"
@@ -50,9 +50,10 @@
                     <span>{{ field.name }}<strong class="text-red" v-if="!field.optional">&nbsp;&nbsp;*</strong></span>
                   </template>
                 </component>
-                <div class="d-flex align-center justify-space-between">
+                <div class="d-flex align-center">
                   <div class="text-grey">Статус бар</div>
-                  <v-checkbox-btn style="flex: 0" v-model="statusbar.show" :disabled="!themeBar"></v-checkbox-btn>
+                  <v-btn :disabled="!statusbar.show" color="grey-lighten-1" icon="mdi-dice-multiple" variant="text" class="mr-auto" @click="fillStatusBar"></v-btn>
+                  <v-checkbox-btn style="flex: 0" v-model="statusbar.show" :disabled="!themeBar"> </v-checkbox-btn>
                 </div>
                 <v-expand-transition>
                   <div v-show="statusbar.show">
@@ -270,6 +271,7 @@ export default {
       this.step--;
       if (this.step == 1) {
         this.form = {};
+        this.statusbar = { show: false };
       }
     },
     save() {
@@ -283,6 +285,7 @@ export default {
       this.pending = [];
       this.dialog = true;
     },
+
     loadPreset() {
       const preset = this.presets.find((item) => item.value == this.selectedRow);
       const { theme, language, currency, exchange, network, statusbar, fields, ...rest } = preset;
@@ -424,7 +427,6 @@ export default {
             };
             this.$http.post('/v1/preset/', body).then(() => {
               this.cleanUp();
-              this.step = 1;
             });
           }
         });
@@ -432,10 +434,20 @@ export default {
     },
     fieldItems(field) {
       if (field.alias.match(/address/)) {
-        return this.wallets.filter((item) => (item.type == 'trx' && this.network.value == 'trc20') || (item.type == 'nontrx' && this.network.value !== 'trc20'));
+        return this.wallets.filter((item) => (item.type == 'trx' && this.network == 'trc20') || (item.type == 'nontrx' && this.network !== 'trc20'));
       } else {
         return field.variants || [];
       }
+    },
+    fieldRules(field) {
+      if (!field.optional && !this.getDisabledState(field)) {
+        if (field.alias.match(/address/)) {
+          return [...this.notEmpty, (v) => (this.network == 'trc20' ? v.match(/^T/) : v.match(/^0x/)) || `Неверный адрес для сети ${this.network}`];
+        } else {
+          return [...this.notEmpty];
+        }
+      }
+      return [];
     },
     cleanUp() {
       this.theme = null;
@@ -445,11 +457,12 @@ export default {
       this.exchange = null;
       this.form = {};
       this.direction = null;
-      this.step = 1;
+      this.statusbar = { show: false };
       this.errorMessage = '';
       this.preview = null;
       this.preset = {};
       this.fields = {};
+      this.step = 1;
     },
     presetFieldData(field) {
       const exchange = this.table.exchanges?.find((item) => item.value == field.exchange);
@@ -502,6 +515,42 @@ export default {
         { show: true, device: this.statusbar.device },
       );
     },
+    fillSingleBarField(item) {
+      if (item.type == 'time') {
+        this.statusbar[item.alias] = this.$dayjs()
+          .subtract(Math.floor(Math.random() * 24), 'hours')
+          .format('HH:mm');
+      } else if (item.type == 'number') {
+        this.statusbar[item.alias] = Math.floor(Math.random() * (item.range[1] - item.range[0] + 1)) + item.range[0];
+      } else if (item.type == 'select') {
+        this.statusbar[item.alias] = item.variants[Math.floor(Math.random() * item.variants.length)];
+      } else {
+        this.statusbar[item.alias] = Math.random() < 0.5;
+      }
+    },
+    fillStatusBar() {
+      const device = this.table.devices[Math.floor(Math.random() * this.table.devices.length)];
+      const { independent, dependent } = device.inputs.reduce(
+        (acc, item) => {
+          if (item.dependsOn) {
+            acc.dependent.push(item);
+          } else {
+            acc.independent.push(item);
+          }
+          return acc;
+        },
+        { independent: [], dependent: [] },
+      );
+      this.statusbar.device = device.value;
+      for (const item of independent) {
+        this.fillSingleBarField(item);
+      }
+      for (const item of dependent) {
+        if (!this.getDisabledBarState(item)) {
+          this.fillSingleBarField(item);
+        }
+      }
+    },
   },
   computed: {
     current100VH() {
@@ -529,7 +578,6 @@ export default {
       return [{ title: 'Создать новый', value: '0' }, ...this.presets];
     },
     walletStyle() {
-      // return this.walletAction ? 'height: 0vh' : 'height: calc(100vh - 100px);';
       return this.walletAction ? 'height: 0vh' : 'height: calc(' + this.current100VH + ' - 100px);';
     },
     deviceFields() {

@@ -15,11 +15,12 @@ export class ConfigService {
       {
         populate: ['exchangeNetworks.networkCurrencies.currency', 'exchangeNetworks.network', 'themes.themeInputs.input.inputAlias.aliasVariants', 'themes.themeLanguages.language'],
         populateWhere: PopulateHint.INFER,
+        orderBy: { name: 'ASC' },
       },
     );
     const devices = await this.em.find(Device, {}, { populate: ['deviceBarInputs.input.variants'] });
     return {
-      exchanges: exchanges.map((exchange) => new RetrieveExchangeConfigDto(exchange)).sort((a, b) => a.title.localeCompare(b.title)),
+      exchanges: exchanges.map((exchange) => new RetrieveExchangeConfigDto(exchange)),
       devices: devices.map((device) => new RetrieveDeviceConfigDto(device)),
     };
   }

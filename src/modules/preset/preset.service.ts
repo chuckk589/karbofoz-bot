@@ -16,6 +16,7 @@ import { BarInputPreset } from '../mikroorm/entities/BarInputPreset';
 import { BarInput } from '../mikroorm/entities/BarInput';
 import { DeviceBarInput } from '../mikroorm/entities/DeviceBarInput';
 import { Device } from '../mikroorm/entities/Device';
+import { PreviewQueryDto } from './dto/preview-query.dto';
 @Injectable()
 export class PresetService {
   constructor(private readonly em: EntityManager) {}
@@ -23,7 +24,9 @@ export class PresetService {
     const preset = await this.em.find(Preset, id, { populate: ['inputPresets', 'barInputPresets'] });
     return await this.em.removeAndFlush(preset);
   }
-
+  async getPreviewImage(previewQuery: PreviewQueryDto) {
+    throw new Error('Method not implemented.');
+  }
   async generatePreview(body: UpdatePresetsDto) {
     const {
       fields = undefined,
@@ -112,7 +115,7 @@ export class PresetService {
     }
   }
   async getPresets() {
-    const presets = await this.em.find(Preset, {}, { populate: ['currency', 'network', 'language', 'theme.exchange', 'inputPresets.input', 'barInputPresets.barInput', 'device'] });
+    const presets = await this.em.find(Preset, {}, { populate: ['currency', 'network', 'language', 'theme.exchange', 'inputPresets.input', 'barInputPresets.barInput', 'device'], orderBy: { name: 'ASC' } });
     return presets.map((preset) => new RetrievePresetDto(preset));
   }
 }
