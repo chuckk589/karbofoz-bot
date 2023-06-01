@@ -18,7 +18,4 @@ export class DeviceBarInput {
 
   @Property({ nullable: true })
   dependsOn?: string;
-
-  @Property({ nullable: true })
-  dependsValue?: string;
 }

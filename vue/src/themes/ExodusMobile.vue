@@ -93,10 +93,19 @@ export default {
       return this.$dayjs(this.payload.query.date).isToday() ? this.getConstant('t4') : this.getConstant('t5');
     },
     timeStampValue() {
-      if (this.$dayjs().diff(this.payload.query.date, 'day')) {
-        return this.$dayjs().locale(this.payload.query.language).format('DD MMM YYYY, LT');
+      // console.log(this.$dayjs().diff(this.payload.query.date, 'second'));
+      // console.log(this.$dayjs(this.payload.query.date).diff(this.$dayjs().utc(), 'minutes'));
+      // console.log(this.$dayjs().utc(), this.$dayjs(this.payload.query.date));
+      // console.log(this.$dayjs().utc().diff(this.payload.query.date, 'minutes'));
+      // if (this.$dayjs().diff(this.payload.query.date, 'day')) {
+      //   return this.$dayjs().locale(this.payload.query.language).format('DD MMM YYYY, LT');
+      // }
+      // return this.$dayjs().locale(this.payload.query.language).to(this.$dayjs(this.payload.query.date)) + '...';
+      const utc = this.$dayjs().utc();
+      if (utc.diff(this.payload.query.date, 'day')) {
+        return this.$dayjs(this.payload.query.date).locale(this.payload.query.language).format('DD MMM YYYY, LT');
       }
-      return this.$dayjs().locale(this.payload.query.language).to(this.$dayjs(this.payload.query.date)) + '...';
+      return utc.locale(this.payload.query.language).to(this.payload.query.date) + '...';
     },
     usdFormatter() {
       return this.fixed(this.payload.query.sum, 2, true, { style: 'currency', currency: 'USD' });

@@ -13,10 +13,18 @@
                 <v-select v-model="exchange" :items="table.exchanges" label="Биржа" density="compact" @update:modelValue="update" :rules="notEmpty"></v-select>
                 <v-select v-model="theme" :items="themeItems" label="Тема" density="compact" @update:modelValue="update" :rules="notEmpty"></v-select>
                 <v-select v-model="language" label="Язык" :items="themeLanguages" density="compact" @update:modelValue="update" :rules="notEmpty"></v-select>
-                <!-- <v-combobox v-model="network" :items="themeNetworks" label="Сеть" density="compact" @update:modelValue="update" :rules="notEmpty"></v-combobox>
-                <v-combobox v-model="currency" :items="themeCurrencies" label="Валюта" density="compact" :rules="notEmpty"></v-combobox> -->
                 <v-select v-model="network" :items="themeNetworks" label="Сеть" density="compact" @update:modelValue="update" :rules="notEmpty"></v-select>
                 <v-select v-model="currency" :items="themeCurrencies" label="Валюта" density="compact" :rules="notEmpty"></v-select>
+                <v-select
+                  v-model="direction"
+                  :items="[
+                    { title: 'Отправка', value: 'out' },
+                    { title: 'Прием', value: 'in' },
+                  ]"
+                  label="Направление"
+                  density="compact"
+                  :rules="notEmpty"
+                ></v-select>
               </v-form>
             </v-card-text>
           </v-window-item>
@@ -110,11 +118,16 @@
               </v-toolbar>
               <v-window v-model="tab" :touch="{ left: null, right: null }">
                 <v-window-item :value="1">
-                  <v-card-text style="padding: 0; height: calc(100vh - 100px); overflow-y: scroll">
+                  <v-card-text :style="'padding: 0; height: calc(' + current100VH + ' - 100px); overflow-y: scroll'">
                     <v-list density="compact" @click:select="(item) => (selectedRow = item.id)" lines="two">
-                      <v-list-item v-for="preset in presets" :key="preset.value" :value="preset.value" :title="preset.title" :subtitle="preset.comment">
+                      <v-list-item v-for="preset in presets" :key="preset.value" :value="preset.value" :title="preset.title" :subtitle="presetFieldData(preset)">
                         <template v-slot:append>
-                          <v-btn color="grey-lighten-1" icon="mdi-delete" variant="text" @click="deletePreset(preset.value)"></v-btn>
+                          <div class="d-flex align-center">
+                            <div>
+                              {{ new Date(preset.createdAt).toLocaleString() }}
+                            </div>
+                            <v-btn color="grey-lighten-1" icon="mdi-delete" variant="text" @click="deletePreset(preset.value)"></v-btn>
+                          </div>
                         </template>
                       </v-list-item>
                     </v-list>
@@ -125,7 +138,7 @@
                     <v-btn class="ma-auto" color="primary" @click="loadPreset"> Загрузить </v-btn>
                   </v-card-actions>
                 </v-window-item>
-                <v-window-item :value="2" style="height: calc(100vh - 48px)" class="d-flex flex-column">
+                <v-window-item :value="2" :style="'height: calc(' + current100VH + '  - 48px)'" class="d-flex flex-column">
                   <v-card-text :style="'padding: 0; transition: height .2s linear; overflow-y: scroll;flex: initial;' + walletStyle">
                     <v-list density="compact" lines="two">
                       <v-list-item v-for="wallet in wallets" :key="wallet.id" :value="wallet.id" :title="wallet.title" :subtitle="wallet.comment">
@@ -183,6 +196,7 @@ export default {
   name: 'WebApp',
   data() {
     return {
+      vh: 0,
       dialog: false,
       errorMessage: '',
       step: 1,
@@ -209,6 +223,10 @@ export default {
     };
   },
   mounted() {
+    this.vh = window.innerHeight * 0.01;
+    window.addEventListener('resize', () => {
+      this.vh = window.innerHeight * 0.01;
+    });
     this.$http({ method: 'GET', url: `/v1/config/` }).then((e) => {
       this.table = e.data;
       console.log(e.data);
@@ -255,11 +273,11 @@ export default {
       }
     },
     save() {
-      this.step++;
       this.fields = this.themeFields.reduce((acc, item) => {
         acc[item.alias] = false;
         return acc;
       }, {});
+      this.step++;
     },
     openDialog() {
       this.pending = [];
@@ -267,13 +285,18 @@ export default {
     },
     loadPreset() {
       const preset = this.presets.find((item) => item.value == this.selectedRow);
-      const { theme, language, currency, exchange, network, fields, ...rest } = preset;
+      const { theme, language, currency, exchange, network, statusbar, fields, ...rest } = preset;
       this.exchange = exchange;
       this.theme = theme;
       this.language = language;
       this.network = network;
       this.currency = currency;
+      this.direction = rest.direction;
       this.form = fields;
+      if (Object.keys(statusbar).length) {
+        this.statusbar = { show: true, ...statusbar };
+      }
+      this.step = 2;
       this.dialog = false;
     },
     handleWallet() {
@@ -361,15 +384,11 @@ export default {
                 language: this.language,
                 currency: this.currency.value || this.currency,
                 network: this.network.value || this.network,
+                direction: this.direction,
                 fields: this.filteredForm(),
                 statusbar: this.filteredStatusBar(),
               }),
             );
-            const now = new Date();
-            body.fields.date = body.fields.date?.value ? new Date(now.getTime() - now.getTimezoneOffset() * 60000 - body.fields.date.value * 1000).toISOString().slice(0, -5) : body.fields.date;
-            body.fields.dateup = body.fields.dateup?.value ? new Date(now.getTime() - now.getTimezoneOffset() * 60000 - body.fields.dateup?.value * 1000).toISOString().slice(0, -5) : body.fields.dateup;
-            body.fields.address = body.fields.address?.value || body.fields.address;
-            console.log(body);
             this.$http
               .post('/v1/preset/preview/', body)
               .then((res) => {
@@ -392,6 +411,7 @@ export default {
               language: this.language,
               currency: this.currency.value || this.currency,
               network: this.network.value || this.network,
+              direction: this.direction,
               preset: this.preset,
               fields: Object.keys(this.fields).reduce((acc, item) => {
                 if (this.fields[item]) {
@@ -402,7 +422,10 @@ export default {
               }, {}),
               statusbar: this.filteredStatusBar(),
             };
-            this.$http.post('/v1/preset/', body).then(() => (this.step = 1));
+            this.$http.post('/v1/preset/', body).then(() => {
+              this.cleanUp();
+              this.step = 1;
+            });
           }
         });
       }
@@ -419,13 +442,23 @@ export default {
       this.language = null;
       this.currency = null;
       this.network = null;
+      this.exchange = null;
       this.form = {};
       this.direction = null;
       this.step = 1;
       this.errorMessage = '';
       this.preview = null;
-      this.preset = null;
+      this.preset = {};
       this.fields = {};
+    },
+    presetFieldData(field) {
+      const exchange = this.table.exchanges?.find((item) => item.value == field.exchange);
+      const theme = exchange.themes.find((item) => item.value == field.theme);
+      const language = theme.languages.find((item) => item.value == field.language);
+      const network = exchange.networks.find((item) => item.value == field.network);
+      const currency = network.currencies.find((item) => item.value == field.currency);
+      const direction = field.direction == 'in' ? 'Прием' : 'Отправка';
+      return `${exchange.title} / ${theme.title} / ${language.title} / ${network.title} / ${currency.title} / ${direction} ${field.comment}`;
     },
     update() {
       if ((this.theme && !this.themeItems.find((theme) => theme.value == this.theme)) || !this.theme) {
@@ -441,12 +474,17 @@ export default {
         this.network = this.themeNetworks.find((network) => network.value == 'trc20')?.value || this.themeNetworks[0].value;
       }
       if ((this.currency && !this.themeCurrencies.find((currency) => currency.value == this.currency)) || !this.currency) this.currency = this.themeCurrencies[0].value;
+      this.direction = 'in';
     },
     filteredForm() {
       const fields = this.themeFields;
       return fields.reduce((acc, item) => {
         if (this.form[item.alias] && !this.getDisabledState(item)) {
-          acc[item.alias] = this.form[item.alias];
+          if (item.alias.match(/date/)) {
+            acc[item.alias] = this.form[item.alias].value ? this.$dayjs().subtract(this.form[item.alias].value, 'second').format() : this.$dayjs(this.form[item.alias]).format();
+          } else {
+            acc[item.alias] = this.form[item.alias].value || this.form[item.alias];
+          }
         }
         return acc;
       }, {});
@@ -466,6 +504,9 @@ export default {
     },
   },
   computed: {
+    current100VH() {
+      return this.vh * 100 + 'px';
+    },
     themeItems() {
       return this.table.exchanges?.find((item) => item.value == this.exchange)?.themes || [];
     },
@@ -488,7 +529,8 @@ export default {
       return [{ title: 'Создать новый', value: '0' }, ...this.presets];
     },
     walletStyle() {
-      return this.walletAction ? 'height: 0vh' : 'height: calc(100vh - 100px);';
+      // return this.walletAction ? 'height: 0vh' : 'height: calc(100vh - 100px);';
+      return this.walletAction ? 'height: 0vh' : 'height: calc(' + this.current100VH + ' - 100px);';
     },
     deviceFields() {
       return this.table.devices.find((item) => item.value == this.statusbar.device)?.inputs || [];
@@ -519,7 +561,9 @@ export default {
 .required label::after {
   content: '*';
 }
-
+.v-combobox__selection {
+  overflow: hidden;
+}
 input[type='time'] {
   position: relative;
 }

@@ -80,7 +80,9 @@ const themeMixin = {
       }
     },
     dateFormatter(value) {
-      return value.replace(/T/, ' ');
+      // console.log(this.$dayjs(value).format('YYYY-MM-DD HH:mm:ss'));
+      // return value.replace(/T/, ' ');
+      return this.$dayjs(value).format('YYYY-MM-DD HH:mm:ss');
     },
     feeFormatter(key = 'cs_com', cutExc = false) {
       const fee = this.payload.query.com;

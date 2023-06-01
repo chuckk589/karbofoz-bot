@@ -600,7 +600,7 @@ const _binance = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
-    .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
     .add({
       type: HtmlInputType.DATETIME_LOCAL,
       name: 'Дата транзакции',
@@ -620,15 +620,7 @@ const _binance = {
         { value: '1 день назад ', alias: '86400' },
       ],
     })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ uk: 'Деталі депозиту', ru: 'Подробнее', en: 'Deposit Details', es: 'Detalles de depósito', alias: 't1in' })
     .add({ uk: 'Деталі зняття коштів', ru: 'Детали вывода средств', en: 'Withdrawal Details', alias: 't1out' })
     .add({ uk: 'Сума', ru: 'Количество', en: 'Amount', es: 'Cantidad', alias: 't2' })
@@ -681,17 +673,9 @@ const _trust = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({ type: HtmlInputType.TEXT, name: 'Отправитель/получатель', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'Nonce', optional: true, alias: 'nonce', dependsOn: [{ field: 'network', value: ['bep20', 'erc20'] }] })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ es: 'Transferencia', uk: 'Переказ', ru: 'Перевод', en: 'Transfer', alias: 't1' })
     .add({ es: 'Fecha', uk: 'Дата', ru: 'Дата', en: 'Date', alias: 't2' })
     .add({ es: 'Estatus', uk: 'Статус', ru: 'Статус', en: 'Status', alias: 't3' })
@@ -717,16 +701,7 @@ const _exodus = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: [{ field: 'network', value: ['bep20', 'erc20'] }] })
-    .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+    .add({ type: HtmlInputType.TEXT, name: 'ID транзакции', alias: 'txid' })
     .add({ en: 'TRANSACTION DETAILS', alias: 't1' })
     .add({ en: 'Personal Note', alias: 't2' })
     .add({ en: 'Add Note', alias: 't3' })
@@ -764,15 +739,6 @@ const _safepal = {
     .add({ type: HtmlInputType.TEXT, name: 'На', alias: 'address2' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Высота', optional: true, alias: 'height' })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
     .add({ en: 'Transaction Details', es: 'Detalles de la transacción', ru: 'Детали транзакции', alias: 't1' })
     .add({ en: 'Status', es: 'Estado', ru: 'Статус', alias: 't2' })
     .add({ en: 'Network Fee', es: 'Tarifa', ru: 'Комиссия сети', alias: 't3' })
@@ -807,18 +773,10 @@ const _gate = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.NUMBER, name: 'ID Ордера', optional: true, alias: 'order' })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ ru: 'Сведения о депозите', uk: 'Данi депозиту', es: 'Detalles del depósito', en: 'Deposit Details', alias: 't1in' })
     .add({ ru: 'Сведения о выводе средств', uk: 'Данi виведення коштiв', es: 'Detalles de la retirada', en: 'Withdrawal Details', alias: 't1out' })
     .add({ ru: 'Количество', uk: 'Кiлькiсть', es: 'Cantidad', en: 'Quantity', alias: 't2' })
@@ -854,7 +812,7 @@ const _huobi = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес вывода', alias: 'address', dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({
       type: HtmlInputType.TEXT,
       name: 'Комиссия',
@@ -865,15 +823,7 @@ const _huobi = {
         { field: 'direction', value: ['out'] },
       ],
     })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ uk: 'Тип', es: 'Tipo', ru: 'Тип', en: 'Type', alias: 't1' })
     .add({ uk: 'Звичайние внесення коштів', es: 'Depósito Normal', ru: 'Обычный депозит', en: 'Ordinary Deposit', alias: 't2in' })
     .add({ uk: 'Звичайние виведення', es: 'Retiro Normal', ru: 'Обычный вывод', en: 'General Withdrawal', alias: 't2out' })
@@ -904,20 +854,12 @@ const _kucoin = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
-    .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес/Аккаунт', alias: 'address' })
+    .add({ type: HtmlInputType.TEXT, name: 'TxHash', alias: 'txid' })
     .add({ type: HtmlInputType.TEXTAREA, name: 'Сообщение', alias: 'msg', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({ type: HtmlInputType.TEXT, name: 'Block(s)', alias: 'block', optional: true, dependsOn: [{ field: 'direction', value: ['in'] }] })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ es: 'Detalles del depósito', ru: 'Детали Депозита', en: 'Deposit Details', alias: 't1in' })
     .add({ es: 'Detalles de retirada', ru: 'Детали Вывода', en: 'Withdrawal Details', alias: 't1out' })
     .add({ es: 'Completado', ru: 'Завершено', en: 'Completed', alias: 't2' })
@@ -952,7 +894,7 @@ const _bitfinex = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
     .add({ type: HtmlInputType.NUMBER, name: 'ID', alias: 'id', optional: true })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({
@@ -974,15 +916,7 @@ const _bitfinex = {
       ],
       optional: true,
     })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ ru: 'Пополнение средств', es: 'Deposito', en: 'Deposit', alias: 't1in' })
     .add({ ru: 'Вывод', es: 'Retiro', en: 'Withdraw', alias: 't1out' })
     .add({ ru: 'ID', es: 'ID', en: 'ID', alias: 't2' })
@@ -1024,18 +958,10 @@ const _bitmart = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
     .add({ type: HtmlInputType.NUMBER, name: 'ID транзакции', alias: 'id', optional: true })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: [{ field: 'direction', value: ['out'] }] })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ es: 'Detalles', ru: 'Подробнее', en: 'Detail', alias: 't1' })
     .add({ es: 'Crear', ru: 'Создать', en: 'Create', alias: 't2' })
     .add({ es: 'Procesando', ru: 'Обработка', en: 'Processing', alias: 't3' })
@@ -1069,15 +995,7 @@ const _cryptocom = {
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.NUMBER, name: 'Эквивалент $', alias: 'eqv', optional: true })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ es: 'Withdraw', ru: 'Withdraw', en: 'Withdraw', alias: 't1out' })
     .add({ es: 'Deposit', ru: 'Deposit', en: 'Deposit', alias: 't1in' })
     .add({ es: 'Completado', ru: 'Завершено', en: 'Completed', alias: 't2' })
@@ -1108,18 +1026,10 @@ const _okx = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'ID транзакции', alias: 'txid' })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({ type: HtmlInputType.TEXT, name: 'Кому', alias: 'address' })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ es: 'Detalles de transacción', uk: 'Відомості про транзакцію', ru: 'Детали транзакции', en: 'Transaction details', alias: 't1' })
     .add({ es: 'depositado', uk: 'внесено', ru: 'внесено', en: 'deposited', alias: 't2in' })
     .add({ es: 'retiro', uk: 'виведено', ru: 'выведено', en: 'withdrawn', alias: 't2out' })
@@ -1151,18 +1061,10 @@ const _ledger = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({ type: HtmlInputType.TEXT, name: 'ID транзакции', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Откуда', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'Эквивалент $', alias: 'eqv', optional: true })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ ru: 'Детали транзакции', es: 'Detalles de las transacciones', en: 'Transaction details', alias: 't1' })
     .add({ ru: 'Получение', es: 'Recibido', en: 'Received', alias: 't2in' })
     .add({ ru: 'Отправка', es: 'Enviado', en: 'Sent', alias: 't2out' })
@@ -1197,15 +1099,7 @@ const _metamask = {
     .add({ type: HtmlInputType.TEXT, name: 'В адрес', alias: 'address2' })
     .add({ type: HtmlInputType.NUMBER, name: 'Эквивалент $', alias: 'eqv', optional: true })
     .add({ type: HtmlInputType.NUMBER, name: 'Примерная плата за газ', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ ru: 'Отправлен', es: 'Enviado', en: 'Sent', alias: 't1out' })
     .add({ ru: 'Получен', es: 'Recibido', en: 'Received', alias: 't1in' })
     .add({ ru: 'Статус', es: 'Estado', en: 'Status', alias: 't2' })
@@ -1242,17 +1136,9 @@ const _mexc = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({ type: HtmlInputType.TEXT, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ en: 'Withdrawal details', es: 'Detalles de retiro', ru: 'Детали вывода средств', alias: 't1out' })
     .add({ en: 'Deposit Details', es: 'Detalles del Depósito', ru: 'Информация о депозите', alias: 't1in' })
     .add({ en: 'Amount', es: 'Monto', ru: 'Сумма', alias: 't2' })
@@ -1303,15 +1189,7 @@ const _payeer = {
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({ type: HtmlInputType.TEXT, name: 'Операция №', alias: 'txnum', optional: true })
     .add({ type: HtmlInputType.TEXT, name: 'Подтверждений', alias: 'conf', optional: true, dependsOn: [{ field: 'direction', value: ['in'] }] })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ ru: 'Детали операции', en: 'Operation details', alias: 't1' })
     .add({ ru: 'Операция N°', en: 'Operation N°', alias: 't2' })
     .add({ ru: 'Платежная система', en: 'Payment system', alias: 't3' })
@@ -1346,19 +1224,10 @@ const _bitget = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+    // .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'network', value: ['erc20'] }] })
     .add({ type: HtmlInputType.NUMBER, name: 'Баланс', alias: 'balance' })
 
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
     .add({ ru: 'История', uk: 'Інформація про рахунок', es: 'Detalles de la factura', en: 'Bill details', alias: 't1' })
     .add({ ru: 'Тип', uk: 'Тип', es: 'Tipo', en: 'Type', alias: 't2' })
     .add({ ru: 'Вывод', uk: 'Виведення коштів', es: 'Retirar', en: 'Withdrawal', alias: 't3out' })
@@ -1386,15 +1255,7 @@ const _kraken = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'ID', alias: 'krakenid', optional: true })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ es: 'Retiro', en: 'Withdraw', alias: 't1out' })
     .add({ es: 'Deposito', en: 'Deposit', alias: 't1in' })
     .add({ es: 'Tether', en: 'Tether', alias: 't2' })
@@ -1423,19 +1284,11 @@ const _coinbase = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'Thash', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Хэш транзакции', alias: 'txid' })
     .add({ type: HtmlInputType.NUMBER, name: 'Эквивалент $', alias: 'eqv', optional: true })
-    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
-    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия сети', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес (В)', alias: 'address', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
+
     .add({ es: 'Ha enviado Tether', ru: 'Отправка Tether', en: 'Sent Tether', alias: 't1out' })
     .add({ es: 'Ha recibido Tether', ru: 'Получение Tether', en: 'Received Tether', alias: 't1in' })
     .add({ es: 'A', ru: 'В', en: 'To', alias: 't2' })
@@ -1474,17 +1327,9 @@ const _bitpapa = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid', dependsOn: [{ field: 'direction', value: ['out'] }] })
-    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
+    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия сети и процессинга', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: [{ field: 'direction', value: ['out'] }] })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ ru: 'Исходящая транзакция', en: 'Withdrawal transaction', alias: 't1out' })
     .add({ ru: 'Входящая транзакция', en: 'Deposit transaction', alias: 't1in' })
     .add({ ru: 'txid:', en: 'txid:', alias: 't2' })
@@ -1513,15 +1358,7 @@ const _exmo = {
     .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Номер транзакции', alias: 'txnum', optional: true })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: [{ field: 'direction', value: ['out'] }] })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ uk: 'Виведення', ru: 'Вывод', en: 'Withdrawal', alias: 't1out' })
     .add({ uk: 'Поповнити', ru: 'Пополнить', en: 'Deposit', alias: 't1in' })
     .add({ uk: 'Txid:', ru: 'Txid:', en: 'Txid:', alias: 't2' })
@@ -1548,15 +1385,7 @@ const _garantex = {
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
     .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ ru: 'Withdrawal history', en: 'Withdrawal history', alias: 't1' })
     .add({ ru: 'Валюта', en: 'Currency', alias: 't2' })
     .add({ ru: 'Сумма', en: 'Amount', alias: 't3' })
@@ -1579,17 +1408,9 @@ const _cexio = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'ID транзакции', alias: 'txid' })
     .add({ type: HtmlInputType.NUMBER, name: 'Баланс', alias: 'balance' })
-    .add({
-      type: HtmlInputType.SELECT,
-      name: 'Направление',
-      values: [
-        { value: 'Отправка', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-      alias: 'direction',
-    })
+
     .add({ en: 'Deposit', alias: 't1in' })
     .add({ en: 'Withdraw', alias: 't1out' })
     .add({ en: 'Completed', alias: 't2' })
@@ -1600,7 +1421,7 @@ const _cexio = {
 const _xiaomi = {
   name: 'xiaomi',
   fields: [
-    { alias: 'wifiAPS', name: 'Wi-Fi AP signal', type: HtmlInputType.NUMBER, dependsOn: 'wifiAP' },
+    { alias: 'wifiAPS', name: 'Wi-Fi AP signal', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiAP' }] },
     { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-5' },
     { alias: '4g', name: '4g signal', type: HtmlInputType.NUMBER, hint: 'Значения 1-5' },
     { alias: 'bluetooth', name: 'Bluetooth' },
@@ -1750,12 +1571,12 @@ async function GenerateThemesForExchange(this: { em: EntityManager }, data: data
         alias: field.alias,
         optional: !!field.optional,
         hint: field.hint,
+        name: field.name,
         dependsOn: JSON.stringify(field.dependsOn),
         ...(field.type
           ? {
               inputAlias: inputalias || {
                 type: field.type as HtmlInputType,
-                name: field.name,
                 alias: field.alias,
                 ...(field.values
                   ? {

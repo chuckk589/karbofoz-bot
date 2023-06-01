@@ -2,9 +2,9 @@
   <div :class="theme" id="main" style="left: 0px; top: 0px; width: 1080px; height: 2274px">
     <StatusBar class="bar" :query="payload.query" :theme="theme"></StatusBar>
     <div id="wobar" style="display: flex; flex-direction: column; align-items: stretch; padding: 0px 38px">
-      <div style="margin-bottom: 37px; margin-top: 10px; justify-content: space-between">
+      <div style="margin-bottom: 31px; margin-top: 10px; justify-content: space-between">
         <FakeImg class="mexc" :path="'/mexc/images/1.png'" />
-        <div style="font-size: 45px; font-family: 'Noto Sans'; font-weight: 400" class="text1">
+        <div style="font-size: 47px; font-weight: 400" class="text1">
           {{ getConstant('t1' + payload.query.direction) }}
         </div>
         <div style="width: 51px"></div>
@@ -12,21 +12,21 @@
       <div style="margin-bottom: 48px; flex-direction: column">
         <div>
           <div style="font-size: 84px; font-family: 'Hacker Argot'" class="text2">{{ fixed(payload.query.sum, 8) }}</div>
-          <div style="font-size: 52px; align-self: flex-end; margin-left: 30px; font-family: 'Noto Sans'; margin-bottom: 8px" class="text1">{{ formatCurName }}</div>
+          <div style="font-size: 52px; align-self: flex-end; margin-left: 30px" class="text1">{{ formatCurName }}</div>
         </div>
-        <div style="font-size: 34px; margin-top: 6px; letter-spacing: 0.8px" class="gray">{{ getConstant('t2') }}</div>
+        <div style="font-size: 36px; margin-top: 6px; letter-spacing: 1px" class="gray">{{ getConstant('t2') }}</div>
       </div>
-      <div class="gray2" style="align-items: stretch; flex-direction: column; padding: 0px 33px 39px 33px; font-size: 31px; letter-spacing: 1px">
-        <div style="border-bottom: 1px solid; padding: 30px 0px; margin-top: 20ox; margin-top: 7px; justify-content: flex-start">
-          <FakeImg style="margin-right: 20px" class="mexc2" :path="'/mexc/images/2.png'" />
+      <div class="gray2" style="align-items: stretch; flex-direction: column; padding: 0px 33px 31px; font-size: 31px; letter-spacing: 1px">
+        <div style="border-bottom: 3px solid; padding: 30px 0px; justify-content: flex-start">
+          <FakeImg style="margin-right: 15px" class="mexc2" :path="'/mexc/images/2.png'" />
           <div class="mexc2" style="font-size: 42px; font-weight: 600">{{ getConstant('t3') }}</div>
         </div>
-        <div style="margin-top: 25px" class="gray">
+        <div style="margin-top: 28px; font-size: 31px; line-height: 50px; letter-spacing: 0.6px" class="gray">
           {{ getConstant('t4' + payload.query.direction) }}
         </div>
         <div style="justify-content: flex-start; margin-top: 14px" class="mexc2" v-if="payload.query.direction == 'out'">{{ getConstant('t16') }}</div>
       </div>
-      <div class="gray2" style="margin-bottom: 80px; margin-top: 25px; flex-direction: column; align-items: stretch">
+      <div class="gray2" style="margin-bottom: 80px; padding-top: 8px; margin-top: 25px; flex-direction: column; align-items: stretch">
         <div class="data-item">
           <div>{{ getConstant('t5') }}</div>
           <div>{{ formatNetwork }}</div>
@@ -51,7 +51,7 @@
         </div>
         <div class="data-item" v-if="payload.query.direction == 'out'">
           <div>{{ getConstant('t8') }}</div>
-          <div>{{ getConstant('cs_com') }}</div>
+          <div>{{ payload.query.com || getConstant('cs_com') }}</div>
         </div>
         <div class="data-item">
           <div>{{ getConstant('t9') }}</div>
@@ -99,36 +99,34 @@ export default {
 .sumFormatter
 <style scoped>
 @font-face {
-  font-family: 'Arialm';
+  font-family: 'AvenirLTStd-Medium';
+  src: url('../mexc/AvenirLTStd-Medium.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Arial-BoldMT';
   src: url('../mexc/Arial-BoldMT.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Noto Sans';
-  src: url('../mexc/NotoSans-Black.ttf') format('truetype');
-  font-weight: 900;
+  font-family: 'AvenirLTStd-Heavy';
+  src: url('../mexc/AvenirLTStd-Heavy.ttf') format('truetype');
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Noto Sans';
-  src: url('../mexc/NotoSans-ExtraBold.ttf') format('truetype');
-  font-weight: bold;
+  font-family: 'AvenirLTStd-Roman';
+  src: url('../mexc/AvenirLTStd-Roman.ttf') format('truetype');
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
-
-@font-face {
-  font-family: 'Noto Sans';
-  src: url('../mexc/NotoSans-Thin.ttf') format('truetype');
-  font-weight: 100;
-  font-style: normal;
-  font-display: swap;
-}
-
 @font-face {
   font-family: 'Noto Sans';
   src: url('../mexc/NotoSans-Medium.ttf') format('truetype');
@@ -136,23 +134,6 @@ export default {
   font-style: normal;
   font-display: swap;
 }
-
-@font-face {
-  font-family: 'Noto Sans';
-  src: url('../mexc/NotoSans-ExtraLight.ttf') format('truetype');
-  font-weight: 200;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Noto Sans Regular';
-  src: url('../mexc/NotoSans-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 @font-face {
   font-family: 'Hacker Argot';
   src: url('../mexc/HackerArgot.ttf') format('truetype');
@@ -160,13 +141,19 @@ export default {
   font-style: normal;
   font-display: swap;
 }
-
+@font-face {
+  font-family: 'Nsdsd';
+  src: url('../mexc/vi_regular.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
 #main {
-  font-family: 'Noto Sans', sans-serif;
+  font-family: 'AvenirLTStd-Medium', 'Nsdsd', 'sans-serif';
 }
 .data-item {
   font-size: 36px;
-  padding: 27px 0;
+  padding: 25px 0;
   margin: 0 34px;
 }
 .data-item > div {

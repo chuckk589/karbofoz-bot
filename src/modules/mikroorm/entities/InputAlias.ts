@@ -16,9 +16,6 @@ export class InputAlias {
   id!: number;
 
   @Property()
-  name: string;
-
-  @Property()
   alias: string;
 
   @Enum({ default: HtmlInputType.TEXT, items: () => HtmlInputType })

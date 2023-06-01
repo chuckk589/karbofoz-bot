@@ -6,6 +6,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import calendar from 'dayjs/plugin/calendar';
 import updateLocale from 'dayjs/plugin/updateLocale';
+import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
 
 Object.defineProperty(String.prototype, 'capitalize', {
@@ -18,6 +19,7 @@ dayjs.extend(localizedFormat);
 dayjs.extend(isToday);
 dayjs.extend(relativeTime);
 dayjs.extend(calendar);
+dayjs.extend(utc);
 dayjs.extend(updateLocale);
 
 dayjs.updateLocale('ru', {

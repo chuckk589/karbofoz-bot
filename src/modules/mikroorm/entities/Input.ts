@@ -17,6 +17,9 @@ export class Input {
   hint?: string;
 
   @Property({ nullable: true })
+  name?: string;
+
+  @Property({ nullable: true })
   dependsOn?: string;
 
   @ManyToOne({ entity: () => InputAlias, nullable: true })

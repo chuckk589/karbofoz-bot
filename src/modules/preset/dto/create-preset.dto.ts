@@ -9,6 +9,7 @@ export class CreatePresetDto {
   language: string;
   currency: string;
   network: string;
+  direction: string;
   preset: PresetFields;
   fields: {
     [key: string]: string;
