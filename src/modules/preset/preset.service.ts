@@ -1,6 +1,6 @@
 import { RetrievePresetDto } from './dto/retrieve-preset.dto';
 import { EntityManager, wrap } from '@mikro-orm/core';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Preset } from '../mikroorm/entities/Preset';
 import { CreatePresetDto } from './dto/create-preset.dto';
 import puppeteer from 'puppeteer';
@@ -17,6 +17,7 @@ import { BarInput } from '../mikroorm/entities/BarInput';
 import { DeviceBarInput } from '../mikroorm/entities/DeviceBarInput';
 import { Device } from '../mikroorm/entities/Device';
 import { PreviewQueryDto } from './dto/preview-query.dto';
+import fs from 'fs';
 @Injectable()
 export class PresetService {
   constructor(private readonly em: EntityManager) {}
@@ -25,7 +26,16 @@ export class PresetService {
     return await this.em.removeAndFlush(preset);
   }
   async getPreviewImage(previewQuery: PreviewQueryDto) {
-    throw new Error('Method not implemented.');
+    const path = `./dist/public/${previewQuery.exchange}/templates/`;
+    const chunks = [previewQuery.direction, ...(previewQuery.dependent ? previewQuery.dependent.split('.') : [])];
+    const files = fs.readdirSync(path).sort((a, b) => a.length - b.length);
+    for (const file of files) {
+      const fileChunks = file.split('.');
+      if (chunks.every((chunk) => fileChunks.includes(chunk))) {
+        return `/${previewQuery.exchange}/templates/${file}`;
+      }
+    }
+    return new HttpException('Preview not found', HttpStatus.NOT_FOUND);
   }
   async generatePreview(body: UpdatePresetsDto) {
     const {
@@ -60,7 +70,6 @@ export class PresetService {
 
   async managePreset(body: CreatePresetDto) {
     const inputs = (await this.em.findOne(Theme, { id: parseInt(body.theme) }, { populate: ['themeInputs.input'] })).themeInputs.getItems().map((themeInput) => themeInput.input);
-    // const barinputs = await this.em.find(BarInput);
     const barinputs = body.statusbar.show ? (await this.em.find(DeviceBarInput, { device: { alias: body.statusbar.device } }, { populate: ['input'] })).map((deviceBarInput) => deviceBarInput.input) : [];
     delete body.statusbar.show;
     if (body.preset.current === '0') {

@@ -1224,8 +1224,16 @@ const _bitget = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
-    // .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
-    .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'network', value: ['erc20'] }] })
+    .add({
+      type: HtmlInputType.NUMBER,
+      name: 'Комиссия',
+      alias: 'com',
+      optional: true,
+      dependsOn: [
+        { field: 'network', value: ['erc20'] },
+        { field: 'direction', value: ['out'] },
+      ],
+    })
     .add({ type: HtmlInputType.NUMBER, name: 'Баланс', alias: 'balance' })
 
     .add({ ru: 'История', uk: 'Інформація про рахунок', es: 'Detalles de la factura', en: 'Bill details', alias: 't1' })

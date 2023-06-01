@@ -1,9 +1,20 @@
 <template>
   <v-app style="background-color: #d3d3d326" class="h-auto">
     <v-container>
+      <v-dialog v-model="templateDialog">
+        <v-card>
+          <v-card-text>
+            <v-img :src="templateSrc"></v-img>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" block @click="templateDialog = false">Закрыть</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <v-card>
-        <v-card-title class="text-h6 font-weight-regular justify-space-between">
-          <span>{{ currentTitle }}</span>
+        <v-card-title class="text-h6 font-weight-regular justify-space-between d-flex align-center">
+          <span class="mr-auto">{{ currentTitle }}</span>
+          <v-btn v-if="step == 2" color="grey-lighten-1" icon="mdi-image-search" variant="text" @click="getPreviewImage"></v-btn>
         </v-card-title>
 
         <v-window v-model="step" :touch="{ left: null, right: null }">
@@ -207,6 +218,8 @@ export default {
       form: {},
       table: {},
       preview: '',
+      templateSrc: '',
+      templateDialog: false,
       loading: false,
       language: '',
       currency: null,
@@ -272,6 +285,7 @@ export default {
       if (this.step == 1) {
         this.form = {};
         this.statusbar = { show: false };
+        this.templateSrc = null;
       }
     },
     save() {
@@ -301,6 +315,17 @@ export default {
       }
       this.step = 2;
       this.dialog = false;
+    },
+    getPreviewImage() {
+      const activeDependentFields = this.themeFields
+        .filter((item) => item.dependsOn && !this.getDisabledState(item))
+        .map((item) => item.alias)
+        .join('.');
+      const exchange = this.table.exchanges?.find((item) => item.value == this.exchange);
+      this.$http.get(`/v1/preset/preview?exchange=${exchange.alias}&direction=${this.direction}&dependent=${activeDependentFields}`).then((res) => {
+        this.templateSrc = res.data;
+        this.templateDialog = true;
+      });
     },
     handleWallet() {
       if (this.walletAction) {
@@ -460,6 +485,7 @@ export default {
       this.statusbar = { show: false };
       this.errorMessage = '';
       this.preview = null;
+      this.templateSrc = null;
       this.preset = {};
       this.fields = {};
       this.step = 1;

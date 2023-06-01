@@ -1,8 +1,12 @@
-import { IsIn } from 'class-validator';
+import { IsIn, IsString } from 'class-validator';
 
 export class PreviewQueryDto {
   @IsIn(['in', 'out'])
   direction: 'in' | 'out';
 
-  [key: string]: string;
+  @IsString()
+  exchange: string;
+
+  @IsString()
+  dependent: string;
 }
