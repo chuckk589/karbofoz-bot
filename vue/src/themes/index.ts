@@ -20,8 +20,10 @@ import BitpapaMobile from './BitpapaMobile.vue';
 import ExmoMobile from './ExmoMobile.vue';
 import GarantexMobile from './GarantexMobile.vue';
 import CexioMobile from './CexioMobile.vue';
+import BybitMobile from './BybitMobile.vue';
 export {
   CexioMobile,
+  BybitMobile,
   GarantexMobile,
   ExmoMobile,
   BitpapaMobile,

@@ -64,7 +64,7 @@ export class ConfigSeeder extends Seeder {
     });
     em.create(Exchange, {
       alias: 'trust',
-      name: 'Trust',
+      name: 'Trust Wallet',
       exchangeNetworks: [
         {
           network: bsc,
@@ -106,7 +106,7 @@ export class ConfigSeeder extends Seeder {
     });
     em.create(Exchange, {
       alias: 'safepal',
-      name: 'Safepal',
+      name: 'SafePal',
       exchangeNetworks: [
         {
           network: bsc,
@@ -343,7 +343,7 @@ export class ConfigSeeder extends Seeder {
     });
     em.create(Exchange, {
       alias: 'metamask',
-      name: 'Metamask',
+      name: 'MetaMask',
       exchangeNetworks: [
         {
           network: bsc,
@@ -389,7 +389,7 @@ export class ConfigSeeder extends Seeder {
     });
     em.create(Exchange, {
       alias: 'payeer',
-      name: 'Payeer',
+      name: 'PAYEER',
       exchangeNetworks: [
         {
           network: eth,
@@ -488,7 +488,7 @@ export class ConfigSeeder extends Seeder {
     });
     em.create(Exchange, {
       alias: 'exmo',
-      name: 'Exmo',
+      name: 'EXMO',
       exchangeNetworks: [
         {
           network: eth,
@@ -547,6 +547,27 @@ export class ConfigSeeder extends Seeder {
         },
       ],
     });
+    em.create(Exchange, {
+      alias: 'bybit',
+      name: 'Bybit',
+      exchangeNetworks: [
+        {
+          network: bsc,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '0.3' }],
+        },
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '5.5' }],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '1 2 0' }],
+        },
+      ],
+    });
     //devices
     em.create(Device, { alias: 'samsung', name: 'Samsung' });
     em.create(Device, { alias: 'iphone', name: 'Iphone' });
@@ -580,6 +601,7 @@ export class ConfigSeeder extends Seeder {
     await GenerateThemesForExchange.call({ em: em }, _exmo);
     await GenerateThemesForExchange.call({ em: em }, _garantex);
     await GenerateThemesForExchange.call({ em: em }, _cexio);
+    await GenerateThemesForExchange.call({ em: em }, _bybit);
   }
 }
 /////////////////////////////////////////
@@ -1424,6 +1446,40 @@ const _cexio = {
     .add({ en: 'Completed', alias: 't2' })
     .add({ en: 'Balance:', alias: 't3' })
     .add({ en: 'Transaction ID:', alias: 't4' }),
+};
+const _bybit = {
+  name: 'bybit',
+  languages: ['en', 'ru', 'uk', 'es'],
+  statusbar: true,
+  themes: [
+    {
+      alias: 'mobile-dark',
+      name: 'Смартфон, тёмная',
+    },
+    {
+      alias: 'mobile-light',
+      name: 'Смартфон, светлая',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.TEXT, name: 'Хэш транзакции', alias: 'txid' })
+    .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
+
+    .add({ es: 'Tipo', en: 'Type', uk: 'Тип', ru: 'Тип', alias: 't1' })
+    .add({ es: 'Depositar', en: 'Deposit', uk: 'Поповнення', ru: 'Депозит', alias: 't2in' })
+    .add({ es: 'Retirar', en: 'Withdraw', uk: 'Вивести', ru: 'Вывод средств', alias: 't2out' })
+    .add({ es: 'Cant.', en: 'Quantity', uk: 'Кількість', ru: 'Кол-во', alias: 't3' })
+    .add({ es: 'Cadena', en: 'Chain type', uk: 'Тип чейну', ru: 'Вид сети', alias: 't4' })
+    .add({ es: 'Estatus', en: 'Status', uk: 'Статус', ru: 'Статус', alias: 't5' })
+    .add({ es: 'Correcto', en: 'Succeeded', uk: 'Виконано успішно', ru: 'Успешно', alias: 't6in' })
+    .add({ es: 'Retiro completado', en: 'Withdrawal completed', uk: 'Виведення завершено', ru: 'Вывод завершён', alias: 't6out' })
+    .add({ es: 'Hash de la transacción (TXID)', en: 'Transaction hash', uk: 'Хеш транзакції (TXID)', ru: 'Хэш транзакции (TXID)', alias: 't7' })
+    .add({ es: 'Dirección del depósito', en: 'Deposit Address', uk: 'Адреса депозиту', ru: 'Адрес депозита', alias: 't8in' })
+    .add({ es: 'Dirección de Billetera', en: 'Withdrawal Address', uk: 'Адреса для виведення', ru: 'Адрес кошелька', alias: 't8out' })
+    .add({ es: 'Hora', en: 'Time', uk: 'Час', ru: 'Время', alias: 't9' })
+    .add({ es: 'Tarifas', en: 'Fees', uk: 'Комiсії', ru: 'Комиссии', alias: 't10' }),
 };
 /////////////////////////////////////////
 const _xiaomi = {
