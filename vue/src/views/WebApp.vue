@@ -53,12 +53,13 @@
                   :hint="field.hint"
                   :rules="fieldRules(field)"
                   v-model="form[field.alias]"
-                  :disabled="getDisabledState(field)"
+                  v-show="!getDisabledState(field)"
                   :append-inner-icon="appendInnerIcon(field.alias)"
                   @click:append-inner="appendInnerClick(field.alias)"
                 >
                   <template #label>
                     <span>{{ field.name }}<strong class="text-red" v-if="!field.optional">&nbsp;&nbsp;*</strong></span>
+                    <span style="color: gray; font-size: 15px" v-if="field.optional">&nbsp;(пусто = Автоввод)</span>
                   </template>
                 </component>
                 <div class="d-flex align-center">
@@ -91,7 +92,7 @@
           </v-window-item>
           <v-window-item :value="4">
             <v-card-text>
-              <v-checkbox v-for="field in themeFields" :key="field.value" :label="field.name" density="compact" v-model="fields[field.alias]"></v-checkbox>
+              <!-- <v-checkbox v-for="field in themeFields" :key="field.value" :label="field.name" density="compact" v-model="fields[field.alias]"></v-checkbox> -->
               <v-form ref="form3">
                 <v-select :items="presetItems" density="compact" v-model="preset.current" :rules="notEmpty"></v-select>
                 <v-expand-transition>
@@ -227,11 +228,12 @@ export default {
       network: null,
       statusbar: { show: false },
       presets: [],
-      preset: {},
+      preset: { current: '0' },
       fields: {},
       selectedRow: null,
       wallets: [],
       wallet: { trx: false },
+      predefinedWallet: null,
       tab: null,
       walletAction: false,
     };
@@ -244,8 +246,6 @@ export default {
     this.$http({ method: 'GET', url: `/v1/config/` }).then((e) => {
       this.table = e.data;
       console.log(e.data);
-
-      // this.step = 2;
     });
     this.$http({ method: 'GET', url: `/v1/preset/` }).then((e) => {
       this.presets = e.data;
@@ -263,7 +263,7 @@ export default {
     },
     appendInnerClick(alias) {
       if (alias == 'txid') {
-        this.form.txid = `${this.network == 'trc20' ? '' : '0x'}${sha256((Math.random() + 1).toString(36).substring(7))}`;
+        this.form.txid = this.genTxid();
       }
     },
 
@@ -272,7 +272,18 @@ export default {
       this.$refs.form1.validate().then((res) => {
         if (res.valid) {
           this.form = this.themeFields.reduce((acc, item) => {
-            acc[item.alias] = this.form[item.alias] || null;
+            if (item.alias == 'address') {
+              acc[item.alias] =
+                this.predefinedWallet && ((this.predefinedWallet.type == 'trx' && this.network == 'trc20') || (this.predefinedWallet.type == 'nontrx' && this.network !== 'trc20')) ? this.predefinedWallet : null;
+            } else if (item.alias == 'txid') {
+              acc[item.alias] = this.genTxid();
+            } else if (item.alias == 'date') {
+              acc[item.alias] = { title: '10 минут назад ', value: '600' };
+            } else if (item.alias == 'sum') {
+              acc[item.alias] = (Math.random() * (10000 - 2000) + 2000).toFixed(Math.random() * 6);
+            } else {
+              acc[item.alias] = null;
+            }
             return acc;
           }, {});
           this.step++;
@@ -339,6 +350,7 @@ export default {
                 this.wallets.push(res.data);
                 this.wallet = {};
                 this.walletAction = false;
+                this.predefinedWallet = res.data;
               });
           }
         });
@@ -347,8 +359,11 @@ export default {
         this.walletAction = true;
       }
     },
+    genTxid() {
+      return `${this.network == 'trc20' ? '' : '0x'}${sha256((Math.random() + 1).toString(36).substring(7))}`;
+    },
     genAddress() {
-      this.wallet.address = `${this.wallet.trx ? '' : '0x'}${sha256((Math.random() + 1).toString(36).substring(7))}`;
+      this.wallet.address = `${this.wallet.trx ? 'T' : '0x'}${sha256((Math.random() + 1).toString(36).substring(7))}`;
     },
     getDisabledState(field) {
       if (field.dependsOn) {
@@ -459,7 +474,7 @@ export default {
     },
     fieldItems(field) {
       if (field.alias.match(/address/)) {
-        return this.wallets.filter((item) => (item.type == 'trx' && this.network == 'trc20') || (item.type == 'nontrx' && this.network !== 'trc20'));
+        return this.presetWallets;
       } else {
         return field.variants || [];
       }
@@ -467,7 +482,7 @@ export default {
     fieldRules(field) {
       if (!field.optional && !this.getDisabledState(field)) {
         if (field.alias.match(/address/)) {
-          return [...this.notEmpty, (v) => (this.network == 'trc20' ? v.match(/^T/) : v.match(/^0x/)) || `Неверный адрес для сети ${this.network}`];
+          return [...this.notEmpty, (v) => (this.network == 'trc20' ? (v.value || v).match(/^T/) : (v.value || v).match(/^0x/)) || `Неверный адрес для сети ${this.network}`];
         } else {
           return [...this.notEmpty];
         }
@@ -486,7 +501,7 @@ export default {
       this.errorMessage = '';
       this.preview = null;
       this.templateSrc = null;
-      this.preset = {};
+      this.preset = { current: '0' };
       this.fields = {};
       this.step = 1;
     },
@@ -497,7 +512,7 @@ export default {
       const network = exchange.networks.find((item) => item.value == field.network);
       const currency = network.currencies.find((item) => item.value == field.currency);
       const direction = field.direction == 'in' ? 'Прием' : 'Отправка';
-      return `${exchange.title} / ${theme.title} / ${language.title} / ${network.title} / ${currency.title} / ${direction} ${field.comment}`;
+      return `${exchange.title} / ${theme.title} / ${language.title} / ${network.title} / ${currency.title} / ${direction} ${field.comment || ''}`;
     },
     update() {
       if ((this.theme && !this.themeItems.find((theme) => theme.value == this.theme)) || !this.theme) {
@@ -582,6 +597,9 @@ export default {
     current100VH() {
       return this.vh * 100 + 'px';
     },
+    presetWallets() {
+      return this.wallets.filter((item) => (item.type == 'trx' && this.network == 'trc20') || (item.type == 'nontrx' && this.network !== 'trc20'));
+    },
     themeItems() {
       return this.table.exchanges?.find((item) => item.value == this.exchange)?.themes || [];
     },
@@ -618,7 +636,7 @@ export default {
       } else if (this.step == 3) {
         return 'Готово!';
       } else if (this.step == 4) {
-        return 'Поля для записи';
+        return 'Сохранение';
       }
       return '';
     },
@@ -635,9 +653,11 @@ export default {
 .required label::after {
   content: '*';
 }
+
 .v-combobox__selection {
   overflow: hidden;
 }
+
 input[type='time'] {
   position: relative;
 }
