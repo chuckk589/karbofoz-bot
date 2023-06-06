@@ -1,6 +1,7 @@
-import { Collection, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Collection, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryKey, Property, Unique, t } from '@mikro-orm/core';
 import { InputValue } from './InputValue';
 import { InputAlias } from './InputAlias';
+import { Theme } from './Theme';
 
 @Entity()
 export class Input {
@@ -10,8 +11,11 @@ export class Input {
   @Property()
   alias: string;
 
-  @Property({ default: false })
-  optional: boolean;
+  @Property({ default: false, nullable: true })
+  optional?: boolean;
+
+  @Property({ default: false, nullable: true })
+  hidden?: boolean;
 
   @Property({ nullable: true })
   hint?: string;
@@ -27,4 +31,7 @@ export class Input {
 
   @OneToMany(() => InputValue, (inputValue) => inputValue.input)
   inputValues = new Collection<InputValue>(this);
+
+  @ManyToOne(() => Theme)
+  theme: Theme;
 }

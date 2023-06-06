@@ -18,6 +18,7 @@ import { DeviceBarInput } from '../mikroorm/entities/DeviceBarInput';
 import { Device } from '../mikroorm/entities/Device';
 import { PreviewQueryDto } from './dto/preview-query.dto';
 import fs from 'fs';
+import { Wallet } from '../mikroorm/entities/Wallet';
 @Injectable()
 export class PresetService {
   constructor(private readonly em: EntityManager) {}
@@ -69,9 +70,10 @@ export class PresetService {
   }
 
   async managePreset(body: CreatePresetDto) {
-    const inputs = (await this.em.findOne(Theme, { id: parseInt(body.theme) }, { populate: ['themeInputs.input'] })).themeInputs.getItems().map((themeInput) => themeInput.input);
+    const inputs = (await this.em.findOne(Theme, { id: parseInt(body.theme) }, { populate: ['themeInputs'] })).themeInputs.getItems();
     const barinputs = body.statusbar.show ? (await this.em.find(DeviceBarInput, { device: { alias: body.statusbar.device } }, { populate: ['input'] })).map((deviceBarInput) => deviceBarInput.input) : [];
     delete body.statusbar.show;
+
     if (body.preset.current === '0') {
       const preset = this.em.create(Preset, {
         name: body.preset.name || `Preset ${new Date().toLocaleString()}`,
@@ -82,6 +84,7 @@ export class PresetService {
         direction: body.direction,
         device: await this.em.findOne(Device, { alias: body.statusbar.device }),
         theme: this.em.getReference(Theme, parseInt(body.theme)),
+        wallet: body.wallet ? this.em.getReference(Wallet, parseInt(body.wallet.id)) : undefined,
         inputPresets: Object.keys(body.fields).map((key) => {
           return this.em.create(InputPreset, {
             input: inputs.find((input) => input.alias == key),
@@ -102,6 +105,7 @@ export class PresetService {
       const preset = await this.em.findOneOrFail(Preset, { id: parseInt(body.preset.current) }, { populate: ['inputPresets.input', 'barInputPresets.barInput'] });
       preset.inputPresets.removeAll();
       preset.barInputPresets.removeAll();
+      body.wallet ? (preset.wallet = this.em.getReference(Wallet, parseInt(body.wallet.id))) : undefined;
       Object.keys(body.fields).forEach((key) => {
         preset.inputPresets.add(
           this.em.create(InputPreset, {
@@ -124,7 +128,7 @@ export class PresetService {
     }
   }
   async getPresets() {
-    const presets = await this.em.find(Preset, {}, { populate: ['currency', 'network', 'language', 'theme.exchange', 'inputPresets.input', 'barInputPresets.barInput', 'device'], orderBy: { name: 'ASC' } });
+    const presets = await this.em.find(Preset, {}, { populate: ['currency', 'network', 'wallet', 'language', 'theme.exchange', 'inputPresets.input', 'barInputPresets.barInput', 'device'], orderBy: { name: 'ASC' } });
     return presets.map((preset) => new RetrievePresetDto(preset));
   }
 }

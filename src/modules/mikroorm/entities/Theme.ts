@@ -1,7 +1,7 @@
 import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
-import { InputTheme } from './InputTheme';
 import { ThemeLanguage } from './ThemeLanguage';
 import { Exchange } from './Exchange';
+import { Input } from './Input';
 
 @Entity()
 export class Theme {
@@ -17,8 +17,8 @@ export class Theme {
   @ManyToOne({ entity: () => Exchange })
   exchange: Exchange;
 
-  @OneToMany(() => InputTheme, (InputTheme) => InputTheme.theme)
-  themeInputs = new Collection<InputTheme>(this);
+  @OneToMany(() => Input, (Input) => Input.theme)
+  themeInputs = new Collection<Input>(this);
 
   @OneToMany(() => ThemeLanguage, (ThemeLanguage) => ThemeLanguage.theme)
   themeLanguages = new Collection<ThemeLanguage>(this);

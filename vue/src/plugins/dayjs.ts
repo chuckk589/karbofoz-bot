@@ -46,4 +46,10 @@ dayjs.updateLocale('es', {
     sameDay: '[Hoy]',
   },
 });
-export default dayjs;
+function timezonedDayjs(...args: any[]) {
+  return dayjs(...args).utcOffset(timezonedDayjs.prototype._offset);
+}
+
+timezonedDayjs.prototype._offset = '';
+
+export default timezonedDayjs;

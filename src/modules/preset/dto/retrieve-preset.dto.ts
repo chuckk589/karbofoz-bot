@@ -1,5 +1,6 @@
 import { Preset } from 'src/modules/mikroorm/entities/Preset';
 import { CreatePresetDto } from './create-preset.dto';
+import { RetrieveWalletDto } from 'src/modules/wallet/dto/retrieve-wallet.dto';
 
 export class RetrievePresetDto extends CreatePresetDto {
   constructor(preset: Preset) {
@@ -14,6 +15,7 @@ export class RetrievePresetDto extends CreatePresetDto {
     this.direction = preset.direction;
     this.exchange = preset.theme.exchange.id.toString();
     this.createdAt = preset.createdAt;
+    this.wallet = new RetrieveWalletDto(preset.wallet);
     this.fields = preset.inputPresets.getItems().reduce((acc: any, inputPreset) => {
       acc[inputPreset.input.alias] = inputPreset.value;
       return acc;

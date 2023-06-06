@@ -7,16 +7,18 @@ export class RetrieveConfigInputDto {
     this.name = input.name;
     this.type = input.inputAlias?.type;
     this.alias = input.alias;
-    this.variants = input.inputAlias.aliasVariants.getItems().length ? input.inputAlias.aliasVariants.getItems().map((variant) => new RetrieveConfigDto({ title: variant.value, value: variant.alias })) : undefined;
+    this.variants = input.inputAlias?.aliasVariants?.getItems().length ? input.inputAlias.aliasVariants.getItems().map((variant) => new RetrieveConfigDto({ title: variant.value, value: variant.alias })) : undefined;
     this.optional = input.optional;
     this.hint = input.hint;
     this.dependsOn = JSON.parse(input.dependsOn);
+    this.hidden = input.hidden;
   }
   name: string;
   type: string;
   alias: string;
   optional: boolean;
   hint?: string;
+  hidden: boolean;
   dependsOn?: dependsOnField[];
   variants?: RetrieveConfigDto[];
 }

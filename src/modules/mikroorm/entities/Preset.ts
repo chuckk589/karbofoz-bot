@@ -7,6 +7,7 @@ import { Currency } from './Currency';
 import { Network } from './Network';
 import { BarInputPreset } from './BarInputPreset';
 import { Device } from './Device';
+import { Wallet } from './Wallet';
 
 @Entity()
 export class Preset {
@@ -36,6 +37,9 @@ export class Preset {
 
   @ManyToOne(() => Currency)
   currency: Currency;
+
+  @ManyToOne(() => Wallet, { nullable: true })
+  wallet: Wallet;
 
   @ManyToOne(() => Network)
   network: Network;

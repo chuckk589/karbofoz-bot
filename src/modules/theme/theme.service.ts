@@ -11,9 +11,9 @@ export class ThemeService {
   async getTheme(id: number, query: RetriveThemeQueryDto) {
     const theme = await this.em.findOne(
       Theme,
-      { id, themeInputs: { input: { inputValues: { $ne: null } } } },
+      { id, themeInputs: { inputValues: { $ne: null } } },
       {
-        populate: ['exchange.exchangeNetworks.constants', 'exchange.exchangeNetworks.network', 'exchange.exchangeNetworks.networkCurrencies.currency', 'themeInputs.input.inputValues.language'],
+        populate: ['exchange.exchangeNetworks.constants', 'exchange.exchangeNetworks.network', 'exchange.exchangeNetworks.networkCurrencies.currency', 'themeInputs.inputValues.language'],
         strategy: LoadStrategy.JOINED,
       },
     );

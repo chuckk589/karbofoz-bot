@@ -6,8 +6,8 @@ export class RetrieveInputValuesDto {
     this.inputs = [
       ...theme.themeInputs.getItems().map((themeInput) => {
         return {
-          alias: themeInput.input.alias,
-          value: themeInput.input.inputValues.getItems().find((inputValue) => inputValue.language.alias == query.language)?.value,
+          alias: themeInput.alias,
+          value: themeInput.inputValues.getItems().find((inputValue) => inputValue.language.alias == query.language)?.value,
         };
       }),
       ...theme.exchange.exchangeNetworks

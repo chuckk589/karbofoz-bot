@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-combobox :hint="hint" :rules="rules" v-model="value" :items="items" density="compact" label="Дата транзакции" append-inner-icon="mdi-calendar">
+    <v-combobox :hint="hint" persistent-hint :rules="rules" v-model="value" :items="items" density="compact" label="Дата транзакции" append-inner-icon="mdi-calendar">
       <template #label>
         <slot name="label"></slot>
       </template>

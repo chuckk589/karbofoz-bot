@@ -1,3 +1,5 @@
+import { RetrieveWalletDto } from 'src/modules/wallet/dto/retrieve-wallet.dto';
+
 type PresetFields = {
   current: string;
   name?: string;
@@ -11,6 +13,7 @@ export class CreatePresetDto {
   network: string;
   direction: string;
   preset: PresetFields;
+  wallet: RetrieveWalletDto;
   fields: {
     [key: string]: string;
   };

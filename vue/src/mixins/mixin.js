@@ -17,8 +17,9 @@ const themeMixin = {
       theme: '',
     };
   },
-  mounted() {
+  created() {
     this.theme = this.payload.path.split('/').pop();
+    this.$dayjs.prototype._offset = this.payload.query.tz;
   },
   methods: {
     /* @deprecated */
@@ -80,8 +81,6 @@ const themeMixin = {
       }
     },
     dateFormatter(value) {
-      // console.log(this.$dayjs(value).format('YYYY-MM-DD HH:mm:ss'));
-      // return value.replace(/T/, ' ');
       return this.$dayjs(value).format('YYYY-MM-DD HH:mm:ss');
     },
     feeFormatter(key = 'cs_com', cutExc = false) {

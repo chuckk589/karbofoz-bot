@@ -11,9 +11,15 @@ export class ConfigService {
   async getAll() {
     const exchanges = await this.em.find(
       Exchange,
-      { themes: { themeInputs: { input: { inputAlias: { $ne: null } } } } },
       {
-        populate: ['exchangeNetworks.networkCurrencies.currency', 'exchangeNetworks.network', 'themes.themeInputs.input.inputAlias.aliasVariants', 'themes.themeLanguages.language'],
+        themes: {
+          themeInputs: {
+            $or: [{ inputAlias: { $ne: null } }, { hidden: true }],
+          },
+        },
+      },
+      {
+        populate: ['exchangeNetworks.networkCurrencies.currency', 'exchangeNetworks.network', 'themes.themeInputs.inputAlias.aliasVariants', 'themes.themeLanguages.language'],
         populateWhere: PopulateHint.INFER,
         orderBy: { name: 'ASC' },
       },

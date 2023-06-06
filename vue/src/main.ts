@@ -14,7 +14,6 @@ app.use(router);
 app.use(vuetify);
 app.config.globalProperties.$http = axios;
 app.config.globalProperties.$dayjs = dayjs;
-
 app.mount('#app');
 
 export default app;

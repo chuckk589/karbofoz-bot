@@ -3,6 +3,7 @@ import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 import { Wallet, WalletType } from '../mikroorm/entities/Wallet';
 import { CreateWalletDto } from './dto/create-wallet.dto';
+import { UpdateWalletDto } from './dto/update-wallet.dto';
 
 @Injectable()
 export class WalletService {
@@ -17,7 +18,7 @@ export class WalletService {
       name: createWalletDto.name,
       address: createWalletDto.address,
       comment: createWalletDto.comment,
-      type: createWalletDto.trx ? WalletType.TRX : WalletType.NONTRX,
+      type: createWalletDto.address[0] == 'T' ? WalletType.TRX : WalletType.NONTRX,
     });
     await this.em.persistAndFlush(wallet);
     return new RetrieveWalletDto(wallet);
@@ -25,5 +26,13 @@ export class WalletService {
   async findAll() {
     const wallets = await this.em.find(Wallet, {});
     return wallets.map((wallet) => new RetrieveWalletDto(wallet));
+  }
+  async update(id: number, updateWalletDto: UpdateWalletDto) {
+    const wallet = await this.em.findOneOrFail(Wallet, id);
+    wallet.name = updateWalletDto.name;
+    wallet.address = updateWalletDto.address;
+    wallet.comment = updateWalletDto.comment;
+    await this.em.persistAndFlush(wallet);
+    return new RetrieveWalletDto(wallet);
   }
 }

@@ -25,6 +25,9 @@ export class DeviceBarInput {
   @Property({ nullable: true })
   hint?: string;
 
+  @Property({ nullable: true, default: false })
+  optional?: boolean;
+
   @Property({ nullable: true, type: BarRange })
   range?: [number, number];
 

@@ -8,7 +8,4 @@ export class CreateWalletDto {
   @IsOptional()
   @IsString()
   comment?: string;
-
-  @IsBoolean()
-  trx: boolean;
 }

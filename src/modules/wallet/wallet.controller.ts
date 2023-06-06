@@ -1,3 +1,4 @@
+import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { WalletService } from './wallet.service';
@@ -22,5 +23,10 @@ export class WalletController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.walletService.remove(+id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateWalletDto: UpdateWalletDto) {
+    return this.walletService.update(+id, updateWalletDto);
   }
 }
