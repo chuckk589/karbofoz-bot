@@ -540,13 +540,14 @@ export default {
       }
     },
     cleanUp() {
-      this.theme = null;
-      this.language = null;
-      this.currency = null;
-      this.network = null;
-      this.exchange = null;
+      // this.direction = null;
+      // this.language = null;
+      // this.currency = null;
+      // this.network = null;
+      // this.theme = null;
+      // this.exchange = null;
+      // this.direction = null;
       this.form = {};
-      this.direction = null;
       this.statusbar = { show: false };
       this.errorMessage = '';
       this.preview = null;
@@ -599,7 +600,7 @@ export default {
       return fields.reduce(
         (acc, item) => {
           if (this.statusbar[item.alias] && !this.getDisabledBarState(item)) {
-            acc[item.alias] = this.statusbar[item.alias];
+            acc[item.alias] = this.statusbar[item.alias].value || this.statusbar[item.alias];
           }
           return acc;
         },

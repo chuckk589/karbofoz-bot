@@ -15,7 +15,7 @@ export class RetrievePresetDto extends CreatePresetDto {
     this.direction = preset.direction;
     this.exchange = preset.theme.exchange.id.toString();
     this.createdAt = preset.createdAt;
-    this.wallet = new RetrieveWalletDto(preset.wallet);
+    this.wallet = preset.wallet ? new RetrieveWalletDto(preset.wallet) : undefined;
     this.fields = preset.inputPresets.getItems().reduce((acc: any, inputPreset) => {
       acc[inputPreset.input.alias] = inputPreset.value;
       return acc;
