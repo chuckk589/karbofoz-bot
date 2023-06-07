@@ -1,7 +1,7 @@
 <template>
   <div v-if="query._device == 'xiaomi'" class="s-bar" style="height: 213px; margin-left: 35px" :class="theme + '-bar'">
     <div>
-      <div class="xiaomi" style="font-size: 35px; font-family: 'Roboto'; letter-spacing: 1px">{{ formatTime }}</div>
+      <div class="xiaomi" style="font-size: 35px; font-family: 'Roboto'; letter-spacing: 1px">{{ this.query['_time'] }}</div>
       <FakeImg class="xiaomi" v-if="!!+query._moon" :path="'/devices/xiaomi/12.png'" style="margin-left: 10px" />
       <FakeImg class="xiaomi" v-if="!!+query._vibro" :path="'/devices/xiaomi/11.png'" style="margin-left: 13px" />
       <FakeImg class="xiaomi" v-if="!!+query._alarm" :path="'/devices/xiaomi/10.png'" style="margin-left: 13px" />
@@ -21,7 +21,7 @@
   </div>
   <div v-else-if="query._device == 'iphone'" style="height: 147px; align-items: stretch" :class="theme + '-bar'">
     <div style="flex: 1 1; margin-left: 128px; margin-top: -9px">
-      <div class="iphone" style="font-size: 45px; font-family: 'iphone'; letter-spacing: 1px">{{ formatTime }}</div>
+      <div class="iphone" style="font-size: 45px; font-family: 'iphone'; letter-spacing: 1px">{{ this.query['_time'] }}</div>
       <FakeImg class="iphone" v-if="!!+query._geoloc" :path="'/devices/iphone/1.png'" style="margin-left: 18px" />
       <v-spacer></v-spacer>
       <WFComponent :value="+query['_4g']" name="iphone_bar" :meta="query['_simnum']" style="margin-right: 21px" />
@@ -32,7 +32,7 @@
   </div>
   <div v-else-if="query._device == 'samsung'" style="height: 100px; align-items: stretch" :class="theme + '-bar'">
     <div style="flex: 1 1; margin-left: 75px">
-      <div class="samsung" style="font-size: 35px; font-family: 'Roboto'; letter-spacing: 1px">{{ formatTime }}</div>
+      <div class="samsung" style="font-size: 35px; font-family: 'Roboto'; letter-spacing: 1px">{{ this.query['_time'] }}</div>
       <FakeImg class="samsung" v-if="!!+query._geoloc" :path="'/devices/samsung/1.png'" style="margin-left: 19px; margin-top: 6px" />
       <v-spacer></v-spacer>
       <FakeImg class="samsung" v-if="!!+query._vpn" :path="'/devices/samsung/6.png'" style="margin-left: 15px" />
@@ -57,7 +57,7 @@
   </div>
   <div v-else-if="query._device == 'realme'" style="height: 155px; align-items: stretch" :class="theme + '-bar'">
     <div style="flex: 1 1">
-      <div class="realme" style="font-size: 38px; font-family: realme; margin-left: 158px">{{ formatTime }}</div>
+      <div class="realme" style="font-size: 38px; font-family: realme; margin-left: 158px">{{ this.query['_time'] }}</div>
       <v-spacer></v-spacer>
       <FakeImg class="realme" v-if="!!+query._nfc" :path="'/devices/realme/3.png'" style="margin-left: 13px" />
 
@@ -106,15 +106,6 @@ export default {
     },
     theme: {
       type: String,
-    },
-  },
-  computed: {
-    formatTime() {
-      const [hours, mins] = this.query['_time'].split(':');
-      const time = new Date();
-      time.setMinutes(mins);
-      time.setHours(hours);
-      return this.$dayjs(time).format('HH:mm');
     },
   },
 };

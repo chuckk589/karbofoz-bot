@@ -1631,26 +1631,62 @@ async function GenerateThemesForExchange(this: { em: EntityManager }, data: data
   const exchange = await this.em.findOneOrFail(Exchange, { alias: data.name });
   const inputs: any[] = [];
   for await (const field of data.fields) {
-    const inputalias = await this.em.findOne(InputAlias, { alias: field.alias });
+    let inputalias = await this.em.findOne(InputAlias, { alias: field.alias });
+    if (!inputalias && field.type) {
+      inputalias = this.em.create(InputAlias, {
+        type: field.type as HtmlInputType,
+        alias: field.alias,
+        ...(field.values
+          ? {
+              aliasVariants: field.values as selectValue[],
+            }
+          : {}),
+      });
+    }
     inputs.push({
       alias: field.alias,
       optional: !!field.optional,
       hint: field.hint,
       name: field.name,
       dependsOn: JSON.stringify(field.dependsOn),
-      ...(field.type
-        ? {
-            inputAlias: inputalias || {
-              type: field.type as HtmlInputType,
-              alias: field.alias,
-              ...(field.values
-                ? {
-                    aliasVariants: field.values as selectValue[],
-                  }
-                : {}),
-            },
-          }
-        : { inputValues: data.languages.map((language: string) => ({ value: (field as any)[language], language: languages.find((lan) => lan.alias == language) })) }),
+      ...(field.type ? { inputAlias: inputalias } : { inputValues: data.languages.map((language: string) => ({ value: (field as any)[language], language: languages.find((lan) => lan.alias == language) })) }),
+    });
+  }
+
+  let tzInputAlias = await this.em.findOne(InputAlias, { alias: 'tz' });
+  if (!tzInputAlias) {
+    tzInputAlias = this.em.create(InputAlias, {
+      alias: 'tz',
+      type: HtmlInputType.SELECT,
+      aliasVariants: [
+        { value: '(GMT-12:00) International Date Line West', alias: '-12' },
+        { value: '(GMT-11:00) Midway Island, Samoa', alias: '-11' },
+        { value: '(GMT-10:00) Hawaii', alias: '-10' },
+        { value: '(GMT-09:00) Alaska', alias: '-9' },
+        { value: '(GMT-08:00) Pacific Time (US & Canada)', alias: '-8' },
+        { value: '(GMT-07:00) Arizona', alias: '-7' },
+        { value: '(GMT-06:00) Central Time (US & Canada)', alias: '-6' },
+        { value: '(GMT-05:00) Eastern Time (US & Canada)', alias: '-5' },
+        { value: '(GMT-04:00) Atlantic Time (Canada)', alias: '-4' },
+        { value: '(GMT-03:00) Buenos Aires, Georgetown', alias: '-3' },
+        { value: '(GMT-02:00) Mid-Atlantic', alias: '-2' },
+        { value: '(GMT-01:00) Cape Verde Is.', alias: '-1' },
+        { value: '(GMT) Greenwich Mean Time : London', alias: '0' },
+        { value: '(GMT+01:00) Rome, Stockholm, Vienna', alias: '1' },
+        { value: '(GMT+02:00)  Istanbul, Minsk', alias: '2' },
+        { value: '(GMT+03:00) Moscow, St. Petersburg', alias: '3' },
+        { value: '(GMT+04:00) Abu Dhabi, Muscat', alias: '4' },
+        { value: '(GMT+05:00) Islamabad, Karachi, Tashkent', alias: '5' },
+        { value: '(GMT+06:00) Almaty, Novosibirsk', alias: '6' },
+        { value: '(GMT+07:00) Bangkok, Hanoi, Jakarta', alias: '7' },
+        { value: '(GMT+08:00) Beijing, Hong Kong, Perth', alias: '8' },
+        { value: '(GMT+09:00) Osaka, Sapporo, Tokyo', alias: '9' },
+        { value: '(GMT+10:00) Canberra, Melbourne, Sydney', alias: '10' },
+        { value: '(GMT+11:00) Magadan, Solomon Is., New Caledonia', alias: '11' },
+        { value: '(GMT+12:00) Auckland, Wellington', alias: '12' },
+        { value: "(GMT+13:00) Nuku'alofa", alias: '13' },
+        { value: '(GMT+14:00) Kiritimati', alias: '14' },
+      ],
     });
   }
 
@@ -1660,7 +1696,7 @@ async function GenerateThemesForExchange(this: { em: EntityManager }, data: data
       exchange,
       statusbar: data.statusbar,
       themeLanguages: [...Array(languages.length).keys()].map((i) => ({ language: languages[i] })),
-      themeInputs: [{ alias: 'tz', name: 'Часовая зона', hidden: true }, ...inputs.map((input) => this.em.create(Input, input))],
+      themeInputs: [this.em.create(Input, { alias: 'tz', name: 'Часовая зона', hidden: true, inputAlias: tzInputAlias }), ...inputs.map((input) => this.em.create(Input, input))],
     }),
   );
   await this.em.flush();

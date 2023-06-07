@@ -43,7 +43,7 @@
           <v-window-item :value="2">
             <v-card-text class="pt-0">
               <v-list-subheader class="text-grey">Временная зона</v-list-subheader>
-              <v-text-field ref="tz" :rules="[...notEmpty, (v) => v.match(/[+-][0-9]{2}:[0-9]{2}/) || 'Неверный формат']" density="compact" label="Часовой пояс" v-model="form.tz" suffix="GMT"></v-text-field>
+              <v-select ref="tz" :rules="notEmpty" :items="tzFields" density="compact" @update:modelValue="updateBarTime" label="Часовой пояс" v-model="form.tz"></v-select>
               <v-list-subheader class="text-grey">Данные шаблона</v-list-subheader>
               <v-form ref="form2" v-if="step == 2">
                 <component
@@ -265,6 +265,7 @@ export default {
     this.$http({ method: 'GET', url: `/v1/config/` }).then((e) => {
       this.table = e.data;
       console.log(e.data);
+      this.statusbar.show = true;
     });
     this.$http({ method: 'GET', url: `/v1/preset/` }).then((e) => {
       this.presets = e.data;
@@ -301,7 +302,8 @@ export default {
             } else if (item.alias == 'sum') {
               acc[item.alias] = (Math.random() * (10000 - 2000) + 2000).toFixed(Math.random() * 6);
             } else if (item.alias == 'tz') {
-              acc[item.alias] = new Date().toString().match(/GMT([+|-]\d{1,2})/)[1] + ':00';
+              const alias = new Date().getTimezoneOffset() / -60;
+              acc[item.alias] = alias.toString();
             } else {
               acc[item.alias] = null;
             }
@@ -460,7 +462,8 @@ export default {
     submit() {
       if (this.step == 2) {
         this.errorMessage = '';
-        Promise.all([this.$refs.form2.validate(), this.$refs.tz.validate(), this.$refs.form6.validate()]).then((res) => {
+        const refs = [this.$refs.form2, this.$refs.tz, ...(this.statusbar.show ? [this.$refs.form6] : [])];
+        Promise.all(refs.map((ref) => ref.validate())).then((res) => {
           if (!res.some((item) => item.length != 0 && !item.valid)) {
             this.loading = true;
             const body = {
@@ -583,7 +586,7 @@ export default {
       return fields.reduce((acc, item) => {
         if (this.form[item.alias] && !this.getDisabledState(item)) {
           if (item.alias.match(/date/)) {
-            acc[item.alias] = this.form[item.alias].value ? this.$dayjs().subtract(this.form[item.alias].value, 'second') : this.$dayjs(this.form[item.alias]);
+            acc[item.alias] = this.form[item.alias].value ? this.$dayjs().subtract(this.form[item.alias].value, 'second') : this.$dayjsPure(this.form[item.alias]).utcOffset(+this.form.tz, true);
           } else {
             acc[item.alias] = this.form[item.alias].value || this.form[item.alias];
           }
@@ -604,8 +607,15 @@ export default {
         { show: true, device: this.statusbar.device },
       );
     },
+    updateBarTime(newValue) {
+      if (this.statusbar.show) {
+        this.$dayjs.prototype._offset = +newValue;
+        this.statusbar.time = this.$dayjs().format('HH:mm');
+      }
+    },
     fillSingleBarField(item) {
       if (item.type == 'time') {
+        this.$dayjs.prototype._offset = +this.form.tz;
         this.statusbar[item.alias] = this.$dayjs().format('HH:mm');
       } else if (item.type == 'number') {
         this.statusbar[item.alias] = Math.floor(Math.random() * (item.range[1] - item.range[0] + 1)) + item.range[0];
@@ -628,7 +638,7 @@ export default {
         },
         { independent: [], dependent: [] },
       );
-      this.statusbar.device = device.value;
+      this.statusbar = { show: true, device: device.value };
       for (const item of independent) {
         this.fillSingleBarField(item);
       }
@@ -676,7 +686,9 @@ export default {
     deviceFields() {
       return this.table.devices.find((item) => item.value == this.statusbar.device)?.inputs || [];
     },
-
+    tzFields() {
+      return this.themeFields.find((field) => field.alias == 'tz').variants;
+    },
     currentTitle: function () {
       if (this.step == 1) {
         return 'Новый шаблон';

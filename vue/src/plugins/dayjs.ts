@@ -47,9 +47,12 @@ dayjs.updateLocale('es', {
   },
 });
 function timezonedDayjs(...args: any[]) {
-  return dayjs(...args).utcOffset(timezonedDayjs.prototype._offset);
+  return dayjs(...args).utcOffset(timezonedDayjs.prototype._offset || 0);
 }
 
-timezonedDayjs.prototype._offset = '';
+timezonedDayjs.prototype._offset = 0;
 
-export default timezonedDayjs;
+export default {
+  timezonedDayjs,
+  dayjs,
+};

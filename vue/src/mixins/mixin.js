@@ -19,7 +19,7 @@ const themeMixin = {
   },
   created() {
     this.theme = this.payload.path.split('/').pop();
-    this.$dayjs.prototype._offset = this.payload.query.tz;
+    this.$dayjs.prototype._offset = +this.payload.query.tz;
   },
   methods: {
     /* @deprecated */
