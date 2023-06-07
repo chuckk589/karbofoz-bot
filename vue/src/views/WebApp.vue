@@ -265,7 +265,6 @@ export default {
     this.$http({ method: 'GET', url: `/v1/config/` }).then((e) => {
       this.table = e.data;
       console.log(e.data);
-      this.statusbar.show = true;
     });
     this.$http({ method: 'GET', url: `/v1/preset/` }).then((e) => {
       this.presets = e.data;
