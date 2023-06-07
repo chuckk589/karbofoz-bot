@@ -19,6 +19,9 @@ export class Wallet {
   @Property()
   address: string;
 
+  @Property({ nullable: true, default: false })
+  preffered: boolean;
+
   @Enum({ default: WalletType.TRX, items: () => WalletType })
   type: WalletType;
 }

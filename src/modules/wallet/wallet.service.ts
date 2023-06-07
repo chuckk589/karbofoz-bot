@@ -14,25 +14,48 @@ export class WalletService {
     return await this.em.removeAndFlush(wallet);
   }
   async create(createWalletDto: CreateWalletDto) {
+    const wallets = await this.em.find(Wallet, {});
+    const type = createWalletDto.address[0] == 'T' ? WalletType.TRX : WalletType.NONTRX;
+    if (createWalletDto.preffered === true) {
+      wallets
+        .filter((item) => item.type == type)
+        .forEach((wallet) => {
+          wallet.preffered = false;
+        });
+    }
     const wallet = this.em.create(Wallet, {
       name: createWalletDto.name,
       address: createWalletDto.address,
       comment: createWalletDto.comment,
-      type: createWalletDto.address[0] == 'T' ? WalletType.TRX : WalletType.NONTRX,
+      preffered: createWalletDto.preffered,
+      type: type,
     });
-    await this.em.persistAndFlush(wallet);
-    return new RetrieveWalletDto(wallet);
+    wallets.push(wallet);
+    await this.em.persistAndFlush(wallets);
+    return wallets.map((wallet) => new RetrieveWalletDto(wallet));
   }
   async findAll() {
     const wallets = await this.em.find(Wallet, {});
     return wallets.map((wallet) => new RetrieveWalletDto(wallet));
   }
   async update(id: number, updateWalletDto: UpdateWalletDto) {
-    const wallet = await this.em.findOneOrFail(Wallet, id);
+    const wallets = await this.em.find(Wallet, {});
+    const wallet = wallets.find((wallet) => wallet.id == id);
     wallet.name = updateWalletDto.name;
     wallet.address = updateWalletDto.address;
     wallet.comment = updateWalletDto.comment;
-    await this.em.persistAndFlush(wallet);
-    return new RetrieveWalletDto(wallet);
+    if (updateWalletDto.address) {
+      wallet.type = updateWalletDto.address[0] == 'T' ? WalletType.TRX : WalletType.NONTRX;
+    }
+    if (updateWalletDto.preffered === true) {
+      wallets
+        .filter((item) => item.type == wallet.type)
+        .forEach((wallet) => {
+          wallet.preffered = false;
+        });
+    }
+    wallet.preffered = updateWalletDto.preffered;
+    await this.em.persistAndFlush(wallets);
+    return wallets.map((wallet) => new RetrieveWalletDto(wallet));
   }
 }

@@ -163,8 +163,14 @@
                 </v-window-item>
                 <v-window-item :value="2" :style="'height: calc(' + current100VH + '  - 48px)'" class="d-flex flex-column">
                   <v-card-text :style="'padding: 0; transition: height .2s linear; overflow-y: scroll;flex: initial;' + walletStyle">
-                    <v-list density="compact" lines="two">
-                      <v-list-item v-for="wallet in wallets" :key="wallet.id" :value="wallet.id" :title="wallet.title" :subtitle="wallet.comment">
+                    <v-list density="compact">
+                      <v-list-item v-for="wallet in wallets" :key="wallet.id" :value="wallet.id" :title="wallet.title">
+                        <v-list-item-subtitle>
+                          <div class="d-flex flex-column">
+                            <div>{{ wallet.comment }}</div>
+                            <span v-if="wallet.preffered" class="text-green">{{ walletPreferedLabel(wallet) }}</span>
+                          </div>
+                        </v-list-item-subtitle>
                         <template v-slot:append>
                           <div>
                             <v-btn color="grey-lighten-1" icon="mdi-pencil" variant="text" @click="editWallet(wallet)"></v-btn>
@@ -181,6 +187,7 @@
                         <v-form ref="form4">
                           <v-text-field v-model="wallet.name" label="Название" :rules="notEmpty" density="compact"></v-text-field>
                           <v-text-field v-model="wallet.address" label="Адрес" :rules="notEmpty" density="compact"></v-text-field>
+                          <v-checkbox v-model="wallet.preffered" label="По умолчанию"></v-checkbox>
                           <v-textarea v-model="wallet.comment" label="Коммент" density="compact"></v-textarea>
                         </v-form>
                       </v-card-text>
@@ -188,14 +195,15 @@
                         <v-form ref="form5">
                           <v-text-field v-model="wallet.title" label="Название" :rules="notEmpty" density="compact"></v-text-field>
                           <v-text-field v-model="wallet.value" label="Адрес" :rules="notEmpty" density="compact"></v-text-field>
+                          <v-checkbox v-model="wallet.preffered" label="По умолчанию"></v-checkbox>
                           <v-textarea v-model="wallet.comment" label="Коммент" density="compact"></v-textarea>
                         </v-form>
                       </v-card-text>
                     </v-expand-transition>
                     <v-spacer></v-spacer>
                     <div class="d-flex">
-                      <v-btn class="ma-auto" color="primary" @click="handleWallet"> {{ walletAction ? 'Готово' : 'Добавить' }} </v-btn>
                       <v-btn v-if="walletAction" class="ma-auto" color="primary" @click="walletAction = null"> Отмена </v-btn>
+                      <v-btn class="ma-auto" color="primary" @click="handleWallet"> {{ walletAction ? 'Готово' : 'Добавить' }} </v-btn>
                     </div>
                   </v-card-actions>
                 </v-window-item>
@@ -292,8 +300,14 @@ export default {
         if (res.valid) {
           this.form = this.themeFields.reduce((acc, item) => {
             if (item.alias == 'address') {
-              acc[item.alias] =
-                this.predefinedWallet && ((this.predefinedWallet.type == 'trx' && this.network == 'trc20') || (this.predefinedWallet.type == 'nontrx' && this.network !== 'trc20')) ? this.predefinedWallet : null;
+              if (this.predefinedWallet && ((this.predefinedWallet.type == 'trx' && this.network == 'trc20') || (this.predefinedWallet.type == 'nontrx' && this.network !== 'trc20'))) {
+                acc[item.alias] = this.predefinedWallet;
+              } else if (this.wallets.length) {
+                const predefined = this.wallets.find((e) => e.preffered && ((e.type == 'trx' && this.network == 'trc20') || (e.type == 'nontrx' && this.network !== 'trc20')));
+                if (predefined) {
+                  acc[item.alias] = predefined;
+                }
+              }
             } else if (item.alias == 'txid') {
               acc[item.alias] = this.genTxid();
             } else if (item.alias == 'date') {
@@ -301,8 +315,7 @@ export default {
             } else if (item.alias == 'sum') {
               acc[item.alias] = (Math.random() * (10000 - 2000) + 2000).toFixed(Math.random() * 6);
             } else if (item.alias == 'tz') {
-              const alias = new Date().getTimezoneOffset() / -60;
-              acc[item.alias] = alias.toString();
+              acc[item.alias] = '3';
             } else {
               acc[item.alias] = null;
             }
@@ -372,7 +385,8 @@ export default {
                 ...this.wallet,
               })
               .then((res) => {
-                this.wallets.push(res.data);
+                // this.wallets.push(res.data);
+                this.wallets = res.data;
                 this.wallet = {};
                 this.walletAction = null;
                 this.predefinedWallet = res.data;
@@ -387,11 +401,13 @@ export default {
                 name: this.wallet.title,
                 address: this.wallet.value,
                 comment: this.wallet.comment,
+                preffered: this.wallet.preffered,
               })
               .then((res) => {
                 this.wallet = {};
-                const index = this.wallets.findIndex((item) => item.id == res.data.id);
-                this.wallets.splice(index, 1, res.data);
+                // const index = this.wallets.findIndex((item) => item.id == res.data.id);
+                // this.wallets.splice(index, 1, res.data);
+                this.wallets = res.data;
                 this.walletAction = null;
               });
           }
@@ -400,6 +416,9 @@ export default {
         this.wallet = {};
         this.walletAction = 'new';
       }
+    },
+    walletPreferedLabel(wallet) {
+      return wallet.type == 'trx' ? 'По умолчанию для TRX сетей' : 'По умолчанию для ETH/BSC сетей';
     },
     genTxid() {
       return `${this.network == 'trc20' ? '' : '0x'}${sha256((Math.random() + 1).toString(36).substring(7))}`;

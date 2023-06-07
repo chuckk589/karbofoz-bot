@@ -8,4 +8,8 @@ export class CreateWalletDto {
   @IsOptional()
   @IsString()
   comment?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  preffered?: boolean;
 }
