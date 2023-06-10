@@ -42,8 +42,8 @@
 
       <FakeImg class="samsung" v-if="!!+query._geoloc2" :path="'/devices/samsung/3.png'" style="margin-left: 15px" />
 
-      <FakeImg class="samsung" v-if="query._wifiShare == 'out'" :path="'/devices/samsung/7.png'" style="margin-left: 15px" />
-      <WFComponent v-if="query._wifiShare == 'in'" :value="query['_wifiS']" name="samsung_wf" style="margin-right: 5px; margin-top: -3px; margin-left: 16px" />
+      <FakeImg class="samsung" v-if="query._wifiMode == 'h'" :path="'/devices/samsung/7.png'" style="margin-left: 15px" />
+      <WFComponent v-if="query._wifiMode == 'volte'" :value="query['_wifiS']" name="samsung_wf" style="margin-right: 5px; margin-top: -3px; margin-left: 16px" />
 
       <FakeImg class="samsung" v-if="query._wifiMode == 'volte' || !!+query._volte" :path="'/devices/samsung/4.png'" style="margin-left: 15px" />
       <FakeImg class="samsung" v-if="query._wifiMode == 'h'" :path="'/devices/samsung/8.png'" style="margin-left: 15px" />
@@ -66,7 +66,7 @@
       <FakeImg class="realme" v-if="!!+query._bluetooth" :path="'/devices/realme/5.png'" style="margin-left: 18px" />
 
       <div class="realme" style="margin-left: 10px; font-family: Realme; letter-spacing: 1px; font-weight: 600; flex-direction: column; line-height: 16px">
-        <div style="transform: scale(0.9, 1)">{{ query['_speed'] }}</div>
+        <div style="transform: scale(0.9, 1)">{{ speed }}</div>
         <div>KB/S</div>
       </div>
 
@@ -83,7 +83,7 @@
         </div>
       </div>
 
-      <WFComponent :meta="!!+query._wifiAP" :value="query['_bar1']" name="realme_bar" style="margin-left: 14px" />
+      <WFComponent :meta="!+query._wifiAP" :value="query['_bar1']" name="realme_bar" style="margin-left: 14px" />
       <WFComponent v-if="query._simnum == 'sim2'" :value="query['_bar2']" name="realme_bar" style="margin-left: 14px" />
 
       <WFComponent :value="query['_charge']" name="realme_btr" style="margin-left: 18px; margin-right: 69px" />
@@ -108,6 +108,12 @@ export default {
       type: String,
     },
   },
+  computed: {
+    speed() {
+      // return this.fixed(this.query._speed, 2);
+      return new Intl.NumberFormat('en', { minimumFractionDigits: 1, maximumFractionDigits: 2 }).format(this.query._speed);
+    },
+  },
 };
 </script>
 <style scoped>
@@ -120,6 +126,7 @@ export default {
   font-family: 'realme';
   src: url('../devices/realme/gilroy.ttf');
 }
+
 .s-bar {
   flex-direction: column !important;
   align-items: stretch !important;
@@ -132,6 +139,7 @@ export default {
 .mobile-dark-bar .realme {
   filter: brightness(0) saturate(100%) invert(98%) sepia(27%) saturate(0%) hue-rotate(353deg) brightness(110%) contrast(100%);
 }
+
 .mobile-light-bar .xiaomi,
 .mobile-light-bar .iphone,
 .mobile-light-bar .samsung,

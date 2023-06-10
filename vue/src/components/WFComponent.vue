@@ -61,9 +61,9 @@
     </div>
     <div v-else-if="name == 'realme_bar'" style="align-items: end; position: relative">
       <div v-if="meta" style="font-weight: 600; width: 17px">
-        <div class="realme" style="right: 3px; position: relative; transform: scale(1.1, 0.75); font-size: 18px; top: -23px">
-          <div style="position: absolute; top: -15px">^</div>
-          <div style="position: absolute">⌄</div>
+        <div class="realme" style="right: 3px; position: relative; transform: scale(0.65); -webkit-text-stroke: 1px; font-size: 18px; top: -23px">
+          <div style="position: absolute; transform: rotate(90deg); top: -20px">&lt;</div>
+          <div style="position: absolute; transform: rotate(270deg); top: -8px; left: -8px">&lt;</div>
         </div>
         <div class="realme" style="transform: scale(1, 1.2); font-size: 18px; right: 21px; bottom: 10px; letter-spacing: 1px; position: absolute; font-weight: 600">4G</div>
       </div>
@@ -74,9 +74,9 @@
         <div style="flex-direction: column-reverse; position: relative">
           <FakeImg v-for="(part, index) in realme_wf" :key="index" :style="'background-image: url(' + part.path + ');' + part.style" :path="part.path" :class="part.class || '' + realmeFillStyle(index < value)" />
         </div>
-        <div class="realme" style="right: 8px; position: relative; transform: scale(1.1, 0.75); font-size: 18px; font-weight: 900; width: 10px; bottom: -7px">
-          <div style="position: absolute; top: -15px">^</div>
-          <div style="position: absolute">⌄</div>
+        <div class="realme" style="right: 6px; position: relative; transform: scale(0.65); font-size: 18px; width: 10px; -webkit-text-stroke: 1px; bottom: -9px">
+          <div style="position: absolute; transform: rotate(90deg); top: -20px">&lt;</div>
+          <div style="position: absolute; transform: rotate(270deg); top: -7px; left: -4px">&lt;</div>
         </div>
       </div>
     </div>

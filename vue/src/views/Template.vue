@@ -1,7 +1,7 @@
 <template>
   <div style="display: flex">
     <component :is="theme" :payload="payload" v-if="loaded"></component>
-    <DevControl :payload="payload" v-if="loaded" @update:query="reload"></DevControl>
+    <!-- <DevControl :payload="payload" v-if="loaded" @update:query="reload"></DevControl> -->
   </div>
 </template>
 

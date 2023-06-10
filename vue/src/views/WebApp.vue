@@ -4,16 +4,17 @@
       <v-dialog v-model="templateDialog">
         <v-card>
           <v-card-text>
-            <v-img :src="templateSrc"></v-img>
+            <v-img alt="test" :src="templateSrc"></v-img>
           </v-card-text>
           <v-card-actions>
             <v-btn color="primary" block @click="templateDialog = false">Закрыть</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <input ref="uploader" class="d-none" type="file" accept=".json" @input="onFileChanged" />
       <v-card>
         <v-card-title class="text-h6 font-weight-regular justify-space-between d-flex align-center">
-          <span class="mr-auto">{{ currentTitle }}</span>
+          <span class="ma-auto">{{ currentTitle }}</span>
           <v-btn v-if="step == 2" color="grey-lighten-1" icon="mdi-image-search" variant="text" @click="getPreviewImage"></v-btn>
         </v-card-title>
 
@@ -65,40 +66,41 @@
                     <span class="text-grey" style="font-size: 15px" v-if="field.optional">&nbsp;(пусто = Автоввод)</span>
                   </template>
                 </component>
-                <div class="d-flex align-center">
-                  <div class="text-grey">Статус бар</div>
-                  <v-btn :disabled="!statusbar.show" color="grey-lighten-1" icon="mdi-dice-multiple" variant="text" class="mr-auto" @click="fillStatusBar"></v-btn>
-                  <v-checkbox-btn style="flex: 0" v-model="statusbar.show" :disabled="!themeBar"> </v-checkbox-btn>
-                </div>
-                <v-expand-transition>
-                  <v-form ref="form6" v-show="statusbar.show" class="status-bar">
-                    <v-select v-model="statusbar.device" :items="table.devices" label="Тип" density="compact"></v-select>
-                    <component
-                      v-for="(field, index) in deviceFields"
-                      :is="getComponentDeviceName(field)"
-                      :type="field.type"
-                      :key="index"
-                      :disabled="getDisabledBarState(field)"
-                      :label="field.name"
-                      :rules="barFieldRules(field)"
-                      :items="fieldItems(field)"
-                      :hint="barFieldHint(field)"
-                      persistent-hint
-                      density="compact"
-                      v-model="statusbar[field.alias]"
-                    >
-                      <template #label>
-                        <span>{{ field.name }}<strong class="text-red" v-if="!field.optional">&nbsp;&nbsp;*</strong></span>
-                      </template>
-                    </component>
-                  </v-form>
-                </v-expand-transition>
               </v-form>
+
+              <div class="d-flex align-center">
+                <div class="text-grey">Строка состояния</div>
+                <v-btn :disabled="!statusbar.show" color="grey-lighten-1" icon="mdi-dice-multiple" variant="text" class="mr-auto" @click="fillStatusBar"></v-btn>
+                <v-checkbox-btn style="flex: 0" v-model="statusbar.show" :disabled="!themeBar"> </v-checkbox-btn>
+              </div>
+              <v-expand-transition>
+                <v-form ref="form6" v-show="statusbar.show" class="status-bar">
+                  <v-select v-model="statusbar.device" :items="table.devices" label="Марка смартфона" density="compact"></v-select>
+                  <component
+                    v-for="(field, index) in deviceFields"
+                    :is="getComponentDeviceName(field)"
+                    :type="field.type"
+                    :key="index"
+                    :disabled="getDisabledBarState(field)"
+                    :rules="barFieldRules(field)"
+                    :items="fieldItems(field)"
+                    :hint="barFieldHint(field)"
+                    :label="field.name"
+                    persistent-hint
+                    density="compact"
+                    v-model="statusbar[field.alias]"
+                  >
+                    <!-- <template #label="field">
+                      <span>{{ field.name }}<strong class="text-red" v-if="!field.optional">&nbsp;&nbsp;*</strong></span>
+                    </template> -->
+                  </component>
+                </v-form>
+              </v-expand-transition>
             </v-card-text>
           </v-window-item>
           <v-window-item :value="3">
-            <v-img class="mb-5" :aspect-ratio="1" :src="preview" />
-            <!-- <a download="preview.png" target="_blank" :href="preview"><v-img class="mb-5" :aspect-ratio="1" :src="preview" /></a> -->
+            <v-img @click="downloadPreview" class="mb-5" :aspect-ratio="1" :src="preview" />
+            <!-- <a :download="previewName()" target="_blank" :href="preview"><v-img class="mb-5" :aspect-ratio="1" :src="preview" /></a> -->
           </v-window-item>
           <v-window-item :value="4">
             <v-card-text>
@@ -125,7 +127,9 @@
           <v-btn v-if="step > 1" variant="text" @click="back"> Назад </v-btn>
           <v-spacer></v-spacer>
           <v-btn v-if="step == 1" color="primary" @click="next"> Далее </v-btn>
-          <v-btn v-if="step == 2 || step == 4" color="primary" @click="submit" :loading="loading"> Готово </v-btn>
+          <v-btn v-if="step == 2 || step == 4" color="primary" @click="submit" :loading="loading">
+            {{ step == 2 ? 'Создать скриншот' : 'Сохранить' }}
+          </v-btn>
           <v-btn v-if="step == 3" color="primary" @click="save"> Сохранить </v-btn>
           <v-dialog v-model="dialog" fullscreen :scrim="false" transition="dialog-bottom-transition">
             <v-card>
@@ -134,6 +138,10 @@
                   <v-tab :value="1">Пресеты</v-tab>
                   <v-tab :value="2">Кошельки</v-tab>
                 </v-tabs>
+                <div>
+                  <v-btn color="grey-lighten-1" icon="mdi-import" variant="text" class="mr-auto" @click="importData"></v-btn>
+                  <v-btn color="grey-lighten-1" icon="mdi-export" variant="text" class="mr-auto" @click="exportData"></v-btn>
+                </div>
                 <v-spacer></v-spacer>
                 <v-btn icon @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
@@ -282,6 +290,27 @@ export default {
     });
   },
   methods: {
+    onFileChanged(e) {
+      if (e.target.files.length == 0) return;
+      const reader = new FileReader();
+      reader.onload = (res) => {
+        this.$http.post(`/v1/config/userdata`, JSON.parse(res.target.result)).finally(() => (e.target.value = ''));
+      };
+      reader.readAsText(e.target.files[0]);
+    },
+    importData() {
+      this.$refs.uploader.click();
+    },
+    exportData() {
+      this.$http.get(`/v1/config/userdata`).then((res) => {
+        const anchor = document.createElement('a');
+        anchor.href = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(res.data))}`;
+        anchor.download = 'userdata.json';
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
+      });
+    },
     appendInnerIcon(alias) {
       if (alias == 'txid') {
         return 'mdi-dice-multiple';
@@ -440,7 +469,7 @@ export default {
     getDisabledBarState(field) {
       if (field.dependsOn) {
         return !field.dependsOn.reduce((acc, item) => {
-          const formValue = this.statusbar[item.field];
+          const formValue = this.statusbar[item.field]?.value || this.statusbar[item.field] || this[item.field];
           if (item.value) {
             if (!item.value.includes(formValue)) acc = false;
           } else {
@@ -657,7 +686,9 @@ export default {
         },
         { independent: [], dependent: [] },
       );
-      this.statusbar = { show: true, device: device.value };
+      this.statusbar = null;
+      this.statusbar = { show: true };
+      this.statusbar.device = device.value;
       for (const item of independent) {
         this.fillSingleBarField(item);
       }
@@ -666,6 +697,22 @@ export default {
           this.fillSingleBarField(item);
         }
       }
+    },
+    downloadPreview() {
+      const link = document.createElement('a');
+      link.href = this.preview;
+      let filename = '';
+      if (this.selectedRow) {
+        const preset = this.presets.find((item) => item.value == this.selectedRow);
+        filename = `${preset.title} ${this.$dayjsPure().format('HH-mm DD.MM.YYYY')}.jpg`;
+      } else {
+        const exchange = this.table.exchanges.find((item) => item.value == this.exchange);
+        filename = `Screenshot_${this.$dayjsPure().format('YYYYDDMM-HHmmss')}_${exchange.title}.jpg`;
+      }
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     },
   },
   computed: {
@@ -710,7 +757,7 @@ export default {
     },
     currentTitle: function () {
       if (this.step == 1) {
-        return 'Новый шаблон';
+        return 'Новый скриншот';
       } else if (this.step == 2) {
         return 'Заполнение данных';
       } else if (this.step == 3) {

@@ -248,7 +248,8 @@ export class ConfigSeeder extends Seeder {
           networkCurrencies: [{ currency: usdt }],
           constants: [
             { alias: 'cs_proc', value: '25/25' },
-            { alias: 'cs_com', value: '1' },
+            { alias: 'cs_comin', value: '0' },
+            { alias: 'cs_comout', value: '1' },
             { alias: 'cs_step', value: '16953075 5 2023-04-07,18:00:00' },
             { alias: 'cs_pair', value: 'BSC' },
           ],
@@ -258,7 +259,8 @@ export class ConfigSeeder extends Seeder {
           networkCurrencies: [{ currency: usdt }],
           constants: [
             { alias: 'cs_proc', value: '25/25' },
-            { alias: 'cs_com', value: '11' },
+            { alias: 'cs_comin', value: '0' },
+            { alias: 'cs_comout', value: '11' },
             { alias: 'cs_step', value: '16953075 5 2023-04-07,18:00:00' },
           ],
         },
@@ -267,7 +269,8 @@ export class ConfigSeeder extends Seeder {
           networkCurrencies: [{ currency: usdt }],
           constants: [
             { alias: 'cs_proc', value: '50/50' },
-            { alias: 'cs_com', value: '1' },
+            { alias: 'cs_comin', value: '0' },
+            { alias: 'cs_comout', value: '1' },
             { alias: 'cs_step', value: '16953075 5 2023-04-07,18:00:00' },
           ],
         },
@@ -320,9 +323,9 @@ export class ConfigSeeder extends Seeder {
             { alias: 'cs_step', value: '232126 0.21' },
             {
               alias: 'cs_comin',
-              value: '0.02 0.03 8',
+              value: '0.002 0.003 8',
             },
-            { alias: 'cs_comout', value: '0.01 0.02 8' },
+            { alias: 'cs_comout', value: '0.001 0.002 8' },
             { alias: 'cs_acc', value: 'Tether' },
           ],
         },
@@ -570,7 +573,7 @@ export class ConfigSeeder extends Seeder {
     });
     //devices
     em.create(Device, { alias: 'samsung', name: 'Samsung' });
-    em.create(Device, { alias: 'iphone', name: 'Iphone' });
+    em.create(Device, { alias: 'iphone', name: 'iPhone' });
     em.create(Device, { alias: 'xiaomi', name: 'Xiaomi' });
     em.create(Device, { alias: 'realme', name: 'Realme' });
 
@@ -627,7 +630,7 @@ const _binance = {
       type: HtmlInputType.DATETIME_LOCAL,
       name: 'Дата транзакции',
       alias: 'date',
-      hint: 'Формат: YYYY-MM-DD HH:mm:ss',
+      hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ',
       values: [
         { value: 'Текущее время ', alias: '0' },
         { value: '2 минуты назад ', alias: '120' },
@@ -694,7 +697,7 @@ const _trust = {
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
     .add({ type: HtmlInputType.TEXT, name: 'Отправитель/получатель', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'Nonce', optional: true, alias: 'nonce', dependsOn: [{ field: 'network', value: ['bep20', 'erc20'] }] })
 
@@ -721,7 +724,7 @@ const _exodus = {
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: [{ field: 'network', value: ['bep20', 'erc20'] }] })
     .add({ type: HtmlInputType.TEXT, name: 'ID транзакции', alias: 'txid' })
     .add({ en: 'TRANSACTION DETAILS', alias: 't1' })
@@ -756,7 +759,7 @@ const _safepal = {
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
     .add({ type: HtmlInputType.TEXT, name: 'От', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'На', alias: 'address2' })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
@@ -795,7 +798,7 @@ const _gate = {
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
     .add({ type: HtmlInputType.NUMBER, name: 'ID Ордера', optional: true, alias: 'order' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
@@ -845,7 +848,7 @@ const _huobi = {
       ],
     })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
 
     .add({ uk: 'Тип', es: 'Tipo', ru: 'Тип', en: 'Type', alias: 't1' })
     .add({ uk: 'Звичайние внесення коштів', es: 'Depósito Normal', ru: 'Обычный депозит', en: 'Ordinary Deposit', alias: 't2in' })
@@ -878,7 +881,7 @@ const _kucoin = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.TEXT, name: 'Block(s)', alias: 'block', optional: true, dependsOn: [{ field: 'direction', value: ['in'] }] })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
     .add({ type: HtmlInputType.TEXTAREA, name: 'Сообщение', alias: 'msg', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес/Аккаунт', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'TxHash', alias: 'txid' })
@@ -917,7 +920,7 @@ const _bitfinex = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'ID', alias: 'id', optional: true })
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Создано', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Создано', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
     .add({
       type: HtmlInputType.DATETIME_LOCAL,
       name: 'Обновлено',
@@ -981,7 +984,7 @@ const _bitmart = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.NUMBER, name: 'ID транзакции', alias: 'id', optional: true })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({ type: HtmlInputType.TEXT, name: 'TXID', alias: 'txid' })
 
@@ -1013,7 +1016,7 @@ const _cryptocom = {
     },
   ],
   fields: new Set()
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.NUMBER, name: 'Эквивалент $', alias: 'eqv', optional: true })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
@@ -1049,7 +1052,7 @@ const _okx = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
     .add({ type: HtmlInputType.TEXT, name: 'Кому', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'ID транзакции', alias: 'txid' })
 
@@ -1084,7 +1087,7 @@ const _ledger = {
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.TEXT, name: 'Эквивалент $', alias: 'eqv', optional: true })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
     .add({ type: HtmlInputType.TEXT, name: 'ID транзакции', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Откуда', alias: 'address' })
 
@@ -1116,7 +1119,7 @@ const _metamask = {
     },
   ],
   fields: new Set()
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
     .add({ type: HtmlInputType.TEXT, name: 'От', alias: 'address' })
     .add({ type: HtmlInputType.TEXT, name: 'В адрес', alias: 'address2' })
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
@@ -1160,7 +1163,7 @@ const _mexc = {
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({ type: HtmlInputType.TEXT, name: 'TxID', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
 
     .add({ en: 'Withdrawal details', es: 'Detalles de retiro', ru: 'Детали вывода средств', alias: 't1out' })
     .add({ en: 'Deposit Details', es: 'Detalles del Depósito', ru: 'Информация о депозите', alias: 't1in' })
@@ -1257,7 +1260,7 @@ const _bitget = {
       ],
     })
     .add({ type: HtmlInputType.NUMBER, name: 'Баланс', alias: 'balance' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
 
     .add({ ru: 'История', uk: 'Інформація про рахунок', es: 'Detalles de la factura', en: 'Bill details', alias: 't1' })
     .add({ ru: 'Тип', uk: 'Тип', es: 'Tipo', en: 'Type', alias: 't2' })
@@ -1284,7 +1287,7 @@ const _kraken = {
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
     .add({ type: HtmlInputType.TEXT, name: 'ID', alias: 'krakenid', optional: true })
 
     .add({ es: 'Retiro', en: 'Withdraw', alias: 't1out' })
@@ -1318,7 +1321,7 @@ const _coinbase = {
     .add({ type: HtmlInputType.TEXT, name: 'Адрес (В)', alias: 'address', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия сети', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({ type: HtmlInputType.TEXT, name: 'Хэш транзакции', alias: 'txid' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
 
     .add({ es: 'Ha enviado Tether', ru: 'Отправка Tether', en: 'Sent Tether', alias: 't1out' })
     .add({ es: 'Ha recibido Tether', ru: 'Получение Tether', en: 'Received Tether', alias: 't1in' })
@@ -1356,7 +1359,7 @@ const _bitpapa = {
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
     .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid', dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия сети и процессинга', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: [{ field: 'direction', value: ['out'] }] })
@@ -1385,7 +1388,7 @@ const _exmo = {
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address', dependsOn: [{ field: 'direction', value: ['out'] }] })
     .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Номер транзакции', alias: 'txnum', optional: true })
@@ -1412,7 +1415,7 @@ const _garantex = {
     },
   ],
   fields: new Set()
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
     .add({ type: HtmlInputType.TEXT, name: 'Txid', alias: 'txid' })
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.NUMBER, name: 'Комиссия', alias: 'com', optional: true, dependsOn: [{ field: 'direction', value: ['out'] }] })
@@ -1438,7 +1441,7 @@ const _cexio = {
   ],
   fields: new Set()
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
     .add({ type: HtmlInputType.NUMBER, name: 'Баланс', alias: 'balance' })
     .add({ type: HtmlInputType.TEXT, name: 'ID транзакции', alias: 'txid' })
 
@@ -1466,7 +1469,7 @@ const _bybit = {
     .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
     .add({ type: HtmlInputType.TEXT, name: 'Хэш транзакции', alias: 'txid' })
     .add({ type: HtmlInputType.TEXT, name: 'Адрес', alias: 'address' })
-    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: YYYY-MM-DD HH:mm:ss' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
 
     .add({ es: 'Tipo', en: 'Type', uk: 'Тип', ru: 'Тип', alias: 't1' })
     .add({ es: 'Depositar', en: 'Deposit', uk: 'Поповнення', ru: 'Депозит', alias: 't2in' })
@@ -1486,30 +1489,30 @@ const _bybit = {
 const _xiaomi = {
   name: 'xiaomi',
   fields: [
-    { alias: 'wifiAPS', name: 'Wi-Fi AP signal', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiAP' }], range: [1, 5] },
-    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, range: [1, 5] },
-    { alias: '4g', name: '4g signal', type: HtmlInputType.NUMBER, range: [1, 5] },
+    { alias: 'wifiAP', name: 'Раздача Wi-Fi', optional: true },
+    { alias: 'wifiAPS', name: 'Уровень сигнала раздачи Wi-Fi', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiAP' }], range: [1, 5] },
+    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.NUMBER, range: [1, 5] },
+    { alias: '4g', name: 'Уровень сигнала LTE', type: HtmlInputType.NUMBER, range: [1, 5] },
     { alias: 'bluetooth', name: 'Bluetooth', optional: true },
-    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER, range: [1, 100] },
+    { alias: 'charge', name: 'Уровень заряда батареи (в %)', type: HtmlInputType.NUMBER, range: [1, 100] },
     { alias: 'time', name: 'Время', type: HtmlInputType.TIME },
-    { alias: 'moon', name: 'moon', optional: true },
-    { alias: 'vibro', name: 'vibro', optional: true },
-    { alias: 'alarm', name: 'alarm', optional: true },
+    { alias: 'moon', name: 'Луна', optional: true },
+    { alias: 'vibro', name: 'Вибрация', optional: true },
+    { alias: 'alarm', name: 'Будильник', optional: true },
     { alias: 'nfc', name: 'NFC', optional: true },
     { alias: 'vpn', name: 'VPN', optional: true },
-    { alias: 'cog', name: 'Cog', optional: true },
-    { alias: 'volte', name: 'voLTE', optional: true },
-    { alias: 'wifiAP', name: 'Wi-Fi access point', optional: true },
+    { alias: 'cog', name: 'Шестерня', optional: true },
+    { alias: 'volte', name: 'VoLTE', optional: true },
   ],
 };
 
 const _iphone = {
   name: 'iphone',
   fields: [
-    { alias: 'geoloc', name: 'Geolocation', optional: true },
+    { alias: 'geoloc', name: 'Активен навигатор', optional: true },
     {
       alias: 'network',
-      name: 'WiFi/LTE',
+      name: 'Wi-Fi или LTE',
       type: HtmlInputType.SELECT,
       values: [
         {
@@ -1517,24 +1520,24 @@ const _iphone = {
           alias: 'lte',
         },
         {
-          value: 'WiFi',
+          value: 'Wi-Fi',
           alias: 'wifi',
         },
       ],
     },
 
-    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, range: [1, 3], dependsOn: [{ field: 'network', value: ['wifi'] }] },
+    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.NUMBER, range: [1, 3], dependsOn: [{ field: 'network', value: ['wifi'] }] },
     {
       alias: 'simnum',
-      name: 'SIM',
+      name: 'Количество SIM-карт',
       type: HtmlInputType.SELECT,
       values: [
-        { value: '1 SIM', alias: 'sim1' },
-        { value: 'Dual SIM', alias: 'sim2' },
+        { value: 'Одна SIM-карта', alias: 'sim1' },
+        { value: 'Две SIM-карты', alias: 'sim2' },
       ],
     },
-    { alias: '4g', name: '4g signal', type: HtmlInputType.NUMBER, range: [1, 4] },
-    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER, range: [1, 100] },
+    { alias: '4g', name: 'Уровень сигнала LTE', type: HtmlInputType.NUMBER, range: [1, 4] },
+    { alias: 'charge', name: 'Уровень заряда батареи (в %)', type: HtmlInputType.NUMBER, range: [1, 100] },
     { alias: 'time', name: 'Время', type: HtmlInputType.TIME },
   ],
 };
@@ -1545,22 +1548,23 @@ const _samsung = {
     { alias: 'time', name: 'Время', type: HtmlInputType.TIME },
     {
       alias: 'simnum',
-      name: 'SIM',
+      name: 'Количество SIM-карт',
       type: HtmlInputType.SELECT,
       values: [
-        { value: '1 SIM', alias: 'sim1' },
-        { value: 'Dual SIM', alias: 'sim2' },
+        { value: 'Одна SIM-карта', alias: 'sim1' },
+        { value: 'Две SIM-карты', alias: 'sim2' },
       ],
     },
-    { alias: 'wifiS1', name: 'Sim 1 signal', type: HtmlInputType.NUMBER, range: [1, 4] },
-    { alias: 'wifiS2', name: 'Sim 2 signal', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'simnum', value: ['sim2'] }], range: [1, 4] },
+    //should be bar1 \ bar2
+    { alias: 'wifiS1', name: 'Уровень сигнала первой SIM-карты', type: HtmlInputType.NUMBER, range: [1, 4] },
+    { alias: 'wifiS2', name: 'Уровень сигнала второй SIM-карты', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'simnum', value: ['sim2'] }], range: [1, 4] },
     {
       alias: 'sound',
-      name: 'Sound',
+      name: 'Звук вкл./Вибрация/Без звука',
       type: HtmlInputType.SELECT,
       values: [
         {
-          value: 'Без значка',
+          value: 'Звук вкл. (т.е. без значка)',
           alias: 'null',
         },
         {
@@ -1568,36 +1572,38 @@ const _samsung = {
           alias: 'nosound',
         },
         {
-          value: 'Вибро',
+          value: 'Вибрация',
           alias: 'novibro',
         },
       ],
     },
-    {
-      alias: 'wifiShare',
-      name: 'Wi-Fi share',
-      type: HtmlInputType.SELECT,
-      values: [
-        { value: 'Раздача', alias: 'out' },
-        { value: 'Прием', alias: 'in' },
-      ],
-    },
-    { alias: 'wifiS', name: 'Wi-Fi signal', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiShare', value: ['in'] }], range: [1, 4] },
-    { alias: 'volte', name: 'voLTE', dependsOn: [{ field: 'wifiShare', value: ['in'] }], optional: true },
+    // {
+    //   alias: 'wifiShare',
+    //   name: 'Приём иди раздача Wi-Fi',
+    //   type: HtmlInputType.SELECT,
+    //   values: [
+    //     { value: 'Приём', alias: 'in' },
+    //     { value: 'Раздача', alias: 'out' },
+    //     { value: 'Без Wi-Fi', alias: 'none' },
+    //   ],
+    // },
+    // { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiShare', value: ['in'] }], range: [1, 4] },
+    // { alias: 'volte', name: 'VoLTE', dependsOn: [{ field: 'wifiShare', value: ['in'] }], optional: true },
     {
       alias: 'wifiMode',
-      name: 'H+ / Volte',
+      name: 'H+ или VoLTE',
       type: HtmlInputType.SELECT,
       values: [
         { value: 'H+', alias: 'h' },
         { value: 'Volte', alias: 'volte' },
       ],
-      dependsOn: [{ field: 'wifiShare', value: ['out'] }],
-      optional: true,
+      // dependsOn: [{ field: 'wifiShare', value: ['out'] }],
+      // optional: true,
     },
-    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER, range: [1, 100] },
-    { alias: 'geoloc', name: 'Geolocation', optional: true },
-    { alias: 'geoloc2', name: 'Geolocation2', optional: true },
+    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiMode', value: ['volte'] }], range: [1, 4] },
+    { alias: 'charge', name: 'Уровень заряда батареи (в %)', type: HtmlInputType.NUMBER, range: [1, 100] },
+    { alias: 'geoloc', name: 'Активен навигатор', optional: true },
+    { alias: 'geoloc2', name: 'GPS', optional: true, dependsOn: [{ field: 'geoloc' }] },
     { alias: 'vpn', name: 'VPN', optional: true },
   ],
 };
@@ -1608,22 +1614,22 @@ const _realme = {
     { alias: 'nfc', name: 'NFC', optional: true },
     { alias: 'alarm', name: 'alarm', optional: true },
     { alias: 'bluetooth', name: 'Bluetooth', optional: true },
-    { alias: 'speed', name: 'Speed', type: HtmlInputType.NUMBER, range: [50, 99], optional: true },
-    { alias: 'volte', name: 'voLTE', optional: true },
+    { alias: 'speed', name: 'Speed', type: HtmlInputType.NUMBER, range: [50, 99] },
+    { alias: 'volte', name: 'VoLTE', optional: true },
     {
       alias: 'simnum',
-      name: 'SIM',
+      name: 'Количество SIM-карт',
       type: HtmlInputType.SELECT,
       values: [
-        { value: '1 SIM', alias: 'sim1' },
-        { value: 'Dual SIM', alias: 'sim2' },
+        { value: 'Одна SIM-карта', alias: 'sim1' },
+        { value: 'Две SIM-карты', alias: 'sim2' },
       ],
     },
-    { alias: 'bar1', name: 'Sim 1 signal', type: HtmlInputType.NUMBER, range: [1, 4] },
-    { alias: 'bar2', name: 'Sim 2 signal', type: HtmlInputType.NUMBER, range: [1, 4], dependsOn: [{ field: 'simnum', value: ['sim2'] }] },
-    { alias: 'wifiAP', name: 'Wi-Fi access point', optional: true },
-    { alias: 'wifiAPS', name: 'Wi-Fi AP signal', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiAP' }], range: [1, 4] },
-    { alias: 'charge', name: 'Battery charge %', type: HtmlInputType.NUMBER, range: [1, 100] },
+    { alias: 'bar1', name: 'Уровень сигнала первой SIM-карты', type: HtmlInputType.NUMBER, range: [1, 4] },
+    { alias: 'bar2', name: 'Уровень сигнала второй SIM-карты', type: HtmlInputType.NUMBER, range: [1, 4], dependsOn: [{ field: 'simnum', value: ['sim2'] }] },
+    { alias: 'wifiAP', name: 'Раздача Wi-Fi', optional: true },
+    { alias: 'wifiAPS', name: 'Уровень сигнала раздачи Wi-Fi', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiAP' }], range: [1, 4] },
+    { alias: 'charge', name: 'Уровень заряда батареи (в %)', type: HtmlInputType.NUMBER, range: [1, 100] },
   ],
 };
 async function GenerateThemesForExchange(this: { em: EntityManager }, data: data) {

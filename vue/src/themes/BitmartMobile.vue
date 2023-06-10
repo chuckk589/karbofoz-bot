@@ -33,7 +33,7 @@
         </div>
         <div class="data-item">
           <div>{{ getConstant('t6') }} ({{ formatPair }})</div>
-          <div class="text">{{ getConstant('cs_com') }}</div>
+          <div class="text">{{ getConstant('cs_com' + payload.query.direction) }}</div>
         </div>
         <div class="data-item">
           <div>{{ getConstant('t7') }}</div>
