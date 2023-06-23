@@ -14,7 +14,9 @@
       <input ref="uploader" class="d-none" type="file" accept=".json" @input="onFileChanged" />
       <v-card>
         <v-card-title class="text-h6 font-weight-regular justify-space-between d-flex align-center">
+          <v-btn v-if="step == 1" color="grey-lighten-1" icon="mdi-dice-2" variant="text" @click="fillForm()"></v-btn>
           <span class="ma-auto">{{ currentTitle }}</span>
+          <v-btn v-if="step == 1" color="grey-lighten-1" icon="mdi-dice-2-outline" variant="text" @click="fillForm(false)"></v-btn>
           <v-btn v-if="step == 2" color="grey-lighten-1" icon="mdi-image-search" variant="text" @click="getPreviewImage"></v-btn>
         </v-card-title>
 
@@ -44,7 +46,7 @@
           <v-window-item :value="2">
             <v-card-text class="pt-0">
               <v-list-subheader class="text-grey">Временная зона</v-list-subheader>
-              <v-select ref="tz" :rules="notEmpty" :items="tzFields" density="compact" @update:modelValue="updateBarTime" label="Часовой пояс" v-model="form.tz"></v-select>
+              <v-select @update:menu="scrollWorkAround" ref="tz" :rules="notEmpty" :items="tzFields" density="compact" @update:modelValue="updateBarTime" label="Часовой пояс" v-model="form.tz"></v-select>
               <v-list-subheader class="text-grey">Данные шаблона</v-list-subheader>
               <v-form ref="form2" v-if="step == 2">
                 <component
@@ -75,7 +77,7 @@
               </div>
               <v-expand-transition>
                 <v-form ref="form6" v-show="statusbar.show" class="status-bar">
-                  <v-select v-model="statusbar.device" :items="table.devices" label="Марка смартфона" density="compact"></v-select>
+                  <v-select v-model="statusbar.device" :items="table.devices" label="Производитель смартфона" @update:modelValue="manualDeviceChange" density="compact"></v-select>
                   <component
                     v-for="(field, index) in deviceFields"
                     :is="getComponentDeviceName(field)"
@@ -86,6 +88,7 @@
                     :items="fieldItems(field)"
                     :hint="barFieldHint(field)"
                     :label="field.name"
+                    :range="field.range"
                     persistent-hint
                     density="compact"
                     v-model="statusbar[field.alias]"
@@ -123,7 +126,8 @@
         <v-divider></v-divider>
 
         <v-card-actions>
-          <v-btn v-if="step == 1" variant="text" @click="openDialog"> Настройки </v-btn>
+          <v-btn v-if="step == 1" variant="text" @click="openDialog('presets')"> Пресеты </v-btn>
+          <v-btn v-if="step == 1" variant="text" @click="openDialog('wallets')"> Кошельки </v-btn>
           <v-btn v-if="step > 1" variant="text" @click="back"> Назад </v-btn>
           <v-spacer></v-spacer>
           <v-btn v-if="step == 1" color="primary" @click="next"> Далее </v-btn>
@@ -132,91 +136,43 @@
           </v-btn>
           <v-btn v-if="step == 3" color="primary" @click="save"> Сохранить </v-btn>
           <v-dialog v-model="dialog" fullscreen :scrim="false" transition="dialog-bottom-transition">
-            <v-card>
+            <div class="v-card v-theme--dark v-card--density-default v-card--variant-elevated">
               <v-toolbar density="compact">
-                <v-tabs v-model="tab" align-tabs="start" density="compact" class="ml-2">
-                  <v-tab :value="1">Пресеты</v-tab>
-                  <v-tab :value="2">Кошельки</v-tab>
-                </v-tabs>
-                <div>
+                <div class="d-flex align-center" v-if="agstate == 'presets'">
+                  <v-btn>Пресеты</v-btn>
+                  <v-btn color="grey-lighten-1" icon="mdi-delete" variant="text" @click="deletePresets"></v-btn>
                   <v-btn color="grey-lighten-1" icon="mdi-import" variant="text" class="mr-auto" @click="importData"></v-btn>
                   <v-btn color="grey-lighten-1" icon="mdi-export" variant="text" class="mr-auto" @click="exportData"></v-btn>
+                </div>
+                <div v-else>
+                  <v-btn>Кошельки</v-btn>
+                  <v-btn color="grey-lighten-1" icon="mdi-plus" variant="text" @click="createWallet"></v-btn>
+                  <v-btn color="grey-lighten-1" icon="mdi-delete" variant="text" @click="deleteWallets"></v-btn>
                 </div>
                 <v-spacer></v-spacer>
                 <v-btn icon @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
               </v-toolbar>
-              <v-window v-model="tab" :touch="{ left: null, right: null }">
-                <v-window-item :value="1">
-                  <v-card-text :style="'padding: 0; height: calc(' + current100VH + ' - 100px); overflow-y: scroll'">
-                    <v-list density="compact" @click:select="(item) => (selectedRow = item.id)" lines="two">
-                      <v-list-item v-for="preset in presets" :key="preset.value" :value="preset.value" :title="preset.title" :subtitle="presetFieldData(preset)">
-                        <template v-slot:append>
-                          <div class="d-flex align-center">
-                            <div>
-                              {{ new Date(preset.createdAt).toLocaleString() }}
-                            </div>
-                            <v-btn color="grey-lighten-1" icon="mdi-delete" variant="text" @click="deletePreset(preset.value)"></v-btn>
-                          </div>
-                        </template>
-                      </v-list-item>
-                    </v-list>
-                  </v-card-text>
-                  <v-divider></v-divider>
-
-                  <v-card-actions>
-                    <v-btn class="ma-auto" color="primary" @click="loadPreset"> Загрузить </v-btn>
-                  </v-card-actions>
-                </v-window-item>
-                <v-window-item :value="2" :style="'height: calc(' + current100VH + '  - 48px)'" class="d-flex flex-column">
-                  <v-card-text :style="'padding: 0; transition: height .2s linear; overflow-y: scroll;flex: initial;' + walletStyle">
-                    <v-list density="compact">
-                      <v-list-item v-for="wallet in wallets" :key="wallet.id" :value="wallet.id" :title="wallet.title">
-                        <v-list-item-subtitle>
-                          <div class="d-flex flex-column">
-                            <div>{{ wallet.comment }}</div>
-                            <span v-if="wallet.preffered" class="text-green">{{ walletPreferedLabel(wallet) }}</span>
-                          </div>
-                        </v-list-item-subtitle>
-                        <template v-slot:append>
-                          <div>
-                            <v-btn color="grey-lighten-1" icon="mdi-pencil" variant="text" @click="editWallet(wallet)"></v-btn>
-                            <v-btn color="grey-lighten-1" icon="mdi-delete" variant="text" @click="deleteWallet(wallet.id)"></v-btn>
-                          </div>
-                        </template>
-                      </v-list-item>
-                    </v-list>
-                  </v-card-text>
-                  <v-divider></v-divider>
-                  <v-card-actions class="flex-column flex-grow-1 align-stretch">
-                    <v-expand-transition>
-                      <v-card-text v-if="walletAction == 'new'">
-                        <v-form ref="form4">
-                          <v-text-field v-model="wallet.name" label="Название" :rules="notEmpty" density="compact"></v-text-field>
-                          <v-text-field v-model="wallet.address" label="Адрес" :rules="notEmpty" density="compact"></v-text-field>
-                          <v-checkbox v-model="wallet.preffered" label="По умолчанию"></v-checkbox>
-                          <v-textarea v-model="wallet.comment" label="Коммент" density="compact"></v-textarea>
-                        </v-form>
-                      </v-card-text>
-                      <v-card-text v-if="walletAction == 'edit'">
-                        <v-form ref="form5">
-                          <v-text-field v-model="wallet.title" label="Название" :rules="notEmpty" density="compact"></v-text-field>
-                          <v-text-field v-model="wallet.value" label="Адрес" :rules="notEmpty" density="compact"></v-text-field>
-                          <v-checkbox v-model="wallet.preffered" label="По умолчанию"></v-checkbox>
-                          <v-textarea v-model="wallet.comment" label="Коммент" density="compact"></v-textarea>
-                        </v-form>
-                      </v-card-text>
-                    </v-expand-transition>
-                    <v-spacer></v-spacer>
-                    <div class="d-flex">
-                      <v-btn v-if="walletAction" class="ma-auto" color="primary" @click="walletAction = null"> Отмена </v-btn>
-                      <v-btn class="ma-auto" color="primary" @click="handleWallet"> {{ walletAction ? 'Готово' : 'Добавить' }} </v-btn>
-                    </div>
-                  </v-card-actions>
-                </v-window-item>
-              </v-window>
-            </v-card>
+              <AgGridVue
+                class="ag-theme-alpine-dark pw-table"
+                :column-defs="aggrid[agstate].columnDefs"
+                :default-col-def="defaultColDef"
+                suppressRowClickSelection
+                suppressContextMenu
+                suppressCellFocus
+                :get-row-id="aggrid[agstate].getRowId"
+                :rowClassRules="aggrid[agstate].rowClassRules"
+                :row-data="AGrowData"
+                rowSelection="multiple"
+                animateRows
+                style="height: 100%"
+                @grid-ready="onGridReady"
+                :context="context"
+                detailRowAutoHeight
+              >
+              </AgGridVue>
+            </div>
           </v-dialog>
         </v-card-actions>
       </v-card>
@@ -230,21 +186,91 @@ import { VSelect } from 'vuetify/components/VSelect';
 import { VCombobox } from 'vuetify/components/VCombobox';
 import { VCheckbox } from 'vuetify/components/VCheckbox';
 import { VTextarea } from 'vuetify/components/VTextarea';
+import { AgGridVue } from 'ag-grid-vue3';
 import sha256 from 'crypto-js/sha256';
+import PresetContentCell from '../components/cellRenderers/PresetContentCell.vue';
+import PresetCell from '../components/cellRenderers/PresetCell.vue';
+import WalletContentCell from '../components/cellRenderers/WalletContentCell.vue';
+import WalletCell from '../components/cellRenderers/WalletCell.vue';
 import DateSelect from '../components/DateSelect.vue';
+import RadioSelect from '@/components/RadioSelect.vue';
+import SliderSelect from '@/components/SliderSelect.vue';
+
 export default {
   components: {
+    AgGridVue,
     VTextField,
     VSelect,
     DateSelect,
+    RadioSelect,
+    SliderSelect,
     VCombobox,
     VCheckbox,
     VTextarea,
+    PresetContentCell,
+    PresetCell,
+    WalletContentCell,
+    WalletCell,
   },
   name: 'WebApp',
   data() {
     return {
-      vh: 0,
+      //aggrid
+      agstate: 'presets',
+      gridApi: null,
+      defaultColDef: {
+        sortable: true,
+        filter: true,
+        flex: 1,
+        wrapText: true,
+        autoHeight: true,
+      },
+      context: { table: null },
+
+      aggrid: {
+        wallets: {
+          getRowId: function (params) {
+            return params.data.id;
+          },
+          rowClassRules: {
+            preffered: 'data.preffered == 1',
+          },
+          columnDefs: [
+            { field: 'title', headerName: 'Содержание', headerCheckboxSelection: true, checkboxSelection: true, cellRenderer: 'WalletContentCell' },
+            {
+              field: 'action',
+              headerName: '',
+              filter: false,
+              sortable: false,
+              maxWidth: 70,
+              cellRenderer: 'WalletCell',
+            },
+          ],
+        },
+        presets: {
+          getRowId: function (params) {
+            return params.data.value;
+          },
+          columnDefs: [
+            { field: 'title', headerName: 'Содержание', headerCheckboxSelection: true, checkboxSelection: true, cellRenderer: 'PresetContentCell' },
+            {
+              field: 'createdAt',
+              headerName: 'Дата создания',
+              sortable: true,
+              valueFormatter: (params) => new Date(params.value).toLocaleString(),
+            },
+            {
+              field: 'action',
+              headerName: '',
+              filter: false,
+              sortable: false,
+              maxWidth: 70,
+              cellRenderer: 'PresetCell',
+            },
+          ],
+        },
+      },
+      //aggrid
       dialog: false,
       errorMessage: '',
       step: 1,
@@ -265,22 +291,23 @@ export default {
       presets: [],
       preset: { current: '0' },
       fields: {},
-      selectedRow: null,
+      loadedPreset: null,
       wallets: [],
-      wallet: {},
       predefinedWallet: null,
-      tab: null,
       walletAction: null,
     };
   },
+  beforeUnmount() {
+    this.$emitter.off('*');
+  },
   mounted() {
-    this.vh = window.innerHeight * 0.01;
-    window.addEventListener('resize', () => {
-      this.vh = window.innerHeight * 0.01;
-    });
     this.$http({ method: 'GET', url: `/v1/config/` }).then((e) => {
       this.table = e.data;
+      this.context = { table: this.table };
       console.log(e.data);
+      //load binance
+      this.exchange = this.table.exchanges.find((e) => e.title == 'Binance')?.value;
+      this.update();
     });
     this.$http({ method: 'GET', url: `/v1/preset/` }).then((e) => {
       this.presets = e.data;
@@ -288,8 +315,63 @@ export default {
     this.$http({ method: 'GET', url: `/v1/wallet/` }).then((e) => {
       this.wallets = e.data;
     });
+    this.$emitter.on('delete-preset-step2', (ids) => {
+      this.$http.delete(`/v1/preset?ids=${ids.join(',')}`).then((res) => {
+        this.presets = this.presets.filter((item) => res.data.includes(+item.value) == false);
+      });
+    });
+    this.$emitter.on('delete-preset-step1', (ids) => {
+      setTimeout(() => {
+        this.$emitter.emit('openDialog', {
+          header: 'Удаление пресетов',
+          message: `Вы собираетесь удалить ${ids.length} пресетов. Продолжить?`,
+          eventName: 'delete-preset-step2',
+          id: ids,
+        });
+      }, 500);
+    });
+    this.$emitter.on('create-wallet', (wallets) => {
+      this.wallets = wallets;
+      setTimeout(() => this.gridApi.refreshCells({ force: true }), 0);
+      //find biggest id
+      const id = Math.max(...this.wallets.map((e) => e.id));
+      this.predefinedWallet = this.wallets.find((e) => e.id == id);
+    });
+    this.$emitter.on('delete-wallet', (ids) => {
+      this.$http.delete(`/v1/wallet?ids=${ids.join(',')}`).then((res) => {
+        this.wallets = this.wallets.filter((item) => res.data.includes(+item.id) == false);
+      });
+    }),
+      this.$emitter.on('load-preset', (evt) => {
+        const preset = this.presets.find((item) => item.value == evt.id);
+        const { theme, language, currency, exchange, network, statusbar, fields, ...rest } = preset;
+        this.exchange = exchange;
+        this.theme = theme;
+        this.language = language;
+        this.network = network;
+        this.currency = currency;
+        this.direction = rest.direction;
+        this.form = fields;
+        if (preset.wallet) {
+          this.form.address = preset.wallet;
+        }
+        if (Object.keys(statusbar).length) {
+          this.statusbar = { show: true, ...statusbar };
+        }
+        this.loadedPreset = evt.id;
+        this.fillStatusBar(false);
+        this.step = 2;
+        this.dialog = false;
+      });
+    this.$emitter.on('edit-wallet', (wallets) => {
+      this.wallets = wallets;
+      setTimeout(() => this.gridApi.refreshCells({ force: true }), 0);
+    });
   },
   methods: {
+    onGridReady(params) {
+      this.gridApi = params.api;
+    },
     onFileChanged(e) {
       if (e.target.files.length == 0) return;
       const reader = new FileReader();
@@ -325,6 +407,7 @@ export default {
 
     next() {
       this.errorMessage = '';
+      this.loadedPreset = null;
       this.$refs.form1.validate().then((res) => {
         if (res.valid) {
           this.form = this.themeFields.reduce((acc, item) => {
@@ -361,6 +444,9 @@ export default {
         this.form = {};
         this.statusbar = { show: false };
         this.templateSrc = null;
+        if (this.loadedPreset) {
+          this.openDialog('presets');
+        }
       }
     },
     save() {
@@ -370,29 +456,68 @@ export default {
       }, {});
       this.step++;
     },
-    openDialog() {
-      this.pending = [];
+    openDialog(type) {
+      this.agstate = type;
       this.dialog = true;
     },
-
-    loadPreset() {
-      const preset = this.presets.find((item) => item.value == this.selectedRow);
-      const { theme, language, currency, exchange, network, statusbar, fields, ...rest } = preset;
-      this.exchange = exchange;
-      this.theme = theme;
-      this.language = language;
-      this.network = network;
-      this.currency = currency;
-      this.direction = rest.direction;
-      this.form = fields;
-      if (preset.wallet) {
-        this.form.address = preset.wallet;
-      }
-      if (Object.keys(statusbar).length) {
-        this.statusbar = { show: true, ...statusbar };
-      }
-      this.step = 2;
-      this.dialog = false;
+    createWallet() {
+      this.$emitter.emit('openModal', {
+        url: `/wallet/`,
+        method: 'POST',
+        header: 'Создание кошелька',
+        eventName: 'create-wallet',
+        fields: [
+          {
+            label: 'Название',
+            key: 'name',
+          },
+          {
+            label: 'Адрес',
+            key: 'address',
+          },
+          {
+            label: 'По умолчанию',
+            key: 'preffered',
+            type: 'select',
+            options: [
+              {
+                value: true,
+                title: 'Да',
+              },
+              {
+                value: false,
+                title: 'Нет',
+              },
+            ],
+          },
+          {
+            label: 'Коммент',
+            key: 'comment',
+          },
+        ],
+      });
+    },
+    deletePresets() {
+      const selectedRows = this.gridApi.getSelectedRows();
+      if (!selectedRows.length) return;
+      const ids = selectedRows.map((c) => c.value);
+      this.$emitter.emit('openDialog', {
+        header: 'Удаление пресетов',
+        message: 'Вы уверены, что хотите удалить пресет(ы)?',
+        eventName: 'delete-preset-step1',
+        id: ids,
+      });
+    },
+    deleteWallets() {
+      const selectedRows = this.gridApi.getSelectedRows();
+      if (!selectedRows.length) return;
+      const ids = selectedRows.map((c) => c.id);
+      this.$emitter.emit('openDialog', {
+        header: 'Удаление кошельков',
+        message: `Сейчас будет удалено ${ids.length} кошельков. Продолжить?`,
+        eventName: 'delete-wallet',
+        id: ids,
+      });
     },
     getPreviewImage() {
       const activeDependentFields = this.themeFields
@@ -404,50 +529,6 @@ export default {
         this.templateSrc = res.data;
         this.templateDialog = true;
       });
-    },
-    handleWallet() {
-      if (this.walletAction == 'new') {
-        this.$refs.form4.validate().then((res) => {
-          if (res.valid) {
-            this.$http
-              .post('/v1/wallet/', {
-                ...this.wallet,
-              })
-              .then((res) => {
-                // this.wallets.push(res.data);
-                this.wallets = res.data;
-                this.wallet = {};
-                this.walletAction = null;
-                this.predefinedWallet = res.data;
-              });
-          }
-        });
-      } else if (this.walletAction == 'edit') {
-        this.$refs.form5.validate().then((res) => {
-          if (res.valid) {
-            this.$http
-              .patch(`/v1/wallet/${this.wallet.id}`, {
-                name: this.wallet.title,
-                address: this.wallet.value,
-                comment: this.wallet.comment,
-                preffered: this.wallet.preffered,
-              })
-              .then((res) => {
-                this.wallet = {};
-                // const index = this.wallets.findIndex((item) => item.id == res.data.id);
-                // this.wallets.splice(index, 1, res.data);
-                this.wallets = res.data;
-                this.walletAction = null;
-              });
-          }
-        });
-      } else {
-        this.wallet = {};
-        this.walletAction = 'new';
-      }
-    },
-    walletPreferedLabel(wallet) {
-      return wallet.type == 'trx' ? 'По умолчанию для TRX сетей' : 'По умолчанию для ETH/BSC сетей';
     },
     genTxid() {
       return `${this.network == 'trc20' ? '' : '0x'}${sha256((Math.random() + 1).toString(36).substring(7))}`;
@@ -490,21 +571,9 @@ export default {
     getComponentDeviceName(field) {
       if (field.type == 'select') return 'v-select';
       else if (field.type == 'number' || field.type == 'time') return 'v-text-field';
+      else if (field.type == 'radio') return 'radio-select';
+      else if (field.type == 'slider') return 'slider-select';
       else return 'v-checkbox';
-    },
-    deletePreset(id) {
-      this.$http.delete(`/v1/preset/${id}`).then((res) => {
-        this.presets = this.presets.filter((item) => item.value != id);
-      });
-    },
-    deleteWallet(id) {
-      this.$http.delete(`/v1/wallet/${id}`).then((res) => {
-        this.wallets = this.wallets.filter((item) => item.id != id);
-      });
-    },
-    editWallet(wallet) {
-      this.wallet = JSON.parse(JSON.stringify(wallet));
-      this.walletAction = 'edit';
     },
     submit() {
       if (this.step == 2) {
@@ -550,9 +619,18 @@ export default {
               wallet: typeof this.form.address == 'object' ? this.form.address : undefined,
               statusbar: this.filteredStatusBar(),
             };
-            this.$http.post('/v1/preset/', body).then(() => {
-              this.cleanUp();
-            });
+            this.$http
+              .post('/v1/preset/', body)
+              .then((res) => {
+                this.cleanUp();
+                // push or replace
+                const index = this.presets.findIndex((item) => item.value == res.data.value);
+                if (index == -1) this.presets.push(res.data);
+                else this.presets.splice(index, 1, res.data);
+              })
+              .catch((err) => {
+                this.errorMessage = err.response.data.message;
+              });
           }
         });
       }
@@ -587,32 +665,38 @@ export default {
         return `Значение от ${field.range[0]} до ${field.range[1]}`;
       }
     },
+    manualDeviceChange(newValue) {
+      if (newValue == 'samsung') {
+        this.statusbar.wifiS1 = 4;
+        this.statusbar.wifiS2 = 4;
+      }
+    },
+    scrollWorkAround(state) {
+      //scroll to current item
+      if (state) {
+        setTimeout(() => {
+          const el = document.querySelector('.v-list-item--active');
+          if (el) {
+            const parent = el.closest('.v-list');
+            if (parent) {
+              parent.scrollTop = el.offsetTop - parent.offsetTop - parent.clientHeight / 2 + el.clientHeight / 2;
+            }
+          }
+        }, 0);
+      }
+    },
     cleanUp() {
-      // this.direction = null;
-      // this.language = null;
-      // this.currency = null;
-      // this.network = null;
-      // this.theme = null;
-      // this.exchange = null;
-      // this.direction = null;
       this.form = {};
       this.statusbar = { show: false };
       this.errorMessage = '';
       this.preview = null;
+      this.loadedPreset = null;
       this.templateSrc = null;
       this.preset = { current: '0' };
       this.fields = {};
       this.step = 1;
     },
-    presetFieldData(field) {
-      const exchange = this.table.exchanges?.find((item) => item.value == field.exchange);
-      const theme = exchange.themes.find((item) => item.value == field.theme);
-      const language = theme.languages.find((item) => item.value == field.language);
-      const network = exchange.networks.find((item) => item.value == field.network);
-      const currency = network.currencies.find((item) => item.value == field.currency);
-      const direction = field.direction == 'in' ? 'Прием' : 'Отправка';
-      return `${exchange.title} / ${theme.title} / ${language.title} / ${network.title} / ${currency.title} / ${direction} ${field.comment || ''}`;
-    },
+
     update() {
       if ((this.theme && !this.themeItems.find((theme) => theme.value == this.theme)) || !this.theme) {
         //find dark theme
@@ -665,7 +749,7 @@ export default {
       if (item.type == 'time') {
         this.$dayjs.prototype._offset = +this.form.tz;
         this.statusbar[item.alias] = this.$dayjs().format('HH:mm');
-      } else if (item.type == 'number') {
+      } else if (item.type == 'number' || item.type == 'radio' || item.type == 'slider') {
         this.statusbar[item.alias] = Math.floor(Math.random() * (item.range[1] - item.range[0] + 1)) + item.range[0];
       } else if (item.type == 'select') {
         this.statusbar[item.alias] = item.variants[Math.floor(Math.random() * item.variants.length)];
@@ -673,14 +757,22 @@ export default {
         this.statusbar[item.alias] = Math.random() < 0.5;
       }
     },
-    fillStatusBar() {
-      const device = this.table.devices[Math.floor(Math.random() * this.table.devices.length)];
+    fillStatusBar(randomAll = true) {
+      let device;
+      if (randomAll) {
+        device = this.table.devices[Math.floor(Math.random() * this.table.devices.length)];
+      } else {
+        const preset = this.presets.find((preset) => preset.value == this.loadedPreset);
+        device = this.table.devices.find((device) => device.value == preset.statusbar.device);
+      }
       const { independent, dependent } = device.inputs.reduce(
         (acc, item) => {
-          if (item.dependsOn) {
-            acc.dependent.push(item);
-          } else {
-            acc.independent.push(item);
+          if (randomAll || (!randomAll && item.alwaysRandom)) {
+            if (item.dependsOn) {
+              acc.dependent.push(item);
+            } else {
+              acc.independent.push(item);
+            }
           }
           return acc;
         },
@@ -698,12 +790,39 @@ export default {
         }
       }
     },
+    fillForm(randomAll = true) {
+      this.exchange = this.table.exchanges[Math.floor(Math.random() * this.table.exchanges.length)].value;
+      this.theme = this.themeItems[Math.floor(Math.random() * this.themeItems.length)].value;
+      let language;
+      if (randomAll) {
+        language = this.themeLanguages[Math.floor(Math.random() * this.themeLanguages.length)].value;
+        this.network = this.themeNetworks[Math.floor(Math.random() * this.themeNetworks.length)].value;
+        this.currency = this.themeCurrencies[Math.floor(Math.random() * this.themeCurrencies.length)].value;
+        this.direction = ['in', 'out'][Math.floor(Math.random() * 2)];
+      } else {
+        //language
+        //find ru or uk
+        const ruuk = this.themeLanguages.filter((language) => language.value == 'ru' || language.value == 'uk');
+        if (ruuk.length) {
+          language = ruuk[Math.floor(Math.random() * ruuk.length)].value;
+        } else {
+          language = this.themeLanguages.find((language) => language.value == 'en')?.value || this.themeLanguages[0].value;
+        }
+        //network
+        this.network = this.themeNetworks.find((network) => network.value == 'trc20')?.value || this.themeNetworks[0].value;
+        //currency
+        this.currency = this.themeCurrencies.find((currency) => currency.value == 'usdt')?.value || this.themeCurrencies[0].value;
+        //direction
+        this.direction = 'in';
+      }
+      this.language = language;
+    },
     downloadPreview() {
       const link = document.createElement('a');
       link.href = this.preview;
       let filename = '';
-      if (this.selectedRow) {
-        const preset = this.presets.find((item) => item.value == this.selectedRow);
+      if (this.loadedPreset) {
+        const preset = this.presets.find((item) => item.value == this.loadedPreset);
         filename = `${preset.title} ${this.$dayjsPure().format('HH-mm DD.MM.YYYY')}.jpg`;
       } else {
         const exchange = this.table.exchanges.find((item) => item.value == this.exchange);
@@ -716,9 +835,6 @@ export default {
     },
   },
   computed: {
-    current100VH() {
-      return this.vh * 100 + 'px';
-    },
     presetWallets() {
       return this.wallets.filter((item) => (item.type == 'trx' && this.network == 'trc20') || (item.type == 'nontrx' && this.network !== 'trc20'));
     },
@@ -746,9 +862,6 @@ export default {
     presetItems() {
       return [{ title: 'Создать новый', value: '0' }, ...this.presets];
     },
-    walletStyle() {
-      return this.walletAction ? 'height: 0vh' : 'height: calc(' + this.current100VH + ' - 100px);';
-    },
     deviceFields() {
       return this.table.devices.find((item) => item.value == this.statusbar.device)?.inputs || [];
     },
@@ -767,6 +880,9 @@ export default {
       }
       return '';
     },
+    AGrowData() {
+      return this[this.agstate];
+    },
   },
 };
 </script>
@@ -776,11 +892,28 @@ export default {
   display: flex;
   flex-direction: column;
 }
-
+.preffered {
+  background-color: #1b5e20 !important;
+}
 .v-text-field .v-input__details > div > div:not(:empty) {
   padding-bottom: 16px;
 }
 
+/* .preset-list .v-list-item__append {
+  align-self: start;
+}
+
+.preset-list .v-list-item-subtitle {
+  -webkit-box-orient: unset;
+}
+
+.preset-list .v-list-item {
+  padding: 4px 0 4px 16px;
+  padding-inline-end: 0 !important;
+} */
+.pw-table button {
+  height: unset !important;
+}
 .v-combobox__selection {
   overflow: hidden;
 }

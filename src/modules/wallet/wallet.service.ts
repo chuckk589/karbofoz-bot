@@ -9,9 +9,10 @@ import { UpdateWalletDto } from './dto/update-wallet.dto';
 export class WalletService {
   constructor(private readonly em: EntityManager) {}
 
-  async remove(id: number) {
-    const wallet = await this.em.findOneOrFail(Wallet, id);
-    return await this.em.removeAndFlush(wallet);
+  async remove(ids: number[]) {
+    const wallets = await this.em.find(Wallet, { id: { $in: ids } });
+    await this.em.removeAndFlush(wallets);
+    return wallets.map((wallet) => wallet.id);
   }
   async create(createWalletDto: CreateWalletDto) {
     const wallets = await this.em.find(Wallet, {});

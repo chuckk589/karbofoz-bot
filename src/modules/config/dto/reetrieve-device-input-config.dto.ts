@@ -9,6 +9,7 @@ export class ReetrieveDeviceInputConfigDto {
     this.variants = deviceBarInput.input.variants.getItems().map((variant) => new RetrieveConfigDto({ title: variant.name, value: variant.alias }));
     this.type = deviceBarInput.input.type || undefined;
     this.dependsOn = JSON.parse(deviceBarInput.dependsOn);
+    this.alwaysRandom = deviceBarInput.alwaysRandom || undefined;
     this.optional = deviceBarInput.optional || undefined;
     this.range = deviceBarInput.range || undefined;
   }
@@ -16,6 +17,7 @@ export class ReetrieveDeviceInputConfigDto {
   alias: string;
   hint?: string;
   dependsOn?: string;
+  alwaysRandom?: boolean;
   type: string;
   optional?: boolean;
   range?: [number, number];

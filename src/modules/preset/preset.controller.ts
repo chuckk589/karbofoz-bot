@@ -27,8 +27,8 @@ export class PresetController {
   managePreset(@Body() body: CreatePresetDto) {
     return this.presetService.managePreset(body);
   }
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.presetService.remove(+id);
+  @Delete()
+  remove(@Query('ids') ids: string) {
+    return this.presetService.remove(ids.split(',').map((id) => +id));
   }
 }

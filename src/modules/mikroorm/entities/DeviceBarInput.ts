@@ -33,4 +33,7 @@ export class DeviceBarInput {
 
   @Property({ nullable: true })
   dependsOn?: string;
+
+  @Property({ nullable: true, default: false })
+  alwaysRandom?: boolean;
 }

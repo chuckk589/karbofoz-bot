@@ -615,11 +615,11 @@ const _binance = {
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
   ],
   fields: new Set()
@@ -688,11 +688,11 @@ const _trust = {
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
   ],
   fields: new Set()
@@ -719,7 +719,7 @@ const _exodus = {
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
   ],
   fields: new Set()
@@ -750,11 +750,11 @@ const _safepal = {
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
   ],
   fields: new Set()
@@ -789,11 +789,11 @@ const _gate = {
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
   ],
   fields: new Set()
@@ -827,11 +827,11 @@ const _huobi = {
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
   ],
   fields: new Set()
@@ -870,11 +870,11 @@ const _kucoin = {
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
   ],
   fields: new Set()
@@ -910,11 +910,11 @@ const _bitfinex = {
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
   ],
   fields: new Set()
@@ -974,11 +974,11 @@ const _bitmart = {
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
   ],
   fields: new Set()
@@ -1012,7 +1012,7 @@ const _cryptocom = {
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
   ],
   fields: new Set()
@@ -1042,11 +1042,11 @@ const _okx = {
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
   ],
   fields: new Set()
@@ -1077,11 +1077,11 @@ const _ledger = {
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
   ],
   fields: new Set()
@@ -1111,11 +1111,11 @@ const _metamask = {
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
   ],
   fields: new Set()
@@ -1151,11 +1151,11 @@ const _mexc = {
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
   ],
   fields: new Set()
@@ -1202,11 +1202,11 @@ const _payeer = {
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
   ],
   fields: new Set()
@@ -1240,11 +1240,11 @@ const _bitget = {
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
   ],
   fields: new Set()
@@ -1278,11 +1278,11 @@ const _kraken = {
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
   ],
   fields: new Set()
@@ -1308,11 +1308,11 @@ const _coinbase = {
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
   ],
   fields: new Set()
@@ -1350,11 +1350,11 @@ const _bitpapa = {
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
   ],
   fields: new Set()
@@ -1379,11 +1379,11 @@ const _exmo = {
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
   ],
   fields: new Set()
@@ -1411,7 +1411,7 @@ const _garantex = {
   themes: [
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
   ],
   fields: new Set()
@@ -1436,7 +1436,7 @@ const _cexio = {
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
   ],
   fields: new Set()
@@ -1458,11 +1458,11 @@ const _bybit = {
   themes: [
     {
       alias: 'mobile-dark',
-      name: 'Смартфон, тёмная',
+      name: 'Тёмная',
     },
     {
       alias: 'mobile-light',
-      name: 'Смартфон, светлая',
+      name: 'Светлая',
     },
   ],
   fields: new Set()
@@ -1490,12 +1490,12 @@ const _xiaomi = {
   name: 'xiaomi',
   fields: [
     { alias: 'wifiAP', name: 'Раздача Wi-Fi', optional: true },
-    { alias: 'wifiAPS', name: 'Уровень сигнала раздачи Wi-Fi', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiAP' }], range: [1, 5] },
-    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.NUMBER, range: [1, 5] },
-    { alias: '4g', name: 'Уровень сигнала LTE', type: HtmlInputType.NUMBER, range: [1, 5] },
+    { alias: 'wifiAPS', name: 'Уровень сигнала раздачи Wi-Fi', type: HtmlInputType.RADIO, dependsOn: [{ field: 'wifiAP' }], range: [1, 5], alwaysRandom: true },
+    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.RADIO, range: [1, 5], alwaysRandom: true },
+    { alias: '4g', name: 'Уровень сигнала LTE', type: HtmlInputType.RADIO, range: [1, 5], alwaysRandom: true },
     { alias: 'bluetooth', name: 'Bluetooth', optional: true },
-    { alias: 'charge', name: 'Уровень заряда батареи (в %)', type: HtmlInputType.NUMBER, range: [1, 100] },
-    { alias: 'time', name: 'Время', type: HtmlInputType.TIME },
+    { alias: 'charge', name: 'Уровень заряда батареи (в %)', type: HtmlInputType.SLIDER, range: [1, 100], alwaysRandom: true },
+    { alias: 'time', name: 'Время', type: HtmlInputType.TIME, alwaysRandom: true },
     { alias: 'moon', name: 'Луна', optional: true },
     { alias: 'vibro', name: 'Вибрация', optional: true },
     { alias: 'alarm', name: 'Будильник', optional: true },
@@ -1514,6 +1514,7 @@ const _iphone = {
       alias: 'network',
       name: 'Wi-Fi или LTE',
       type: HtmlInputType.SELECT,
+      alwaysRandom: true,
       values: [
         {
           value: 'LTE',
@@ -1526,7 +1527,7 @@ const _iphone = {
       ],
     },
 
-    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.NUMBER, range: [1, 3], dependsOn: [{ field: 'network', value: ['wifi'] }] },
+    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.RADIO, range: [1, 3], dependsOn: [{ field: 'network', value: ['wifi'] }], alwaysRandom: true },
     {
       alias: 'simnum',
       name: 'Количество SIM-карт',
@@ -1536,16 +1537,16 @@ const _iphone = {
         { value: 'Две SIM-карты', alias: 'sim2' },
       ],
     },
-    { alias: '4g', name: 'Уровень сигнала LTE', type: HtmlInputType.NUMBER, range: [1, 4] },
-    { alias: 'charge', name: 'Уровень заряда батареи (в %)', type: HtmlInputType.NUMBER, range: [1, 100] },
-    { alias: 'time', name: 'Время', type: HtmlInputType.TIME },
+    { alias: '4g', name: 'Уровень сигнала LTE', type: HtmlInputType.RADIO, range: [1, 4], alwaysRandom: true },
+    { alias: 'charge', name: 'Уровень заряда батареи (в %)', type: HtmlInputType.SLIDER, range: [1, 100], alwaysRandom: true },
+    { alias: 'time', name: 'Время', type: HtmlInputType.TIME, alwaysRandom: true },
   ],
 };
 
 const _samsung = {
   name: 'samsung',
   fields: [
-    { alias: 'time', name: 'Время', type: HtmlInputType.TIME },
+    { alias: 'time', name: 'Время', type: HtmlInputType.TIME, alwaysRandom: true },
     {
       alias: 'simnum',
       name: 'Количество SIM-карт',
@@ -1556,15 +1557,15 @@ const _samsung = {
       ],
     },
     //should be bar1 \ bar2
-    { alias: 'wifiS1', name: 'Уровень сигнала первой SIM-карты', type: HtmlInputType.NUMBER, range: [1, 4] },
-    { alias: 'wifiS2', name: 'Уровень сигнала второй SIM-карты', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'simnum', value: ['sim2'] }], range: [1, 4] },
+    { alias: 'wifiS1', name: 'Уровень сигнала 1-ой SIM-карты', type: HtmlInputType.RADIO, range: [1, 4], alwaysRandom: true },
+    { alias: 'wifiS2', name: 'Уровень сигнала 2-ой SIM-карты', type: HtmlInputType.RADIO, dependsOn: [{ field: 'simnum', value: ['sim2'] }], range: [1, 4], alwaysRandom: true },
     {
       alias: 'sound',
       name: 'Звук вкл./Вибрация/Без звука',
       type: HtmlInputType.SELECT,
       values: [
         {
-          value: 'Звук вкл. (т.е. без значка)',
+          value: 'Звук вкл. (то есть без значка)',
           alias: 'null',
         },
         {
@@ -1577,44 +1578,30 @@ const _samsung = {
         },
       ],
     },
-    // {
-    //   alias: 'wifiShare',
-    //   name: 'Приём иди раздача Wi-Fi',
-    //   type: HtmlInputType.SELECT,
-    //   values: [
-    //     { value: 'Приём', alias: 'in' },
-    //     { value: 'Раздача', alias: 'out' },
-    //     { value: 'Без Wi-Fi', alias: 'none' },
-    //   ],
-    // },
-    // { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiShare', value: ['in'] }], range: [1, 4] },
-    // { alias: 'volte', name: 'VoLTE', dependsOn: [{ field: 'wifiShare', value: ['in'] }], optional: true },
     {
       alias: 'wifiMode',
       name: 'H+ или VoLTE',
       type: HtmlInputType.SELECT,
       values: [
         { value: 'H+', alias: 'h' },
-        { value: 'Volte', alias: 'volte' },
+        { value: 'VoLTE', alias: 'volte' },
       ],
-      // dependsOn: [{ field: 'wifiShare', value: ['out'] }],
-      // optional: true,
     },
-    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiMode', value: ['volte'] }], range: [1, 4] },
-    { alias: 'charge', name: 'Уровень заряда батареи (в %)', type: HtmlInputType.NUMBER, range: [1, 100] },
-    { alias: 'geoloc', name: 'Активен навигатор', optional: true },
-    { alias: 'geoloc2', name: 'GPS', optional: true, dependsOn: [{ field: 'geoloc' }] },
+    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.RADIO, dependsOn: [{ field: 'wifiMode', value: ['volte'] }], range: [1, 4], alwaysRandom: true },
+    { alias: 'charge', name: 'Уровень заряда батареи (в %)', type: HtmlInputType.SLIDER, range: [1, 100], alwaysRandom: true },
+    { alias: 'geoloc2', name: 'GPS', optional: true },
+    { alias: 'geoloc', name: 'Активен навигатор', optional: true, dependsOn: [{ field: 'geoloc2' }] },
     { alias: 'vpn', name: 'VPN', optional: true },
   ],
 };
 const _realme = {
   name: 'realme',
   fields: [
-    { alias: 'time', name: 'Время', type: HtmlInputType.TIME },
+    { alias: 'time', name: 'Время', type: HtmlInputType.TIME, alwaysRandom: true },
     { alias: 'nfc', name: 'NFC', optional: true },
     { alias: 'alarm', name: 'alarm', optional: true },
     { alias: 'bluetooth', name: 'Bluetooth', optional: true },
-    { alias: 'speed', name: 'Speed', type: HtmlInputType.NUMBER, range: [50, 99] },
+    { alias: 'speed', name: 'Speed', type: HtmlInputType.NUMBER, range: [50, 99], alwaysRandom: true },
     { alias: 'volte', name: 'VoLTE', optional: true },
     {
       alias: 'simnum',
@@ -1625,11 +1612,11 @@ const _realme = {
         { value: 'Две SIM-карты', alias: 'sim2' },
       ],
     },
-    { alias: 'bar1', name: 'Уровень сигнала первой SIM-карты', type: HtmlInputType.NUMBER, range: [1, 4] },
-    { alias: 'bar2', name: 'Уровень сигнала второй SIM-карты', type: HtmlInputType.NUMBER, range: [1, 4], dependsOn: [{ field: 'simnum', value: ['sim2'] }] },
-    { alias: 'wifiAP', name: 'Раздача Wi-Fi', optional: true },
-    { alias: 'wifiAPS', name: 'Уровень сигнала раздачи Wi-Fi', type: HtmlInputType.NUMBER, dependsOn: [{ field: 'wifiAP' }], range: [1, 4] },
-    { alias: 'charge', name: 'Уровень заряда батареи (в %)', type: HtmlInputType.NUMBER, range: [1, 100] },
+    { alias: 'bar1', name: 'Уровень сигнала 1-ой SIM-карты', type: HtmlInputType.RADIO, range: [1, 4], alwaysRandom: true },
+    { alias: 'bar2', name: 'Уровень сигнала 2-ой SIM-карты', type: HtmlInputType.RADIO, range: [1, 4], dependsOn: [{ field: 'simnum', value: ['sim2'] }], alwaysRandom: true },
+    { alias: 'wifi', name: 'Приём Wi-Fi', optional: true, alwaysRandom: true },
+    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.RADIO, dependsOn: [{ field: 'wifi' }], range: [1, 4], alwaysRandom: true },
+    { alias: 'charge', name: 'Уровень заряда батареи (в %)', type: HtmlInputType.SLIDER, range: [1, 100], alwaysRandom: true },
   ],
 };
 async function GenerateThemesForExchange(this: { em: EntityManager }, data: data) {
@@ -1711,7 +1698,7 @@ async function GenerateThemesForExchange(this: { em: EntityManager }, data: data
 async function GenerateDeviceInputs(this: { em: EntityManager }, data: deviceData) {
   const device = await this.em.findOneOrFail(Device, { alias: data.name });
   const barinputs = await this.em.find(BarInput, { alias: { $in: data.fields.map((field) => field.alias) } });
-  data.fields.map((field: field & { hint?: string; dependsOn?: string; range?: [number, number] }) => {
+  data.fields.map((field: field & { hint?: string; dependsOn?: string; range?: [number, number]; alwaysRandom?: boolean }) => {
     let existing = barinputs.find((barinput) => barinput.alias == field.alias);
     if (!existing) {
       existing = this.em.create(BarInput, {
@@ -1727,6 +1714,7 @@ async function GenerateDeviceInputs(this: { em: EntityManager }, data: deviceDat
       range: field.range,
       hint: field.hint,
       optional: !!field.optional,
+      alwaysRandom: !!field.alwaysRandom,
       dependsOn: JSON.stringify(field.dependsOn),
     });
   });

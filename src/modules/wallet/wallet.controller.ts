@@ -1,6 +1,6 @@
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { CreateWalletDto } from './dto/create-wallet.dto';
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { WalletService } from './wallet.service';
 
 @Controller({
@@ -20,9 +20,9 @@ export class WalletController {
     return this.walletService.findAll();
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.walletService.remove(+id);
+  @Delete()
+  remove(@Query('ids') ids: string) {
+    return this.walletService.remove(ids.split(',').map((id) => +id));
   }
 
   @Patch(':id')

@@ -8,6 +8,8 @@ export enum HtmlInputType {
   DATETIME_LOCAL = 'datetime-local',
   TIME = 'time',
   TEXTAREA = 'textarea',
+  RADIO = 'radio',
+  SLIDER = 'slider',
 }
 
 @Entity()

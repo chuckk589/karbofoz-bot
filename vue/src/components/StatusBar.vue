@@ -70,9 +70,9 @@
         <div>KB/S</div>
       </div>
 
-      <WFComponent v-if="!!+query._wifiAP" name="realme_wf" :value="query._wifiAPS" style="margin-left: 14px" />
+      <WFComponent v-if="!!+query._wifi" name="realme_wf" :value="query._wifiS" style="margin-left: 14px" />
 
-      <div v-if="!+query._volte" style="align-items: flex-start; margin-left: 8px">
+      <div v-if="!!+query._volte" style="align-items: flex-start; margin-left: 8px">
         <div class="realme" style="flex-direction: column; font-family: 'realme'; margin-top: 2px; letter-spacing: 1px; font-size: 15px; -webkit-text-stroke: 2px; transform: scale(0.9, 1.1); line-height: 15px">
           <span>Vo</span>
           <span>LTE</span>
@@ -83,7 +83,7 @@
         </div>
       </div>
 
-      <WFComponent :meta="!+query._wifiAP" :value="query['_bar1']" name="realme_bar" style="margin-left: 14px" />
+      <WFComponent :meta="!+query._wifi" :value="query['_bar1']" name="realme_bar" style="margin-left: 14px" />
       <WFComponent v-if="query._simnum == 'sim2'" :value="query['_bar2']" name="realme_bar" style="margin-left: 14px" />
 
       <WFComponent :value="query['_charge']" name="realme_btr" style="margin-left: 18px; margin-right: 69px" />

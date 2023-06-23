@@ -1,4 +1,4 @@
-import { Cascade, Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
+import { Cascade, Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 
 import { InputPreset } from './InputPreset';
 import { Language } from './Language';
@@ -14,6 +14,7 @@ export class Preset {
   @PrimaryKey()
   id!: number;
 
+  @Unique()
   @Property()
   name!: string;
 
