@@ -14,10 +14,19 @@
       <input ref="uploader" class="d-none" type="file" accept=".json" @input="onFileChanged" />
       <v-card>
         <v-card-title class="text-h6 font-weight-regular justify-space-between d-flex align-center">
-          <v-btn v-if="step == 1" color="grey-lighten-1" icon="mdi-dice-2" variant="text" @click="fillForm()"></v-btn>
+          <div v-if="step == 1" class="random-btn">
+            <v-btn color="grey-lighten-1" icon="mdi-dice-2" variant="text" @click="fillForm(false)"></v-btn>
+            <span class="ml-2">Full random</span>
+          </div>
           <span class="ma-auto">{{ currentTitle }}</span>
-          <v-btn v-if="step == 1" color="grey-lighten-1" icon="mdi-dice-2-outline" variant="text" @click="fillForm(false)"></v-btn>
-          <v-btn v-if="step == 2" color="grey-lighten-1" icon="mdi-image-search" variant="text" @click="getPreviewImage"></v-btn>
+          <div v-if="step == 1" class="random-btn">
+            <v-btn class="ml-auto" color="grey-lighten-1" icon="mdi-dice-2-outline" variant="text" @click="fillForm(false)"></v-btn>
+            <span class="mr-2">TRX random</span>
+          </div>
+          <div v-if="step == 2" class="random-btn">
+            <v-btn class="ml-auto" color="grey-lighten-1" icon="mdi-image-search" variant="text" @click="getPreviewImage"></v-btn>
+            <span class="mr-2">Исходник</span>
+          </div>
         </v-card-title>
 
         <v-window v-model="step" :touch="{ left: null, right: null }">
@@ -113,7 +122,7 @@
                 <v-expand-transition>
                   <div v-show="preset.current == '0'">
                     <v-text-field v-model="preset.name" label="Название" density="compact"></v-text-field>
-                    <v-textarea v-model="preset.comment" label="Комментарий" density="compact"></v-textarea>
+                    <!-- <v-textarea v-model="preset.comment" label="Комментарий" density="compact"></v-textarea> -->
                   </div>
                 </v-expand-transition>
               </v-form>
@@ -127,9 +136,9 @@
 
         <v-card-actions>
           <v-btn v-if="step == 1" variant="text" @click="openDialog('presets')"> Пресеты </v-btn>
-          <v-btn v-if="step == 1" variant="text" @click="openDialog('wallets')"> Кошельки </v-btn>
+          <v-btn class="ma-auto" v-if="step == 1" variant="text" @click="openDialog('wallets')"> Кошельки </v-btn>
           <v-btn v-if="step > 1" variant="text" @click="back"> Назад </v-btn>
-          <v-spacer></v-spacer>
+          <v-spacer v-if="step > 1"></v-spacer>
           <v-btn v-if="step == 1" color="primary" @click="next"> Далее </v-btn>
           <v-btn v-if="step == 2 || step == 4" color="primary" @click="submit" :loading="loading">
             {{ step == 2 ? 'Создать скриншот' : 'Сохранить' }}
@@ -168,6 +177,7 @@
                 animateRows
                 style="height: 100%"
                 @grid-ready="onGridReady"
+                @sortChanged="AGGridManualFilter"
                 :context="context"
                 detailRowAutoHeight
               >
@@ -218,6 +228,7 @@ export default {
       //aggrid
       agstate: 'presets',
       gridApi: null,
+      columnApi: null,
       defaultColDef: {
         sortable: true,
         filter: true,
@@ -236,7 +247,7 @@ export default {
             preffered: 'data.preffered == 1',
           },
           columnDefs: [
-            { field: 'title', headerName: 'Содержание', headerCheckboxSelection: true, checkboxSelection: true, cellRenderer: 'WalletContentCell' },
+            { field: 'title', flex: 3, headerName: 'Содержание', headerCheckboxSelection: true, checkboxSelection: true, cellRenderer: 'WalletContentCell' },
             {
               field: 'action',
               headerName: '',
@@ -252,12 +263,12 @@ export default {
             return params.data.value;
           },
           columnDefs: [
-            { field: 'title', headerName: 'Содержание', headerCheckboxSelection: true, checkboxSelection: true, cellRenderer: 'PresetContentCell' },
+            { field: 'title', flex: 3, headerName: 'Содержание', headerCheckboxSelection: true, checkboxSelection: true, cellRenderer: 'PresetContentCell' },
             {
               field: 'createdAt',
               headerName: 'Дата создания',
               sortable: true,
-              valueFormatter: (params) => new Date(params.value).toLocaleString(),
+              valueFormatter: (params) => new Date(params.value).toLocaleString('ru-Ru', { dateStyle: 'short', timeStyle: 'short' }),
             },
             {
               field: 'action',
@@ -371,6 +382,8 @@ export default {
   methods: {
     onGridReady(params) {
       this.gridApi = params.api;
+      this.columnApi = params.columnApi;
+      this.AGGridLoadFilter();
     },
     onFileChanged(e) {
       if (e.target.files.length == 0) return;
@@ -387,7 +400,7 @@ export default {
       this.$http.get(`/v1/config/userdata`).then((res) => {
         const anchor = document.createElement('a');
         anchor.href = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(res.data))}`;
-        anchor.download = 'userdata.json';
+        anchor.download = `Пресеты ${new Date().toLocaleString('ru-Ru', { dateStyle: 'short', timeStyle: 'short' })}.json`;
         document.body.appendChild(anchor);
         anchor.click();
         document.body.removeChild(anchor);
@@ -490,10 +503,10 @@ export default {
               },
             ],
           },
-          {
-            label: 'Коммент',
-            key: 'comment',
-          },
+          // {
+          //   label: 'Коммент',
+          //   key: 'comment',
+          // },
         ],
       });
     },
@@ -669,6 +682,35 @@ export default {
       if (newValue == 'samsung') {
         this.statusbar.wifiS1 = 4;
         this.statusbar.wifiS2 = 4;
+      } else if (newValue == 'iphone') {
+        this.statusbar.simnum = 'sim1';
+      }
+      //fill some fields with default values
+      const device = this.table.devices.find((item) => item.value == newValue);
+      device.inputs
+        .filter((input) => ['time', 'charge'].includes(input.alias))
+        .forEach((item) => {
+          this.fillSingleBarField(item);
+        });
+    },
+    AGGridManualFilter() {
+      const colState = this.columnApi.getColumnState();
+      const sortState = colState
+        .filter(function (s) {
+          return s.sort != null;
+        })
+        .map(function (s) {
+          return { colId: s.colId, sort: s.sort, sortIndex: s.sortIndex };
+        });
+      localStorage.setItem(`karbSort_${this.agstate}`, JSON.stringify(sortState));
+    },
+    AGGridLoadFilter() {
+      const sortState = localStorage.getItem(`karbSort_${this.agstate}`);
+      if (sortState) {
+        this.columnApi.applyColumnState({
+          state: JSON.parse(sortState),
+          defaultState: { sort: null },
+        });
       }
     },
     scrollWorkAround(state) {
@@ -764,6 +806,7 @@ export default {
       } else {
         const preset = this.presets.find((preset) => preset.value == this.loadedPreset);
         device = this.table.devices.find((device) => device.value == preset.statusbar.device);
+        if (!device) return;
       }
       const { independent, dependent } = device.inputs.reduce(
         (acc, item) => {
@@ -898,7 +941,18 @@ export default {
 .v-text-field .v-input__details > div > div:not(:empty) {
   padding-bottom: 16px;
 }
-
+.random-btn {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+}
+.random-btn .v-btn {
+  width: calc(var(--v-btn-height));
+  height: calc(var(--v-btn-height));
+}
+.random-btn span {
+  line-height: 10px;
+}
 /* .preset-list .v-list-item__append {
   align-self: start;
 }
@@ -949,5 +1003,8 @@ input::-webkit-inner-spin-button {
 
 input:focus {
   outline-width: 0;
+}
+.ag-cell-wrap-text {
+  word-break: unset;
 }
 </style>

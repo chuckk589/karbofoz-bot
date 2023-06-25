@@ -1491,7 +1491,8 @@ const _xiaomi = {
   fields: [
     { alias: 'wifiAP', name: 'Раздача Wi-Fi', optional: true },
     { alias: 'wifiAPS', name: 'Уровень сигнала раздачи Wi-Fi', type: HtmlInputType.RADIO, dependsOn: [{ field: 'wifiAP' }], range: [1, 5], alwaysRandom: true },
-    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.RADIO, range: [1, 5], alwaysRandom: true },
+    { alias: 'wifi', name: 'Приём Wi-Fi', optional: true },
+    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.RADIO, range: [1, 5], dependsOn: [{ field: 'wifi' }], alwaysRandom: true },
     { alias: '4g', name: 'Уровень сигнала LTE', type: HtmlInputType.RADIO, range: [1, 5], alwaysRandom: true },
     { alias: 'bluetooth', name: 'Bluetooth', optional: true },
     { alias: 'charge', name: 'Уровень заряда батареи (в %)', type: HtmlInputType.SLIDER, range: [1, 100], alwaysRandom: true },
@@ -1512,7 +1513,7 @@ const _iphone = {
     { alias: 'geoloc', name: 'Активен навигатор', optional: true },
     {
       alias: 'network',
-      name: 'Wi-Fi или LTE',
+      name: 'LTE или Wi-Fi',
       type: HtmlInputType.SELECT,
       alwaysRandom: true,
       values: [
