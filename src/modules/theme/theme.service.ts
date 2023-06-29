@@ -1,4 +1,4 @@
-import { EntityManager, LoadStrategy, PopulateHint } from '@mikro-orm/core';
+import { EntityManager, LoadStrategy } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 import { Theme } from '../mikroorm/entities/Theme';
 import { RetrieveInputValuesDto } from './dto/retrieve-input-values.dto';

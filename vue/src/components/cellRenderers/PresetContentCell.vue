@@ -1,7 +1,7 @@
 <template>
   <div style="line-height: initial">
     <div>{{ params.data.title }}</div>
-    <div>{{ presetFieldData(params.data) }}</div>
+    <div :style="wrapStyle" v-html="presetFieldData(params.data)"></div>
   </div>
 </template>
 
@@ -19,7 +19,12 @@ export default {
       const network = exchange.networks.find((item) => item.value == field.network);
       const currency = network.currencies.find((item) => item.value == field.currency);
       const direction = field.direction == 'in' ? 'Прием' : 'Отправка';
-      return `${exchange.title} / ${theme.title} / ${language.title} / ${network.title} / ${currency.title} / ${direction} ${field.comment || ''}`;
+      return `${exchange.title}\n${theme.title}\n${language.title}\n${network.title}/${currency.title}\n${direction}`;
+    },
+  },
+  computed: {
+    wrapStyle() {
+      return this.$vuetify.display.mobile ? 'white-space:pre' : '';
     },
   },
 };

@@ -13,6 +13,9 @@ export class BarInputVariant {
   @Property()
   alias: string;
 
+  @Property({ nullable: true })
+  dependsOn?: string;
+
   @ManyToOne({ entity: () => BarInput })
   barInput: BarInput;
 }

@@ -8,7 +8,7 @@ export class BarRange extends Type<[number, number], string> {
   }
 
   convertToJSValue(value: string | undefined, platform: Platform): [number, number] {
-    return value?.split(',').map((v) => parseInt(v)) as [number, number];
+    return value?.split(',').map((v) => (v.includes('.') ? parseFloat(v) : parseInt(v))) as [number, number];
   }
 }
 @Entity()

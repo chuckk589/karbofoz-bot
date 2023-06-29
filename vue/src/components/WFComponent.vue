@@ -80,6 +80,12 @@
         </div>
       </div>
     </div>
+    <div v-else-if="name == 'samsung_4g'" style="align-items: end; position: relative">
+      <div style="width: 29px">
+        <div class="samsung" style="position: absolute; font-size: 19px; font-weight: 500; letter-spacing: 1px; font-family: 'ROBOTO'; bottom: -7px">4G</div>
+        <FakeImg class="samsung_bar_fill" :path="'/devices/samsung/10.png'" style="position: absolute; bottom: -18px"></FakeImg>
+      </div>
+    </div>
   </div>
 </template>
 <script>

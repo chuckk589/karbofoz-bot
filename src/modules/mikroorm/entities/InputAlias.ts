@@ -10,6 +10,7 @@ export enum HtmlInputType {
   TEXTAREA = 'textarea',
   RADIO = 'radio',
   SLIDER = 'slider',
+  FLOATSLIDER = 'floatslider',
 }
 
 @Entity()

@@ -1,7 +1,7 @@
 <template>
   <div v-if="query._device == 'xiaomi'" class="s-bar" style="height: 213px; margin-left: 35px" :class="theme + '-bar'">
     <div>
-      <div class="xiaomi" style="font-size: 35px; font-family: 'Roboto'; letter-spacing: 1px">{{ this.query['_time'] }}</div>
+      <div class="xiaomi" style="font-size: 35px; font-family: 'Roboto'; letter-spacing: 1px">{{ time }}</div>
       <FakeImg class="xiaomi" v-if="!!+query._moon" :path="'/devices/xiaomi/12.png'" style="margin-left: 10px" />
       <FakeImg class="xiaomi" v-if="!!+query._vibro" :path="'/devices/xiaomi/11.png'" style="margin-left: 13px" />
       <FakeImg class="xiaomi" v-if="!!+query._alarm" :path="'/devices/xiaomi/10.png'" style="margin-left: 13px" />
@@ -21,18 +21,18 @@
   </div>
   <div v-else-if="query._device == 'iphone'" style="height: 147px; align-items: stretch" :class="theme + '-bar'">
     <div style="flex: 1 1; margin-left: 128px; margin-top: -9px">
-      <div class="iphone" style="font-size: 45px; font-family: 'iphone'; letter-spacing: 1px">{{ this.query['_time'] }}</div>
+      <div class="iphone" style="font-size: 45px; font-family: 'iphone'; letter-spacing: 1px">{{ time }}</div>
       <FakeImg class="iphone" v-if="!!+query._geoloc" :path="'/devices/iphone/1.png'" style="margin-left: 18px" />
       <v-spacer></v-spacer>
       <WFComponent :value="+query['_4g']" name="iphone_bar" :meta="query['_simnum']" style="margin-right: 21px" />
-      <WFComponent v-if="query._network == 'wifi'" :value="+query['_wifiS']" name="iphone_wf" style="margin-right: 12px" />
-      <FakeImg class="iphone" v-if="query._network == 'lte'" :path="'/devices/iphone/3.png'" style="margin-right: 10px" />
+      <WFComponent v-if="query._connection == 'wifi'" :value="+query['_wifiS']" name="iphone_wf" style="margin-right: 12px" />
+      <FakeImg class="iphone" v-if="query._connection == 'lte'" :path="'/devices/iphone/3.png'" style="margin-right: 10px" />
       <WFComponent :value="query['_charge']" name="iphone_btr" style="margin-right: 77px; margin-top: 5px" />
     </div>
   </div>
   <div v-else-if="query._device == 'samsung'" style="height: 100px; align-items: stretch" :class="theme + '-bar'">
     <div style="flex: 1 1; margin-left: 75px">
-      <div class="samsung" style="font-size: 35px; font-family: 'Roboto'; letter-spacing: 1px">{{ this.query['_time'] }}</div>
+      <div class="samsung" style="font-size: 35px; font-family: 'Roboto'; letter-spacing: 1px">{{ time }}</div>
       <FakeImg class="samsung" v-if="!!+query._geoloc" :path="'/devices/samsung/1.png'" style="margin-left: 19px; margin-top: 6px" />
       <v-spacer></v-spacer>
       <FakeImg class="samsung" v-if="!!+query._vpn" :path="'/devices/samsung/6.png'" style="margin-left: 15px" />
@@ -42,11 +42,12 @@
 
       <FakeImg class="samsung" v-if="!!+query._geoloc2" :path="'/devices/samsung/3.png'" style="margin-left: 15px" />
 
-      <FakeImg class="samsung" v-if="query._wifiMode == 'h'" :path="'/devices/samsung/7.png'" style="margin-left: 15px" />
-      <WFComponent v-if="query._wifiMode == 'volte'" :value="query['_wifiS']" name="samsung_wf" style="margin-right: 5px; margin-top: -3px; margin-left: 16px" />
+      <FakeImg class="samsung" v-if="query._wifiMode == 'out'" :path="'/devices/samsung/7.png'" style="margin-left: 15px" />
+      <WFComponent v-if="query._wifiMode == 'in'" :value="query['_wifiS']" name="samsung_wf" style="margin-right: 5px; margin-top: -3px; margin-left: 16px" />
 
-      <FakeImg class="samsung" v-if="query._wifiMode == 'volte' || !!+query._volte" :path="'/devices/samsung/4.png'" style="margin-left: 15px" />
-      <FakeImg class="samsung" v-if="query._wifiMode == 'h'" :path="'/devices/samsung/8.png'" style="margin-left: 15px" />
+      <FakeImg class="samsung" v-if="!!+query._volte" :path="'/devices/samsung/4.png'" style="margin-left: 15px" />
+      <FakeImg class="samsung" v-if="query._connection == 'h'" :path="'/devices/samsung/8.png'" style="margin-left: 15px" />
+      <WFComponent v-if="query._connection == '4g'" name="samsung_4g" style="margin-left: 15px" />
 
       <WFComponent :value="query['_wifiS1']" name="samsung_bar" style="margin-left: 10px" />
       <WFComponent v-if="query._simnum == 'sim2'" :value="query['_wifiS2']" name="samsung_bar" style="margin-left: 14px" />
@@ -57,7 +58,7 @@
   </div>
   <div v-else-if="query._device == 'realme'" style="height: 155px; align-items: stretch" :class="theme + '-bar'">
     <div style="flex: 1 1">
-      <div class="realme" style="font-size: 38px; font-family: realme; margin-left: 158px">{{ this.query['_time'] }}</div>
+      <div class="realme" style="font-size: 38px; font-family: realme; margin-left: 158px">{{ time }}</div>
       <v-spacer></v-spacer>
       <FakeImg class="realme" v-if="!!+query._nfc" :path="'/devices/realme/3.png'" style="margin-left: 13px" />
 
@@ -110,8 +111,12 @@ export default {
   },
   computed: {
     speed() {
-      // return this.fixed(this.query._speed, 2);
-      return new Intl.NumberFormat('en', { minimumFractionDigits: 1, maximumFractionDigits: 2 }).format(this.query._speed);
+      const num = this.query._speed.includes('.') ? parseFloat(this.query._speed) : parseInt(this.query._speed);
+      const len = 3 - Math.floor(num).toString().length;
+      return num.toFixed(len);
+    },
+    time() {
+      return this.query.language == 'es' ? (this.query._time[0] == '0' ? this.query._time.slice(1) : this.query._time) : this.query._time;
     },
   },
 };

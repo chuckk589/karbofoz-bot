@@ -5,4 +5,5 @@ export class RetrieveConfigDto {
   title: string; //name of config
   value: string; //id of config
   comment?: string;
+  dependsOn?: string;
 }

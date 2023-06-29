@@ -102,9 +102,6 @@
                     density="compact"
                     v-model="statusbar[field.alias]"
                   >
-                    <!-- <template #label="field">
-                      <span>{{ field.name }}<strong class="text-red" v-if="!field.optional">&nbsp;&nbsp;*</strong></span>
-                    </template> -->
                   </component>
                 </v-form>
               </v-expand-transition>
@@ -233,7 +230,6 @@ export default {
         sortable: true,
         filter: true,
         flex: 1,
-        wrapText: true,
         autoHeight: true,
       },
       context: { table: null },
@@ -247,7 +243,14 @@ export default {
             preffered: 'data.preffered == 1',
           },
           columnDefs: [
-            { field: 'title', flex: 3, headerName: 'Содержание', headerCheckboxSelection: true, checkboxSelection: true, cellRenderer: 'WalletContentCell' },
+            {
+              field: 'title',
+              flex: 3,
+              headerName: 'Содержание',
+              headerCheckboxSelection: true,
+              checkboxSelection: true,
+              cellRenderer: 'WalletContentCell',
+            },
             {
               field: 'action',
               headerName: '',
@@ -263,19 +266,23 @@ export default {
             return params.data.value;
           },
           columnDefs: [
-            { field: 'title', flex: 3, headerName: 'Содержание', headerCheckboxSelection: true, checkboxSelection: true, cellRenderer: 'PresetContentCell' },
+            { field: 'title', flex: 2, headerName: 'Содержание', headerCheckboxSelection: true, checkboxSelection: true, cellRenderer: 'PresetContentCell' },
             {
               field: 'createdAt',
               headerName: 'Дата создания',
+              cellStyle: () => {
+                return this.$vuetify.display.mobile ? { 'white-space': 'pre' } : {};
+              },
               sortable: true,
-              valueFormatter: (params) => new Date(params.value).toLocaleString('ru-Ru', { dateStyle: 'short', timeStyle: 'short' }),
+              maxWidth: 180,
+              valueFormatter: (params) => new Date(params.value).toLocaleString('ru-Ru', { dateStyle: 'short', timeStyle: 'short' }).split(', ').join('\n'),
             },
             {
               field: 'action',
               headerName: '',
               filter: false,
               sortable: false,
-              maxWidth: 70,
+              maxWidth: 90,
               cellRenderer: 'PresetCell',
             },
           ],
@@ -363,6 +370,7 @@ export default {
         this.currency = currency;
         this.direction = rest.direction;
         this.form = fields;
+        this.form.sum = (Math.random() * (10000 - 2000) + 2000).toFixed(Math.random() * 6);
         if (preset.wallet) {
           this.form.address = preset.wallet;
         }
@@ -562,15 +570,22 @@ export default {
     },
     getDisabledBarState(field) {
       if (field.dependsOn) {
-        return !field.dependsOn.reduce((acc, item) => {
-          const formValue = this.statusbar[item.field]?.value || this.statusbar[item.field] || this[item.field];
-          if (item.value) {
-            if (!item.value.includes(formValue)) acc = false;
-          } else {
-            if (!formValue) acc = false;
-          }
-          return acc;
-        }, true);
+        const keys = Object.getOwnPropertyNames(field.dependsOn);
+        for (let i = 0; i < keys.length; i++) {
+          // const key = keys[i];
+          // const formValue = this.statusbar[key]?.value ?? this.statusbar[key] ?? this[key] ?? false;
+          // const filterKeys = Object.getOwnPropertyNames(field.dependsOn[key]);
+          // for (let j = 0; j < filterKeys.length; j++) {
+          //   const filterKey = filterKeys[j];
+          //   const filterValue = field.dependsOn[key][filterKey];
+          //   if (filterKey == '$eq') {
+          //     if (filterValue != formValue) return true;
+          //   } else if (filterKey == '$ne') {
+          //     if (filterValue == formValue) return true;
+          //   }
+          // }
+          return !this.checkSingleStatusBarField(field);
+        }
       }
       return false;
     },
@@ -585,7 +600,7 @@ export default {
       if (field.type == 'select') return 'v-select';
       else if (field.type == 'number' || field.type == 'time') return 'v-text-field';
       else if (field.type == 'radio') return 'radio-select';
-      else if (field.type == 'slider') return 'slider-select';
+      else if (field.type == 'slider' || field.type == 'floatslider') return 'slider-select';
       else return 'v-checkbox';
     },
     submit() {
@@ -652,8 +667,40 @@ export default {
       if (field.alias.match(/address/)) {
         return this.presetWallets;
       } else {
-        return field.variants || [];
+        return field.variants?.filter((item) => {
+          const result = this.checkSingleStatusBarField(item);
+          if (!result && this.statusbar[field.alias] == item.value) this.statusbar[field.alias] = undefined;
+          return result;
+        });
       }
+    },
+    checkSingleStatusBarField(item) {
+      if (item.dependsOn) {
+        const keys = Object.getOwnPropertyNames(item.dependsOn);
+        for (let i = 0; i < keys.length; i++) {
+          const key = keys[i];
+          if (key == '$or') {
+            for (let j = 0; j < item.dependsOn[key].length; j++) {
+              if (this.checkSingleStatusBarField({ dependsOn: item.dependsOn[key][j] })) {
+                return true;
+              }
+            }
+            return false;
+          }
+          const formValue = this.statusbar[key]?.value ?? this.statusbar[key] ?? this[key] ?? false;
+          const filterKeys = Object.getOwnPropertyNames(item.dependsOn[key]);
+          for (let j = 0; j < filterKeys.length; j++) {
+            const filterKey = filterKeys[j];
+            const filterValue = item.dependsOn[key][filterKey];
+            if (filterKey == '$eq') {
+              if (filterValue != formValue) return false;
+            } else if (filterKey == '$ne') {
+              if (filterValue == formValue) return false;
+            }
+          }
+        }
+      }
+      return true;
     },
     fieldRules(field) {
       if (!field.optional && !this.getDisabledState(field)) {
@@ -682,13 +729,25 @@ export default {
       if (newValue == 'samsung') {
         this.statusbar.wifiS1 = 4;
         this.statusbar.wifiS2 = 4;
+        this.statusbar.simnum = 'sim1';
+        // this.statusbar.wifiMode = 'volte';
       } else if (newValue == 'iphone') {
         this.statusbar.simnum = 'sim1';
+        this.statusbar.network = 'lte';
+        this.statusbar.wifiS = 3;
+        this.statusbar['4g'] = 4;
+      } else if (newValue == 'xiaomi') {
+        this.statusbar.wifi = true;
+        this.statusbar.wifiS = 5;
+        this.statusbar['4g'] = 5;
+        this.statusbar.volte = true;
+      } else if (newValue == 'realme') {
+        this.statusbar.volte = true;
       }
       //fill some fields with default values
       const device = this.table.devices.find((item) => item.value == newValue);
       device.inputs
-        .filter((input) => ['time', 'charge'].includes(input.alias))
+        .filter((input) => ['time', 'charge', 'speed'].includes(input.alias))
         .forEach((item) => {
           this.fillSingleBarField(item);
         });
@@ -712,6 +771,9 @@ export default {
           defaultState: { sort: null },
         });
       }
+    },
+    AGGridCellDataStyle() {
+      return this.$vuetify.display.mobile ? 'white-space:pre' : '';
     },
     scrollWorkAround(state) {
       //scroll to current item
@@ -791,6 +853,10 @@ export default {
       if (item.type == 'time') {
         this.$dayjs.prototype._offset = +this.form.tz;
         this.statusbar[item.alias] = this.$dayjs().format('HH:mm');
+      } else if (item.type == 'floatslider') {
+        const num = Math.random() * (item.range[1] / 100 - item.range[0] + 1) + item.range[0];
+        const len = 3 - Math.floor(num).toString().length;
+        this.statusbar[item.alias] = num.toFixed(len);
       } else if (item.type == 'number' || item.type == 'radio' || item.type == 'slider') {
         this.statusbar[item.alias] = Math.floor(Math.random() * (item.range[1] - item.range[0] + 1)) + item.range[0];
       } else if (item.type == 'select') {
@@ -935,24 +1001,30 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
 .preffered {
   background-color: #1b5e20 !important;
 }
+
 .v-text-field .v-input__details > div > div:not(:empty) {
   padding-bottom: 16px;
 }
+
 .random-btn {
   display: flex;
   flex-direction: column;
   font-size: 12px;
 }
+
 .random-btn .v-btn {
   width: calc(var(--v-btn-height));
   height: calc(var(--v-btn-height));
 }
+
 .random-btn span {
   line-height: 10px;
 }
+
 /* .preset-list .v-list-item__append {
   align-self: start;
 }
@@ -968,6 +1040,7 @@ export default {
 .pw-table button {
   height: unset !important;
 }
+
 .v-combobox__selection {
   overflow: hidden;
 }
@@ -1004,6 +1077,7 @@ input::-webkit-inner-spin-button {
 input:focus {
   outline-width: 0;
 }
+
 .ag-cell-wrap-text {
   word-break: unset;
 }

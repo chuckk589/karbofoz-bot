@@ -1490,9 +1490,9 @@ const _xiaomi = {
   name: 'xiaomi',
   fields: [
     { alias: 'wifiAP', name: 'Раздача Wi-Fi', optional: true },
-    { alias: 'wifiAPS', name: 'Уровень сигнала раздачи Wi-Fi', type: HtmlInputType.RADIO, dependsOn: [{ field: 'wifiAP' }], range: [1, 5], alwaysRandom: true },
+    { alias: 'wifiAPS', name: 'Уровень сигнала раздачи Wi-Fi', type: HtmlInputType.RADIO, dependsOn: { wifiAP: { $ne: false } }, range: [1, 5], alwaysRandom: true },
     { alias: 'wifi', name: 'Приём Wi-Fi', optional: true },
-    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.RADIO, range: [1, 5], dependsOn: [{ field: 'wifi' }], alwaysRandom: true },
+    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.RADIO, range: [1, 5], dependsOn: { wifi: { $ne: false } }, alwaysRandom: true },
     { alias: '4g', name: 'Уровень сигнала LTE', type: HtmlInputType.RADIO, range: [1, 5], alwaysRandom: true },
     { alias: 'bluetooth', name: 'Bluetooth', optional: true },
     { alias: 'charge', name: 'Уровень заряда батареи (в %)', type: HtmlInputType.SLIDER, range: [1, 100], alwaysRandom: true },
@@ -1512,7 +1512,7 @@ const _iphone = {
   fields: [
     { alias: 'geoloc', name: 'Активен навигатор', optional: true },
     {
-      alias: 'network',
+      alias: 'connection',
       name: 'LTE или Wi-Fi',
       type: HtmlInputType.SELECT,
       alwaysRandom: true,
@@ -1528,7 +1528,7 @@ const _iphone = {
       ],
     },
 
-    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.RADIO, range: [1, 3], dependsOn: [{ field: 'network', value: ['wifi'] }], alwaysRandom: true },
+    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.RADIO, range: [1, 3], dependsOn: { connection: { $eq: 'wifi' } }, alwaysRandom: true },
     {
       alias: 'simnum',
       name: 'Количество SIM-карт',
@@ -1559,7 +1559,7 @@ const _samsung = {
     },
     //should be bar1 \ bar2
     { alias: 'wifiS1', name: 'Уровень сигнала 1-ой SIM-карты', type: HtmlInputType.RADIO, range: [1, 4], alwaysRandom: true },
-    { alias: 'wifiS2', name: 'Уровень сигнала 2-ой SIM-карты', type: HtmlInputType.RADIO, dependsOn: [{ field: 'simnum', value: ['sim2'] }], range: [1, 4], alwaysRandom: true },
+    { alias: 'wifiS2', name: 'Уровень сигнала 2-ой SIM-карты', type: HtmlInputType.RADIO, dependsOn: { simnum: { $eq: 'sim2' } }, range: [1, 4], alwaysRandom: true },
     {
       alias: 'sound',
       name: 'Звук вкл./Вибрация/Без звука',
@@ -1580,18 +1580,38 @@ const _samsung = {
       ],
     },
     {
-      alias: 'wifiMode',
-      name: 'H+ или VoLTE',
+      alias: 'connection',
+      name: 'H+ или 4g',
       type: HtmlInputType.SELECT,
       values: [
+        { value: 'Нет', alias: 'none' },
         { value: 'H+', alias: 'h' },
-        { value: 'VoLTE', alias: 'volte' },
+        { value: '4G', alias: '4g' },
       ],
     },
-    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.RADIO, dependsOn: [{ field: 'wifiMode', value: ['volte'] }], range: [1, 4], alwaysRandom: true },
+    {
+      alias: 'volte',
+      name: 'VoLTE',
+      dependsOn: {
+        connection: { $ne: 'h' },
+        $or: [{ connection: { $eq: '4g' } }, { wifiMode: { $eq: 'in' } }],
+      },
+      optional: true,
+    },
+    {
+      alias: 'wifiMode',
+      name: 'Приём/Раздача',
+      type: HtmlInputType.SELECT,
+      values: [
+        { value: 'Нет', alias: 'none' },
+        { value: 'Приём', alias: 'in' },
+        { value: 'Раздача', alias: 'out', dependsOn: { connection: { $ne: 'none' } } },
+      ],
+    },
+    { alias: 'wifiS', name: 'Уровень приёма Wi-Fi', type: HtmlInputType.RADIO, range: [1, 4], alwaysRandom: true, dependsOn: { wifiMode: { $eq: 'in' } } },
     { alias: 'charge', name: 'Уровень заряда батареи (в %)', type: HtmlInputType.SLIDER, range: [1, 100], alwaysRandom: true },
     { alias: 'geoloc2', name: 'GPS', optional: true },
-    { alias: 'geoloc', name: 'Активен навигатор', optional: true, dependsOn: [{ field: 'geoloc2' }] },
+    { alias: 'geoloc', name: 'Активен навигатор', optional: true, dependsOn: { geoloc2: { $ne: false } } },
     { alias: 'vpn', name: 'VPN', optional: true },
   ],
 };
@@ -1602,7 +1622,7 @@ const _realme = {
     { alias: 'nfc', name: 'NFC', optional: true },
     { alias: 'alarm', name: 'alarm', optional: true },
     { alias: 'bluetooth', name: 'Bluetooth', optional: true },
-    { alias: 'speed', name: 'Speed', type: HtmlInputType.NUMBER, range: [50, 99], alwaysRandom: true },
+    { alias: 'speed', name: 'Speed', type: HtmlInputType.FLOATSLIDER, range: [0.01, 999], alwaysRandom: true },
     { alias: 'volte', name: 'VoLTE', optional: true },
     {
       alias: 'simnum',
@@ -1614,9 +1634,9 @@ const _realme = {
       ],
     },
     { alias: 'bar1', name: 'Уровень сигнала 1-ой SIM-карты', type: HtmlInputType.RADIO, range: [1, 4], alwaysRandom: true },
-    { alias: 'bar2', name: 'Уровень сигнала 2-ой SIM-карты', type: HtmlInputType.RADIO, range: [1, 4], dependsOn: [{ field: 'simnum', value: ['sim2'] }], alwaysRandom: true },
+    { alias: 'bar2', name: 'Уровень сигнала 2-ой SIM-карты', type: HtmlInputType.RADIO, range: [1, 4], dependsOn: { simnum: { $eq: 'sim2' } }, alwaysRandom: true },
     { alias: 'wifi', name: 'Приём Wi-Fi', optional: true, alwaysRandom: true },
-    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.RADIO, dependsOn: [{ field: 'wifi' }], range: [1, 4], alwaysRandom: true },
+    { alias: 'wifiS', name: 'Уровень сигнала приёма Wi-Fi', type: HtmlInputType.RADIO, dependsOn: { wifi: { $ne: false } }, range: [1, 4], alwaysRandom: true },
     { alias: 'charge', name: 'Уровень заряда батареи (в %)', type: HtmlInputType.SLIDER, range: [1, 100], alwaysRandom: true },
   ],
 };
@@ -1653,37 +1673,36 @@ async function GenerateThemesForExchange(this: { em: EntityManager }, data: data
       alias: 'tz',
       type: HtmlInputType.SELECT,
       aliasVariants: [
-        { value: '(GMT-12:00) International Date Line West', alias: '-12' },
-        { value: '(GMT-11:00) Midway Island, Samoa', alias: '-11' },
-        { value: '(GMT-10:00) Hawaii', alias: '-10' },
-        { value: '(GMT-09:00) Alaska', alias: '-9' },
-        { value: '(GMT-08:00) Pacific Time (US & Canada)', alias: '-8' },
-        { value: '(GMT-07:00) Arizona', alias: '-7' },
-        { value: '(GMT-06:00) Central Time (US & Canada)', alias: '-6' },
-        { value: '(GMT-05:00) Eastern Time (US & Canada)', alias: '-5' },
-        { value: '(GMT-04:00) Atlantic Time (Canada)', alias: '-4' },
-        { value: '(GMT-03:00) Buenos Aires, Georgetown', alias: '-3' },
-        { value: '(GMT-02:00) Mid-Atlantic', alias: '-2' },
-        { value: '(GMT-01:00) Cape Verde Is.', alias: '-1' },
-        { value: '(GMT) Greenwich Mean Time : London', alias: '0' },
-        { value: '(GMT+01:00) Rome, Stockholm, Vienna', alias: '1' },
-        { value: '(GMT+02:00)  Istanbul, Minsk', alias: '2' },
-        { value: '(GMT+03:00) Moscow, St. Petersburg', alias: '3' },
-        { value: '(GMT+04:00) Abu Dhabi, Muscat', alias: '4' },
-        { value: '(GMT+05:00) Islamabad, Karachi, Tashkent', alias: '5' },
-        { value: '(GMT+06:00) Almaty, Novosibirsk', alias: '6' },
-        { value: '(GMT+07:00) Bangkok, Hanoi, Jakarta', alias: '7' },
-        { value: '(GMT+08:00) Beijing, Hong Kong, Perth', alias: '8' },
-        { value: '(GMT+09:00) Osaka, Sapporo, Tokyo', alias: '9' },
-        { value: '(GMT+10:00) Canberra, Melbourne, Sydney', alias: '10' },
-        { value: '(GMT+11:00) Magadan, Solomon Is., New Caledonia', alias: '11' },
-        { value: '(GMT+12:00) Auckland, Wellington', alias: '12' },
-        { value: "(GMT+13:00) Nuku'alofa", alias: '13' },
-        { value: '(GMT+14:00) Kiritimati', alias: '14' },
+        { value: '(GMT-12:00) Линия смены дат', alias: '-12' },
+        { value: '(GMT-11:00) Американское Самоа, Ниуэ', alias: '-11' },
+        { value: '(GMT-10:00) Гавайи', alias: '-10' },
+        { value: '(GMT-09:00) Аляска', alias: '-9' },
+        { value: '(GMT-08:00) Североамериканское тихоокеанское время (США и Канада)', alias: '-8' },
+        { value: '(GMT-07:00) Горное время (США и Канада)', alias: '-7' },
+        { value: '(GMT-06:00) Центральное время (США и Канада)', alias: '-6' },
+        { value: '(GMT-05:00) Североамериканское восточное время (США и Канада)', alias: '-5' },
+        { value: '(GMT-04:00) Атлантическое время (Канада)', alias: '-4' },
+        { value: '(GMT-03:00) Южноамериканское восточное время (Бразилиа, Буэнос-Айрес)', alias: '-3' },
+        { value: '(GMT-02:00) Среднеатлантическое время', alias: '-2' },
+        { value: '(GMT-01:00) Португалия (Азорские острова), Кабо-Верде', alias: '-1' },
+        { value: '(GMT) Дублин, Эдинбург, Лиссабон, Лондон, Касабланка, Монровия', alias: '0' },
+        { value: '(GMT+01:00) Центральноевропейское время (Белград, Братислава)', alias: '1' },
+        { value: '(GMT+02:00) Восточноевропейское время (Афины, Бухарест, Вильнюс)', alias: '2' },
+        { value: '(GMT+03:00) Арабское время (Ирак, Кувейт, Саудовская Аравия)', alias: '3' },
+        { value: '(GMT+04:00) Объединённые Арабские Эмираты, Оман, Азербайджан', alias: '4' },
+        { value: '(GMT+05:00) Западноазиатское время (Исламабад, Карачи, Ташкент)', alias: '5' },
+        { value: '(GMT+06:00) Центральноазиатское время (Бангладеш, Казахстан)', alias: '6' },
+        { value: '(GMT+07:00) Юго-Восточная Азия (Бангкок, Джакарта, Ханой)', alias: '7' },
+        { value: '(GMT+08:00) Западноавстралийское время (Перт)', alias: '8' },
+        { value: '(GMT+09:00) Якутское время, Корея, Япония', alias: '9' },
+        { value: '(GMT+10:00) Западно-тихоокеанское время (Гуам, Порт-Морсби)', alias: '10' },
+        { value: '(GMT+11:00) Центрально-тихоокеанское время (Соломоновы острова)', alias: '11' },
+        { value: '(GMT+12:00) Камчатское время, Маршалловы острова, Фиджи', alias: '12' },
+        { value: '(GMT+13:00) Тонга', alias: '13' },
+        { value: '(GMT+14:00) Кирибати (острова Лайн)', alias: '14' },
       ],
     });
   }
-
   data.themes.map((theme: any) =>
     this.em.create(Theme, {
       ...theme,
@@ -1698,17 +1717,23 @@ async function GenerateThemesForExchange(this: { em: EntityManager }, data: data
 
 async function GenerateDeviceInputs(this: { em: EntityManager }, data: deviceData) {
   const device = await this.em.findOneOrFail(Device, { alias: data.name });
-  const barinputs = await this.em.find(BarInput, { alias: { $in: data.fields.map((field) => field.alias) } });
+  // const barinputs = await this.em.find(BarInput, { alias: { $in: data.fields.map((field) => field.alias) } });
   data.fields.map((field: field & { hint?: string; dependsOn?: string; range?: [number, number]; alwaysRandom?: boolean }) => {
-    let existing = barinputs.find((barinput) => barinput.alias == field.alias);
-    if (!existing) {
-      existing = this.em.create(BarInput, {
-        alias: field.alias,
-        name: field.name,
-        type: field.type as HtmlInputType,
-        ...(field.values ? { variants: (field.values as any).map((value: any) => this.em.create(BarInputVariant, { name: value.value, alias: value.alias })) } : {}),
-      });
-    }
+    // let existing = barinputs.find((barinput) => barinput.alias == field.alias);
+    // if (!existing) {
+    //   existing = this.em.create(BarInput, {
+    //     alias: field.alias,
+    //     name: field.name,
+    //     type: field.type as HtmlInputType,
+    //     ...(field.values ? { variants: (field.values as any).map((value: any) => this.em.create(BarInputVariant, { name: value.value, alias: value.alias })) } : {}),
+    //   });
+    // }
+    const existing = this.em.create(BarInput, {
+      alias: field.alias,
+      name: field.name,
+      type: field.type as HtmlInputType,
+      ...(field.values ? { variants: (field.values as any).map((value: any) => this.em.create(BarInputVariant, { name: value.value, alias: value.alias, dependsOn: value.dependsOn })) } : {}),
+    });
     return this.em.create(DeviceBarInput, {
       device,
       input: existing,

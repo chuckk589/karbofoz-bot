@@ -6,7 +6,7 @@ export class ReetrieveDeviceInputConfigDto {
     this.name = deviceBarInput.input.name;
     this.alias = deviceBarInput.input.alias;
     this.hint = deviceBarInput.hint || undefined;
-    this.variants = deviceBarInput.input.variants.getItems().map((variant) => new RetrieveConfigDto({ title: variant.name, value: variant.alias }));
+    this.variants = deviceBarInput.input.variants.getItems().map((variant) => new RetrieveConfigDto({ title: variant.name, value: variant.alias, dependsOn: JSON.parse(variant.dependsOn) }));
     this.type = deviceBarInput.input.type || undefined;
     this.dependsOn = JSON.parse(deviceBarInput.dependsOn);
     this.alwaysRandom = deviceBarInput.alwaysRandom || undefined;
