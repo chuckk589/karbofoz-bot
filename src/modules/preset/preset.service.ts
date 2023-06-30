@@ -73,7 +73,7 @@ export class PresetService {
     } catch (error) {
       console.log(error);
       await browser.close();
-      return new HttpException('Try again', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException('Try again', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
