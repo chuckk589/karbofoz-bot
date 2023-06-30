@@ -42,7 +42,7 @@
                   v-model="direction"
                   :items="[
                     { title: 'Отправка', value: 'out' },
-                    { title: 'Прием', value: 'in' },
+                    { title: 'Приём', value: 'in' },
                   ]"
                   label="Направление"
                   density="compact"
@@ -161,7 +161,7 @@
                 </v-btn>
               </v-toolbar>
               <AgGridVue
-                class="ag-theme-alpine-dark pw-table"
+                :class="mobileClass + 'ag-theme-alpine-dark pw-table'"
                 :column-defs="aggrid[agstate].columnDefs"
                 :default-col-def="defaultColDef"
                 suppressRowClickSelection
@@ -231,6 +231,7 @@ export default {
         filter: true,
         flex: 1,
         autoHeight: true,
+        suppressMenu: true,
       },
       context: { table: null },
 
@@ -266,7 +267,7 @@ export default {
             return params.data.value;
           },
           columnDefs: [
-            { field: 'title', flex: 2, headerName: 'Содержание', headerCheckboxSelection: true, checkboxSelection: true, cellRenderer: 'PresetContentCell' },
+            { field: 'title', minWidth: 150, headerName: 'Содержание', headerCheckboxSelection: true, checkboxSelection: true, cellRenderer: 'PresetContentCell' },
             {
               field: 'createdAt',
               headerName: 'Дата создания',
@@ -274,6 +275,7 @@ export default {
                 return this.$vuetify.display.mobile ? { 'white-space': 'pre' } : {};
               },
               sortable: true,
+              minWidth: 125,
               maxWidth: 180,
               valueFormatter: (params) => new Date(params.value).toLocaleString('ru-Ru', { dateStyle: 'short', timeStyle: 'short' }).split(', ').join('\n'),
             },
@@ -281,8 +283,8 @@ export default {
               field: 'action',
               headerName: '',
               filter: false,
+              maxWidth: 140,
               sortable: false,
-              maxWidth: 90,
               cellRenderer: 'PresetCell',
             },
           ],
@@ -373,6 +375,7 @@ export default {
         this.form.sum = (Math.random() * (10000 - 2000) + 2000).toFixed(Math.random() * 6);
         if (preset.wallet) {
           this.form.address = preset.wallet;
+          console.log(preset.wallet);
         }
         if (Object.keys(statusbar).length) {
           this.statusbar = { show: true, ...statusbar };
@@ -726,6 +729,7 @@ export default {
       }
     },
     manualDeviceChange(newValue) {
+      this.statusbar = { show: true, device: newValue };
       if (newValue == 'samsung') {
         this.statusbar.wifiS1 = 4;
         this.statusbar.wifiS2 = 4;
@@ -992,6 +996,9 @@ export default {
     AGrowData() {
       return this[this.agstate];
     },
+    mobileClass() {
+      return this.$vuetify.display.mobile ? 'ag-mobile ' : '';
+    },
   },
 };
 </script>
@@ -1022,7 +1029,7 @@ export default {
 }
 
 .random-btn span {
-  line-height: 10px;
+  line-height: 16px;
 }
 
 /* .preset-list .v-list-item__append {
@@ -1080,5 +1087,20 @@ input:focus {
 
 .ag-cell-wrap-text {
   word-break: unset;
+}
+.ag-mobile .ag-header-cell {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.ag-mobile .ag-cell {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.ag-mobile .ag-selection-checkbox {
+  margin-left: 7px;
+}
+.ag-mobile .ag-header-select-all {
+  margin-left: 7px;
+  margin-right: 12px !important;
 }
 </style>

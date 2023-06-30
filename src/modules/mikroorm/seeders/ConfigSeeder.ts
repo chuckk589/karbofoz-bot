@@ -1581,7 +1581,7 @@ const _samsung = {
     },
     {
       alias: 'connection',
-      name: 'H+ или 4g',
+      name: 'H+ или 4G',
       type: HtmlInputType.SELECT,
       values: [
         { value: 'Нет', alias: 'none' },
@@ -1600,7 +1600,7 @@ const _samsung = {
     },
     {
       alias: 'wifiMode',
-      name: 'Приём/Раздача',
+      name: 'Режим работы Wi-Fi',
       type: HtmlInputType.SELECT,
       values: [
         { value: 'Нет', alias: 'none' },
@@ -1620,9 +1620,9 @@ const _realme = {
   fields: [
     { alias: 'time', name: 'Время', type: HtmlInputType.TIME, alwaysRandom: true },
     { alias: 'nfc', name: 'NFC', optional: true },
-    { alias: 'alarm', name: 'alarm', optional: true },
+    { alias: 'alarm', name: 'Будильник', optional: true },
     { alias: 'bluetooth', name: 'Bluetooth', optional: true },
-    { alias: 'speed', name: 'Speed', type: HtmlInputType.FLOATSLIDER, range: [0.01, 999], alwaysRandom: true },
+    { alias: 'speed', name: 'Скорость передачи данных (в KB/S)', type: HtmlInputType.FLOATSLIDER, range: [0.01, 999], alwaysRandom: true },
     { alias: 'volte', name: 'VoLTE', optional: true },
     {
       alias: 'simnum',

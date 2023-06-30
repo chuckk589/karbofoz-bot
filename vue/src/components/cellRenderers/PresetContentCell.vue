@@ -1,7 +1,7 @@
 <template>
-  <div style="line-height: initial">
-    <div>{{ params.data.title }}</div>
-    <div :style="wrapStyle" v-html="presetFieldData(params.data)"></div>
+  <div style="line-height: initial; padding: 5px 0 10px">
+    <div class="font-weight-medium text-uppercase">{{ params.data.title }}</div>
+    <div class="text-grey" :style="wrapStyle" v-html="presetFieldData(params.data)"></div>
   </div>
 </template>
 
@@ -18,7 +18,7 @@ export default {
       const language = theme.languages.find((item) => item.value == field.language);
       const network = exchange.networks.find((item) => item.value == field.network);
       const currency = network.currencies.find((item) => item.value == field.currency);
-      const direction = field.direction == 'in' ? 'Прием' : 'Отправка';
+      const direction = field.direction == 'in' ? 'Приём' : 'Отправка';
       return `${exchange.title}\n${theme.title}\n${language.title}\n${network.title}/${currency.title}\n${direction}`;
     },
   },

@@ -104,6 +104,7 @@ export class PresetService {
             }),
         });
         await this.em.persistAndFlush(preset);
+        await this.em.populate(preset, ['wallet']);
         return new RetrievePresetDto(preset);
       } else {
         const preset = await this.em.findOneOrFail(
