@@ -68,11 +68,13 @@ export class PresetService {
       });
       const img = await page.$(_show ? '#main' : '#wobar');
       const screen = await img.screenshot({ path: 'example.png', encoding: 'base64' });
+      await browser.close();
       return { screen };
     } catch (error) {
       console.log(error);
+      await browser.close();
+      return new HttpException('Try again', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    await browser.close();
   }
 
   async managePreset(body: CreatePresetDto) {
