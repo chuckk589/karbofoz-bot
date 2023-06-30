@@ -58,17 +58,21 @@ export class PresetService {
     };
     const queryString = new URLSearchParams(bodyFlat).toString();
     const browser = await puppeteer.launch(puppeteerOptions);
-    const page = await browser.newPage();
-    await page.goto(`${process.env.NODE_ENV === 'dev' ? 'https://192.168.1.14:3001' : 'http://localhost:443'}/template?${queryString}`, { waitUntil: 'networkidle2' });
-    await page.setViewport({
-      width: 2560,
-      height: 1440,
-      deviceScaleFactor: 1,
-    });
-    const img = await page.$(_show ? '#main' : '#wobar');
-    const screen = await img.screenshot({ path: 'example.png', encoding: 'base64' });
+    try {
+      const page = await browser.newPage();
+      await page.goto(`${process.env.NODE_ENV === 'dev' ? 'https://192.168.1.14:3001' : 'http://localhost:443'}/template?${queryString}`, { waitUntil: 'networkidle2' });
+      await page.setViewport({
+        width: 2560,
+        height: 1440,
+        deviceScaleFactor: 1,
+      });
+      const img = await page.$(_show ? '#main' : '#wobar');
+      const screen = await img.screenshot({ path: 'example.png', encoding: 'base64' });
+      return { screen };
+    } catch (error) {
+      console.log(error);
+    }
     await browser.close();
-    return { screen };
   }
 
   async managePreset(body: CreatePresetDto) {

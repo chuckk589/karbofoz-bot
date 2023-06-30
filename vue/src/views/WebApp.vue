@@ -1032,18 +1032,6 @@ export default {
   line-height: 16px;
 }
 
-/* .preset-list .v-list-item__append {
-  align-self: start;
-}
-
-.preset-list .v-list-item-subtitle {
-  -webkit-box-orient: unset;
-}
-
-.preset-list .v-list-item {
-  padding: 4px 0 4px 16px;
-  padding-inline-end: 0 !important;
-} */
 .pw-table button {
   height: unset !important;
 }
