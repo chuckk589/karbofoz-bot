@@ -372,10 +372,11 @@ export default {
         this.currency = currency;
         this.direction = rest.direction;
         this.form = fields;
+        //predefined values
         this.form.sum = (Math.random() * (10000 - 2000) + 2000).toFixed(Math.random() * 6);
+        this.form.txid = this.genTxid();
         if (preset.wallet) {
           this.form.address = preset.wallet;
-          console.log(preset.wallet);
         }
         if (Object.keys(statusbar).length) {
           this.statusbar = { show: true, ...statusbar };
@@ -449,7 +450,7 @@ export default {
             } else if (item.alias == 'date') {
               acc[item.alias] = { title: '10 минут назад ', value: '600' };
             } else if (item.alias == 'sum') {
-              acc[item.alias] = (Math.random() * (10000 - 2000) + 2000).toFixed(Math.random() * 6);
+              acc[item.alias] = (Math.random() * (5000 - 2000) + 2000).toFixed(Math.random() * 6);
             } else if (item.alias == 'tz') {
               acc[item.alias] = '3';
             } else {
@@ -891,9 +892,11 @@ export default {
         },
         { independent: [], dependent: [] },
       );
-      this.statusbar = null;
-      this.statusbar = { show: true };
-      this.statusbar.device = device.value;
+      if (randomAll) {
+        this.statusbar = null;
+        this.statusbar = { show: true };
+        this.statusbar.device = device.value;
+      }
       for (const item of independent) {
         this.fillSingleBarField(item);
       }
@@ -1076,17 +1079,21 @@ input:focus {
 .ag-cell-wrap-text {
   word-break: unset;
 }
+
 .ag-mobile .ag-header-cell {
   padding-left: 5px;
   padding-right: 5px;
 }
+
 .ag-mobile .ag-cell {
   padding-left: 5px;
   padding-right: 5px;
 }
+
 .ag-mobile .ag-selection-checkbox {
   margin-left: 7px;
 }
+
 .ag-mobile .ag-header-select-all {
   margin-left: 7px;
   margin-right: 12px !important;

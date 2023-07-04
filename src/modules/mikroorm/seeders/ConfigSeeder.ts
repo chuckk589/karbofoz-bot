@@ -1604,7 +1604,7 @@ const _samsung = {
       type: HtmlInputType.SELECT,
       values: [
         { value: 'Нет', alias: 'none' },
-        { value: 'Приём', alias: 'in' },
+        { value: 'Приём', alias: 'in', dependsOn: { connection: { $eq: 'none' } } },
         { value: 'Раздача', alias: 'out', dependsOn: { connection: { $ne: 'none' } } },
       ],
     },
