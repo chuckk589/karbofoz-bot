@@ -13,8 +13,8 @@
       <FakeImg class="xiaomi" v-if="!!+query._vpn" :path="'/devices/xiaomi/5.png'" style="margin-right: 14px" />
       <FakeImg class="xiaomi" v-if="!!+query._volte" :path="'/devices/xiaomi/4.png'" style="margin-right: 3px" />
       <WFComponent :meta="!+query._wifiAP" :value="+query['_4g']" name="xiaomi_bar" style="margin-right: 14px" />
-      <WFComponent v-if="!!+query._wifi" name="xiaomi_wf2" :value="+query['_wifiS']" style="margin-right: 16px" />
-      <WFComponent v-if="!!+query._wifiAP" :value="+query['_wifiAPS']" name="xiaomi_wf" style="margin-right: 11px" />
+      <WFComponent v-if="!!+query._wifi" name="xiaomi_wf" :value="+query['_wifiS']" style="margin-right: 16px" />
+      <WFComponent v-if="!!+query._wifiAP" :value="+query['_wifiAPS']" name="xiaomi_wf2" style="margin-right: 11px" />
       <WFComponent :value="query['_charge']" name="xiaomi_btr" style="margin-right: 41px" />
     </div>
     <FakeImg class="xiaomi" :path="'/devices/xiaomi/2.png'" style="margin: 48px 34px 0px auto" />

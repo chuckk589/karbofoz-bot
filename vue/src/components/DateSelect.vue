@@ -5,7 +5,7 @@
         <slot name="label"></slot>
       </template>
     </v-combobox>
-    <input hidden ref="date" type="datetime-local" @change="(evt) => $emit('update:modelValue', evt.target.value)" step="1" />
+    <input hidden ref="date" type="datetime-local" @change="(evt) => $emit('update:modelValue', evt.target.value)" />
   </div>
 </template>
 
@@ -34,10 +34,10 @@ export default {
   computed: {
     value: {
       get() {
-        return this.modelValue;
+        return typeof this.modelValue == 'object' ? this.modelValue : new Date(this.modelValue).toLocaleString('ru-Ru', { dateStyle: 'short', timeStyle: 'short' }).replace(',', '');
       },
       set(value) {
-        this.$emit('update:modelValue', value);
+        // this.$emit('update:modelValue', new Date(value));
       },
     },
   },

@@ -458,6 +458,11 @@ export default {
             }
             return acc;
           }, {});
+          if (this.exchange == 8) {
+            //bitfinex
+            this.form.date = { title: '5 минут назад ', value: '300' };
+            this.form.dateup = { title: 'Текущее время ', value: '0' };
+          }
           this.step++;
         }
       });
