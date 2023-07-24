@@ -1,6 +1,6 @@
 <template>
   <div style="line-height: initial; padding: 5px 0 10px">
-    <div class="font-weight-medium text-uppercase">{{ params.data.title }}</div>
+    <div class="font-weight-medium" style="text-wrap: balance">{{ params.data.title }}</div>
     <div class="text-grey" :style="wrapStyle" v-html="presetFieldData(params.data)"></div>
   </div>
 </template>

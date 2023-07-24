@@ -19,7 +19,7 @@ services:
     build:
       context: .
       target: builder
-    command: sh -c -f "yarn mikro-orm schema:fresh --run --seed==ConfigSeeder;yarn run start:prod"
+    command: sh -c -f "yarn run start:prod"
     restart: unless-stopped
     env_file: ./.env
     environment:
