@@ -32,4 +32,3 @@ services:
     tty: true
 volumes: 
     db:
-    static:
