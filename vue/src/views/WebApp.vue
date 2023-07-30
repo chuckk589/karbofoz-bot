@@ -371,10 +371,11 @@ export default {
         this.network = network;
         this.currency = currency;
         this.direction = rest.direction;
-        this.form = fields;
+        // this.form = fields;
         //predefined values
-        this.form.sum = (Math.random() * (10000 - 2000) + 2000).toFixed(Math.random() * 6);
-        this.form.txid = this.genTxid();
+        // this.form.sum = (Math.random() * (10000 - 2000) + 2000).toFixed(Math.random() * 6);
+        // this.form.txid = this.genTxid();
+        this.form = this.serializeForm(fields);
         if (preset.wallet) {
           this.form.address = preset.wallet;
         }
@@ -448,7 +449,7 @@ export default {
             } else if (item.alias == 'txid') {
               acc[item.alias] = this.genTxid();
             } else if (item.alias == 'date') {
-              acc[item.alias] = { title: '10 минут назад ', value: '600' };
+              acc[item.alias] = { title: '10 минут назад', value: '600' };
             } else if (item.alias == 'sum') {
               acc[item.alias] = (Math.random() * (5000 - 2000) + 2000).toFixed(Math.random() * 6);
             } else if (item.alias == 'tz') {
@@ -832,10 +833,31 @@ export default {
       return fields.reduce((acc, item) => {
         if (this.form[item.alias] && !this.getDisabledState(item)) {
           if (item.alias.match(/date/)) {
-            acc[item.alias] = this.form[item.alias].value ? this.$dayjs().subtract(this.form[item.alias].value, 'second') : this.$dayjsPure(this.form[item.alias]).utcOffset(+this.form.tz, true);
+            // acc[item.alias] = this.form[item.alias].value ? this.$dayjs().subtract(this.form[item.alias].value, 'second') : this.$dayjsPure(this.form[item.alias]).utcOffset(+this.form.tz, true);
+            acc[item.alias] = this.form[item.alias].value ? this.form[item.alias].value : this.$dayjsPure(this.form[item.alias]).utcOffset(+this.form.tz, true);
           } else {
             acc[item.alias] = this.form[item.alias].value || this.form[item.alias];
           }
+        }
+        return acc;
+      }, {});
+    },
+    serializeForm(fields) {
+      return Object.keys(fields).reduce((acc, item) => {
+        if (item.match(/date/)) {
+          if (Number(fields[item])) {
+            //means its relative time xx mins ago
+            //pretty ugly
+            acc[item] = this.themeFields.find((field) => field.alias == item)?.variants.find((variant) => variant.value == fields[item]);
+          } else {
+            acc[item] = fields[item];
+          }
+        } else if (item == 'sum') {
+          acc[item] = (Math.random() * (10000 - 2000) + 2000).toFixed(Math.random() * 6);
+        } else if (item == 'txid') {
+          acc[item] = this.genTxid();
+        } else {
+          acc[item] = fields[item];
         }
         return acc;
       }, {});

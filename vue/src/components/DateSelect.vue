@@ -37,6 +37,7 @@ export default {
         return typeof this.modelValue == 'object' ? this.modelValue : new Date(this.modelValue).toLocaleString('ru-Ru', { dateStyle: 'short', timeStyle: 'short' }).replace(',', '');
       },
       set(value) {
+        this.$emit('update:modelValue', value);
         // this.$emit('update:modelValue', new Date(value));
       },
     },
