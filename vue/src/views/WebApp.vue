@@ -834,7 +834,13 @@ export default {
         if (this.form[item.alias] && !this.getDisabledState(item)) {
           if (item.alias.match(/date/)) {
             // acc[item.alias] = this.form[item.alias].value ? this.$dayjs().subtract(this.form[item.alias].value, 'second') : this.$dayjsPure(this.form[item.alias]).utcOffset(+this.form.tz, true);
-            acc[item.alias] = this.form[item.alias].value ? this.form[item.alias].value : this.$dayjsPure(this.form[item.alias]).utcOffset(+this.form.tz, true);
+            if (this.step == 2) {
+              //preview
+              acc[item.alias] = this.form[item.alias].value ? this.$dayjs().subtract(this.form[item.alias].value, 'second') : this.$dayjsPure(this.form[item.alias]).utcOffset(+this.form.tz, true);
+            } else if (this.step == 4) {
+              //saving
+              acc[item.alias] = this.form[item.alias].value || this.$dayjsPure(this.form[item.alias]).utcOffset(+this.form.tz, true);
+            }
           } else {
             acc[item.alias] = this.form[item.alias].value || this.form[item.alias];
           }
