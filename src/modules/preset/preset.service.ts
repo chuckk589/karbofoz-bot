@@ -60,7 +60,7 @@ export class PresetService {
     const browser = await puppeteer.launch(puppeteerOptions);
     try {
       const page = await browser.newPage();
-      await page.goto(`${process.env.NODE_ENV === 'dev' ? 'https://localhost:3001' : 'http://localhost:443'}/template?${queryString}`, { waitUntil: 'networkidle2' });
+      await page.goto(`${process.env.NODE_ENV === 'dev' ? 'https://localhost:3001' : `http://localhost:${process.env.PORT}`}/template?${queryString}`, { waitUntil: 'networkidle2' });
       await page.setViewport({
         width: 2560,
         height: 1440,
