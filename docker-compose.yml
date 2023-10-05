@@ -13,10 +13,6 @@ services:
       - db:/var/lib/mysql
     ports:
     - 3309:3306
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "3"
   app:
     logging:
       options:
