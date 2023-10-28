@@ -65,6 +65,28 @@ export class ConfigSeeder extends Seeder {
     em.create(Exchange, {
       alias: 'trust',
       name: 'Trust Wallet',
+      archived: true,
+      exchangeNetworks: [
+        {
+          network: bsc,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '0.0001 0.00025 9' }],
+        },
+        {
+          network: eth,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '0.003 0.004 18' }],
+        },
+        {
+          network: trx,
+          networkCurrencies: [{ currency: usdt }],
+          constants: [{ alias: 'cs_com', value: '0' }],
+        },
+      ],
+    });
+    em.create(Exchange, {
+      alias: 'trustv2',
+      name: 'Trust Wallet',
       exchangeNetworks: [
         {
           network: bsc,
@@ -584,6 +606,7 @@ export class ConfigSeeder extends Seeder {
 
     await GenerateThemesForExchange.call({ em: em }, _binance);
     await GenerateThemesForExchange.call({ em: em }, _trust);
+    await GenerateThemesForExchange.call({ em: em }, _trustv2);
     await GenerateThemesForExchange.call({ em: em }, _exodus);
     await GenerateThemesForExchange.call({ em: em }, _safepal);
     await GenerateThemesForExchange.call({ em: em }, _gate);
@@ -711,7 +734,36 @@ const _trust = {
     .add({ es: 'Remitente', uk: 'Відправник', ru: 'Отправитель', en: 'Sender', alias: 't8in' })
     .add({ es: 'Destinatario', uk: 'Одержувач', ru: 'Получатель', en: 'Recipient', alias: 't8out' }),
 };
+const _trustv2 = {
+  name: 'trustv2',
+  languages: ['en', 'ru', 'uk', 'es'],
+  statusbar: true,
+  themes: [
+    {
+      alias: 'mobile-dark',
+      name: 'Тёмная',
+    },
+    {
+      alias: 'mobile-light',
+      name: 'Светлая',
+    },
+  ],
+  fields: new Set()
+    .add({ type: HtmlInputType.NUMBER, name: 'Сумма', alias: 'sum' })
+    .add({ type: HtmlInputType.DATETIME_LOCAL, name: 'Дата транзакции', alias: 'date', hint: 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ' })
+    .add({ type: HtmlInputType.TEXT, name: 'Отправитель/получатель', alias: 'address' })
+    .add({ type: HtmlInputType.TEXT, name: 'Nonce', optional: true, alias: 'nonce', dependsOn: [{ field: 'network', value: ['bep20', 'erc20'] }] })
 
+    .add({ es: 'Transferir', uk: 'Переказати', ru: 'Перевод', en: 'Transfer', alias: 't1' })
+    .add({ es: 'Fecha', uk: 'Дата', ru: 'Дата', en: 'Date', alias: 't2' })
+    .add({ es: 'Estado', uk: 'Статус', ru: 'Статус', en: 'Status', alias: 't3' })
+    .add({ es: 'Comisión de red', uk: 'Комісія мережі', ru: 'Комиссия сети', en: 'Network Fee', alias: 't4' })
+    .add({ es: 'Más información', uk: 'Детальнiше', ru: 'Подробнее', en: 'More Details', alias: 't5' })
+    .add({ es: 'Nonce', uk: 'Nonce', ru: 'Nonce', en: 'Nonce', alias: 't6' })
+    .add({ es: 'Completada', uk: 'Виконано', ru: 'Выполнено', en: 'Completed', alias: 't7' })
+    .add({ es: 'Remitente', uk: 'Відправник', ru: 'Отправитель', en: 'Sender', alias: 't8in' })
+    .add({ es: 'Destinatario', uk: 'Отримувач', ru: 'Получатель', en: 'Recipient', alias: 't8out' }),
+};
 const _exodus = {
   name: 'exodus',
   languages: ['en'],

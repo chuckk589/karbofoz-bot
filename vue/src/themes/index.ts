@@ -21,6 +21,8 @@ import ExmoMobile from './ExmoMobile.vue';
 import GarantexMobile from './GarantexMobile.vue';
 import CexioMobile from './CexioMobile.vue';
 import BybitMobile from './BybitMobile.vue';
+import Trustv2Mobile from './Trustv2Mobile.vue';
+
 export {
   CexioMobile,
   BybitMobile,
@@ -45,4 +47,5 @@ export {
   OkxMobile,
   LedgerMobile,
   MetamaskMobile,
+  Trustv2Mobile,
 };

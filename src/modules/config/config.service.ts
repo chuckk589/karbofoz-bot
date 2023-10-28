@@ -77,6 +77,7 @@ export class ConfigService {
             $or: [{ inputAlias: { $ne: null } }, { hidden: true }],
           },
         },
+        archived: false,
       },
       {
         populate: ['exchangeNetworks.networkCurrencies.currency', 'exchangeNetworks.network', 'themes.themeInputs.inputAlias.aliasVariants', 'themes.themeLanguages.language'],

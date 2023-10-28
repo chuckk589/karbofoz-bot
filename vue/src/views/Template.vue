@@ -7,12 +7,12 @@
 
 <script>
 import * as themes from '../themes';
-import DevControl from '@/components/DevControl.vue';
+// import DevControl from '@/components/DevControl.vue';
 export default {
   name: 'TemplateView',
   components: {
     ...themes,
-    DevControl,
+    // DevControl,
   },
   data() {
     return {

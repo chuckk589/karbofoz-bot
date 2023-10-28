@@ -14,6 +14,9 @@ export class Exchange {
   @Property({ nullable: true })
   name!: string;
 
+  @Property({ default: false })
+  archived = false;
+
   @OneToMany(() => ExchangeNetwork, (exchangeNetwork) => exchangeNetwork.exchange)
   exchangeNetworks = new Collection<ExchangeNetwork>(this);
 
