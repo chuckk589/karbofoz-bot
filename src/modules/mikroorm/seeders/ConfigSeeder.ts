@@ -62,28 +62,28 @@ export class ConfigSeeder extends Seeder {
         },
       ],
     });
-    em.create(Exchange, {
-      alias: 'trust',
-      name: 'Trust Wallet',
-      archived: true,
-      exchangeNetworks: [
-        {
-          network: bsc,
-          networkCurrencies: [{ currency: usdt }],
-          constants: [{ alias: 'cs_com', value: '0.0001 0.00025 9' }],
-        },
-        {
-          network: eth,
-          networkCurrencies: [{ currency: usdt }],
-          constants: [{ alias: 'cs_com', value: '0.003 0.004 18' }],
-        },
-        {
-          network: trx,
-          networkCurrencies: [{ currency: usdt }],
-          constants: [{ alias: 'cs_com', value: '0' }],
-        },
-      ],
-    });
+    // em.create(Exchange, {
+    //   alias: 'trust',
+    //   name: 'Trust Wallet',
+    //   archived: true,
+    //   exchangeNetworks: [
+    //     {
+    //       network: bsc,
+    //       networkCurrencies: [{ currency: usdt }],
+    //       constants: [{ alias: 'cs_com', value: '0.0001 0.00025 9' }],
+    //     },
+    //     {
+    //       network: eth,
+    //       networkCurrencies: [{ currency: usdt }],
+    //       constants: [{ alias: 'cs_com', value: '0.003 0.004 18' }],
+    //     },
+    //     {
+    //       network: trx,
+    //       networkCurrencies: [{ currency: usdt }],
+    //       constants: [{ alias: 'cs_com', value: '0' }],
+    //     },
+    //   ],
+    // });
     em.create(Exchange, {
       alias: 'trustv2',
       name: 'Trust Wallet',
@@ -605,7 +605,7 @@ export class ConfigSeeder extends Seeder {
     await GenerateDeviceInputs.call({ em: em }, _realme);
 
     await GenerateThemesForExchange.call({ em: em }, _binance);
-    await GenerateThemesForExchange.call({ em: em }, _trust);
+    // await GenerateThemesForExchange.call({ em: em }, _trust);
     await GenerateThemesForExchange.call({ em: em }, _trustv2);
     await GenerateThemesForExchange.call({ em: em }, _exodus);
     await GenerateThemesForExchange.call({ em: em }, _safepal);
