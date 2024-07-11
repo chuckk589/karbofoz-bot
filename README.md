@@ -1,8 +1,7 @@
 
 ### Prerequisites
 
-* docker docker-compose
- [https://docs.docker.com/desktop/install/ubuntu/](https://docs.docker.com/desktop/install/ubuntu/)
+* docker docker-compose [https://docs.docker.com/engine/install/](https://docs.docker.com/engine/install/)
 
 ### Installation
 
