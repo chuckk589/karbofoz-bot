@@ -23,5 +23,5 @@
     ```
 4. (First run) Seed database
    ```sh
-    docker exec -it karbofoz-bot-app-1 yarn run schema:seeder
+    docker exec -it karbofoz-bot-app-1 yarn run schema:clean
     ```
